@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, View, StyleSheet, ActivityIndicator, Animated, Platform } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Platform,
+  Animated,
+  View,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import ThemedText from './ThemedText';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
@@ -14,16 +22,16 @@ const Button = ({
   size = 'medium',
   borderRadius = 'light',
   // Animation customization props
-  animationSpeed = 2000, // Duration in milliseconds
-  animationColors = ['rgba(255, 255, 255, 0.3)', 'rgba(255, 255, 255, 0.5)'], // Array of colors for lines
+  animationSpeed = 200, // Duration in milliseconds
+  animationColors = ['rgba(255, 255, 255, 0.3)', 'rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.3)'], // Array of colors for gradient
   animationAngle = 45, // Angle in degrees
-  animationLines = 3, // Number of diagonal lines
   style,
   textStyle,
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [animationValue] = useState(new Animated.Value(0));
+  const [textColor, setTextColor] = useState(null);
 
   // Function to get the correct colors based on colorName or fallback to variant
   const getButtonColors = () => {
@@ -43,17 +51,55 @@ const Button = ({
 
   useEffect(() => {
     if (isHovered) {
-      Animated.loop(
+      // Two-stage animation: fill then solidify
+      Animated.sequence([
+        // Stage 1: Gradient sweeps across (0 to 0.7)
+        Animated.timing(animationValue, {
+          toValue: 0.7,
+          duration: animationSpeed * 0.6, // 60% of total time for fill
+          useNativeDriver: Platform.OS !== 'web',
+        }),
+        // Stage 2: Solidify to solid color (0.7 to 1)
         Animated.timing(animationValue, {
           toValue: 1,
-          duration: animationSpeed,
+          duration: animationSpeed * 0.4, // 40% of total time for solidify
           useNativeDriver: Platform.OS !== 'web',
-        })
-      ).start();
+        }),
+      ]).start();
     } else {
       animationValue.setValue(0);
     }
   }, [isHovered, animationValue, animationSpeed]);
+
+  // Listen to animation value changes to update text color
+  useEffect(() => {
+    const listener = animationValue.addListener(({ value }) => {
+      const buttonColors = getButtonColors();
+      
+      if (value < 0.7) {
+        // Stay button color until 0.7
+        setTextColor(buttonColors[500]);
+      } else {
+        // Fade from button color to white between 0.7 and 1.0
+        const fadeProgress = (value - 0.7) / 0.3; // 0 to 1 between 0.7 and 1.0
+        
+        // Fade smoothly from button color to white between 0.7 and 1.0
+        // fadeProgress goes from 0 to 1 as value goes from 0.7 to 1.0
+        // Use multiple steps for smoother transition
+        if (fadeProgress < 0.33) {
+          setTextColor(buttonColors[500]); // 0.7 to 0.8
+        } else if (fadeProgress < 0.66) {
+          setTextColor(buttonColors[500]); // 0.8 to 0.9
+        } else {
+          setTextColor(colors.text.inverse); // 0.9 to 1.0
+        }
+      }
+    });
+
+    return () => {
+      animationValue.removeListener(listener);
+    };
+  }, [animationValue, getButtonColors]);
 
   const handlePressIn = () => {
     if (disabled || loading) return;
@@ -166,8 +212,12 @@ const Button = ({
     
     const buttonColors = getButtonColors();
     
+    // Only apply solid fill after 0.7 (70% of animation)
     return {
-      backgroundColor: buttonColors[500],
+      backgroundColor: animationValue.interpolate({
+        inputRange: [0, 0.7, 0.7, 1],
+        outputRange: [colors.background.primary, colors.background.primary, buttonColors[500], buttonColors[500]], // Stay white until 0.7, then instantly fill
+      }),
       borderColor: buttonColors[500],
     };
   };
@@ -175,9 +225,26 @@ const Button = ({
   const getHoveredTextStyles = () => {
     if (!isHovered) return {};
     
+    // Use the state-based text color
     return {
-      color: colors.text.inverse,
+      color: textColor,
     };
+  };
+
+  // Create a sweeping gradient effect by animating the gradient's position
+  const angle = animationAngle;
+  const radians = (angle * Math.PI) / 180;
+  
+  // Calculate the gradient sweep position
+  const sweepPosition = animationValue.interpolate({
+    inputRange: [0, 0.7],
+    outputRange: [-200, 200], // Move from left to right across the button
+  });
+  
+  // Create gradient points for diagonal sweep
+  const gradientPoints = {
+    start: { x: Math.sin(radians), y: -Math.cos(radians) },
+    end: { x: -Math.sin(radians), y: Math.cos(radians) },
   };
 
   return (
@@ -198,37 +265,32 @@ const Button = ({
           style,
         ]}
       >
-        {/* Animated diagonal lines background */}
+        {/* Simple gradient background */}
         {isHovered && (
-          <View style={styles.animatedContainer}>
-            {Array.from({ length: animationLines }, (_, index) => (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.animatedLine,
-                  {
-                    backgroundColor: animationColors[index % animationColors.length],
-                    transform: [
-                      {
-                        translateX: animationValue.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [-150, 150],
-                        }),
-                      },
-                      {
-                        rotate: `${animationAngle}deg`,
-                      },
-                    ],
-                    // Stagger the animation for each line
-                    opacity: animationValue.interpolate({
-                      inputRange: [0, 0.2, 0.8, 1],
-                      outputRange: [0, 1, 1, 0],
-                    }),
-                  },
-                ]}
+          <Animated.View style={styles.animatedGradient}>
+            <Animated.View
+              style={[
+                styles.gradientContainer,
+                {
+                  width: animationValue.interpolate({
+                    inputRange: [0, 0.7],
+                    outputRange: ['0%', '100%'], // Animate width from 0% to 100%
+                  }),
+                  opacity: animationValue.interpolate({
+                    inputRange: [0.7, 1],
+                    outputRange: [1, 0], // Fade out gradient after 0.7
+                  }),
+                },
+              ]}
+            >
+              <LinearGradient
+                colors={[getButtonColors()[300], 'white']} // Use lighter shade (300 instead of 500)
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.gradientFill}
               />
-            ))}
-          </View>
+            </Animated.View>
+          </Animated.View>
         )}
         
         {loading ? (
@@ -236,11 +298,11 @@ const Button = ({
             color={isHovered ? colors.text.inverse : (variant === 'primary' ? colors.text.inverse : getButtonColors()[700])} 
             size="small" 
           />
-                        ) : (
-                          <ThemedText style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
-                            {children}
-                          </ThemedText>
-                        )}
+        ) : (
+          <ThemedText style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
+            {children}
+          </ThemedText>
+        )}
       </Animated.View>
     </TouchableOpacity>
   );
@@ -296,56 +358,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   
-  // Primary button (solid fill)
-  primaryButton: {
-    backgroundColor: colors.primary[500],
-    borderWidth: 1,
-    borderColor: colors.primary[500],
-  },
-  primaryButtonText: {
-    color: colors.text.inverse,
-  },
-  
-  // Secondary button (outline with primary colors)
-  secondaryButton: {
-    backgroundColor: colors.background.primary,
-    borderWidth: 1,
-    borderColor: colors.primary[500],
-  },
-  secondaryButtonText: {
-    color: colors.primary[500],
-  },
-  
-  // Success button (outline)
-  successButton: {
-    backgroundColor: colors.background.primary,
-    borderWidth: 1,
-    borderColor: colors.success[500],
-  },
-  successButtonText: {
-    color: colors.success[500],
-  },
-  
-  // Warning button (outline)
-  warningButton: {
-    backgroundColor: colors.background.primary,
-    borderWidth: 1,
-    borderColor: colors.warning[500],
-  },
-  warningButtonText: {
-    color: colors.warning[500],
-  },
-  
-  // Danger button (outline)
-  dangerButton: {
-    backgroundColor: colors.background.primary,
-    borderWidth: 1,
-    borderColor: colors.error[500],
-  },
-  dangerButtonText: {
-    color: colors.error[500],
-  },
-  
   // Animated background container
   animatedContainer: {
     position: 'absolute',
@@ -356,14 +368,23 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   
-  // Individual animated line
-  animatedLine: {
+  // Simple gradient
+  animatedGradient: {
     position: 'absolute',
-    top: '50%',
-    left: -150,
-    width: 400,
-    height: 3,
-    marginTop: -1.5,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+  },
+  
+  gradientContainer: {
+    height: '100%',
+  },
+  
+  gradientFill: {
+    width: '100%',
+    height: '100%',
   },
 });
 
