@@ -10,6 +10,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import UsersListScreen from '../screens/users/UsersListScreen';
 import TournamentsListScreen from '../screens/tournaments/TournamentsListScreen';
+import DesignShowcaseScreen from '../screens/design/DesignShowcaseScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,6 +49,13 @@ const MainTabs: React.FC = () => {
         component={TournamentsListScreen}
         options={{
           tabBarLabel: 'Tournaments',
+        }}
+      />
+      <Tab.Screen 
+        name="Design" 
+        component={DesignShowcaseScreen}
+        options={{
+          tabBarLabel: 'Design',
         }}
       />
     </Tab.Navigator>
