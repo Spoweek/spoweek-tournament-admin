@@ -18,9 +18,9 @@ import {
   SecondaryButton, 
   SuccessButton, 
   WarningButton, 
-  DangerButton 
+  DangerButton
 } from '../../components/common/buttons';
-import { AboveLabelInput, InsideLabelInput } from '../../components/common/inputs';
+import { LabeledField, TextInputAdapter } from '../../components/common/inputs';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -308,88 +308,6 @@ export default function LoginScreen() {
           </View>
         </Card>
         
-        {/* Input Components Showcase - Temporary for Testing */}
-        <Card 
-          width="100%" 
-          backgroundColor={colors.background.primary}
-          borderRadius="light"
-          style={styles.inputShowcaseCard}
-        >
-          <Text style={[typography.h3, styles.sectionTitle]}>Input Components</Text>
-          
-          {/* Above Label Inputs */}
-          <View style={styles.inputSection}>
-            <Text style={[typography.h4, styles.subsectionTitle]}>Above Label Inputs</Text>
-            
-            <AboveLabelInput
-              label="Standard Input"
-              placeholder="Enter text here"
-              value=""
-              onChangeText={() => {}}
-            />
-            
-            <AboveLabelInput
-              label="Pill Input"
-              placeholder="Rounded corners"
-              value=""
-              onChangeText={() => {}}
-              borderRadius="full"
-            />
-            
-            <AboveLabelInput
-              label="Small Input"
-              placeholder="Compact size"
-              value=""
-              onChangeText={() => {}}
-              size="small"
-            />
-            
-            <AboveLabelInput
-              label="Large Input"
-              placeholder="Larger size"
-              value=""
-              onChangeText={() => {}}
-              size="large"
-            />
-          </View>
-          
-          {/* Inside Label Inputs */}
-          <View style={styles.inputSection}>
-            <Text style={[typography.h4, styles.subsectionTitle]}>Inside Label Inputs (Floating)</Text>
-            
-            <InsideLabelInput
-              label="Floating Label"
-              placeholder="Enter text here"
-              value=""
-              onChangeText={() => {}}
-            />
-            
-            <InsideLabelInput
-              label="Pill Floating"
-              placeholder="Rounded corners"
-              value=""
-              onChangeText={() => {}}
-              borderRadius="full"
-            />
-            
-            <InsideLabelInput
-              label="Small Floating"
-              placeholder="Compact size"
-              value=""
-              onChangeText={() => {}}
-              size="small"
-            />
-            
-            <InsideLabelInput
-              label="Large Floating"
-              placeholder="Larger size"
-              value=""
-              onChangeText={() => {}}
-              size="large"
-            />
-          </View>
-        </Card>
-        
         <Card 
           width="100%" 
           padding={40}
@@ -403,45 +321,43 @@ export default function LoginScreen() {
             </View>
           ) : null}
           
-          {success ? (
+          {success && (
             <View style={styles.successContainer}>
               <Text style={[typography.success, styles.successText]}>{success}</Text>
             </View>
-          ) : null}
+          )}
           
-          <InsideLabelInput
+          <LabeledField
             label="Email"
-            placeholder="Enter your email"
             value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-              if (error) setError('');
-            }}
-            onKeyPress={handleKeyPress}
+            onChange={setEmail}
+            placeholder="Enter your email"
+            InputComponent={TextInputAdapter}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
             returnKeyType="next"
+            onKeyPress={handleKeyPress}
             onSubmitEditing={() => {
-              // Focus next input (password)
+              passwordRef.current.focus(); // use ref for next input
             }}
           />
-          
-          <InsideLabelInput
+
+          <LabeledField
             label="Password"
-            placeholder="Enter your password"
             value={password}
-            onChangeText={(text) => {
-              setPassword(text);
-              if (error) setError('');
-            }}
-            onKeyPress={handleKeyPress}
+            onChange={setPassword}
+            placeholder="Enter your password"
+            InputComponent={TextInputAdapter}
             secureTextEntry
             autoCapitalize="none"
             autoCorrect={false}
             returnKeyType="done"
+            onKeyPress={handleKeyPress}
             onSubmitEditing={handleLogin}
+            ref={passwordRef} // needed for focusing
           />
+
           
           <View style={styles.forgotLinksContainer}>
             <TouchableOpacity onPress={handleForgotId} style={styles.forgotLink}>
