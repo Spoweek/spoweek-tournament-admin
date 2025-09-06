@@ -5,8 +5,8 @@ import {
   ActivityIndicator,
   Platform,
   View,
+  Text,
 } from 'react-native';
-import ThemedText from './ThemedText';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 
@@ -181,9 +181,9 @@ const Button = ({
             size="small" 
           />
         ) : (
-          <ThemedText style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
+          <Text style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
             {children}
-          </ThemedText>
+          </Text>
         )}
       </View>
     </TouchableOpacity>

@@ -24,6 +24,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "fonts": [
+      "node_modules/@expo-google-fonts/noto-sans-kr/NotoSansKR_400Regular.ttf",
+      "node_modules/@expo-google-fonts/noto-sans-kr/NotoSansKR_500Medium.ttf",
+      "node_modules/@expo-google-fonts/noto-sans-kr/NotoSansKR_700Bold.ttf"
+    ]
   }
 }

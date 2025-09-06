@@ -25,6 +25,23 @@ export const globalStyles = StyleSheet.create({
 
 // Component to apply global styles (for web)
 export const GlobalStyles = ({ children }) => {
+  // Set global font for web
+  if (Platform.OS === 'web') {
+    React.useEffect(() => {
+      const style = document.createElement('style');
+      style.textContent = `
+        * {
+          font-family: 'NotoSansKR_400Regular', 'Noto Sans KR', sans-serif !important;
+        }
+      `;
+      document.head.appendChild(style);
+      
+      return () => {
+        document.head.removeChild(style);
+      };
+    }, []);
+  }
+
   return children;
 };
 

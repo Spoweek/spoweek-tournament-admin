@@ -2,7 +2,7 @@ import { colors } from './colors';
 
 // Font families
 export const fontFamilies = {
-  primary: 'Noto Sans KR',
+  primary: 'NotoSansKR_400Regular',
   secondary: 'sans-serif',
   fallback: 'system',
 };
