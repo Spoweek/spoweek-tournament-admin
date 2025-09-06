@@ -60,28 +60,47 @@ const styles = StyleSheet.create({
   },
   // Web-specific styles (body scrolling enabled)
   webContainer: {
-    minHeight: '100vh',
+    ...Platform.select({
+      web: {
+        minHeight: '100vh' as any,
+        display: 'flex' as any,
+      },
+      default: {
+        minHeight: '100%',
+      },
+    }),
     backgroundColor: '#f5f5f5',
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   webContent: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: 700,
   },
   scrollView: {
     flex: 1,
     // Web-specific styles for better scrolling
-    overflow: 'auto',
-    WebkitOverflowScrolling: 'touch',
+    ...Platform.select({
+      web: {
+        overflow: 'auto' as any,
+        WebkitOverflowScrolling: 'touch' as any,
+      },
+      default: {},
+    }),
   },
   scrollContent: {
     flexGrow: 1,
     alignItems: 'center',
     paddingVertical: 40,
-    minHeight: '100vh', // Ensure full viewport height on web
+    ...Platform.select({
+      web: {
+        minHeight: '100vh' as any, // Ensure full viewport height on web
+      },
+      default: {
+        minHeight: '100%',
+      },
+    }),
   },
   content: {
     width: '100%',
