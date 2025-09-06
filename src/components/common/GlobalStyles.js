@@ -32,6 +32,10 @@ export const GlobalStyles = ({ children }) => {
       style.textContent = `
         * {
           font-family: 'NotoSansKR_400Regular', 'Noto Sans KR', sans-serif !important;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeLegibility;
+          font-smooth: always;
         }
       `;
       document.head.appendChild(style);
