@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { 
   View, 
-  Text, 
-  TextInput, 
   TouchableOpacity, 
   StyleSheet, 
   ActivityIndicator,
@@ -12,7 +10,11 @@ import { useAuth } from '../../context/AuthContext';
 import AuthLayout from '../../layouts/AuthLayout';
 import Logo from '../../components/common/Logo';
 import Card from '../../components/common/Card';
+import ThemedText from '../../components/common/ThemedText';
+import ThemedTextInput from '../../components/common/ThemedTextInput';
+import { globalStyles } from '../../components/common/GlobalStyles';
 import { colors } from '../../styles/colors';
+import { typography } from '../../styles/typography';
 import { 
   PrimaryButton, 
   SecondaryButton, 
@@ -67,7 +69,7 @@ export default function LoginScreen() {
   const handleKeyPress = (event) => {
     if (event.nativeEvent.key === 'Enter') {
       handleLogin();
-    }
+    } 
   };
 
   return (
@@ -84,134 +86,134 @@ export default function LoginScreen() {
           padding={16}
           style={styles.colorPaletteCard}
         >
-          <Text style={styles.colorPaletteTitle}>Color Palette</Text>
+          <ThemedText style={[typography.h3, styles.colorPaletteTitle]}>Color Palette</ThemedText>
           
           {/* Primary Colors */}
           <View style={styles.colorSection}>
-            <Text style={styles.colorSectionTitle}>Primary</Text>
+            <ThemedText style={[typography.label, styles.colorSectionTitle]}>Primary</ThemedText>
             <View style={styles.colorRow}>
               <View style={[styles.colorSwatch, { backgroundColor: colors.primary[100] }]}>
-                <Text style={styles.colorLabel}>primary.100</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>primary.100</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.primary[300] }]}>
-                <Text style={styles.colorLabel}>primary.300</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>primary.300</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.primary[500] }]}>
-                <Text style={styles.colorLabel}>primary.500</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>primary.500</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.primary[700] }]}>
-                <Text style={styles.colorLabel}>primary.700</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>primary.700</ThemedText>
               </View>
             </View>
           </View>
           
           {/* Secondary Colors */}
           <View style={styles.colorSection}>
-            <Text style={styles.colorSectionTitle}>Secondary</Text>
+            <ThemedText style={[typography.label, styles.colorSectionTitle]}>Secondary</ThemedText>
             <View style={styles.colorRow}>
               <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[100] }]}>
-                <Text style={styles.colorLabel}>secondary.100</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>secondary.100</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[300] }]}>
-                <Text style={styles.colorLabel}>secondary.300</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>secondary.300</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[500] }]}>
-                <Text style={styles.colorLabel}>secondary.500</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>secondary.500</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[700] }]}>
-                <Text style={styles.colorLabel}>secondary.700</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>secondary.700</ThemedText>
               </View>
             </View>
           </View>
           
           {/* Success Colors */}
           <View style={styles.colorSection}>
-            <Text style={styles.colorSectionTitle}>Success</Text>
+            <ThemedText style={[typography.label, styles.colorSectionTitle]}>Success</ThemedText>
             <View style={styles.colorRow}>
               <View style={[styles.colorSwatch, { backgroundColor: colors.success[100] }]}>
-                <Text style={styles.colorLabel}>success.100</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>success.100</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.success[300] }]}>
-                <Text style={styles.colorLabel}>success.300</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>success.300</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.success[500] }]}>
-                <Text style={styles.colorLabel}>success.500</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>success.500</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.success[700] }]}>
-                <Text style={styles.colorLabel}>success.700</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>success.700</ThemedText>
               </View>
             </View>
           </View>
           
           {/* Warning Colors */}
           <View style={styles.colorSection}>
-            <Text style={styles.colorSectionTitle}>Warning</Text>
+            <ThemedText style={[typography.label, styles.colorSectionTitle]}>Warning</ThemedText>
             <View style={styles.colorRow}>
               <View style={[styles.colorSwatch, { backgroundColor: colors.warning[100] }]}>
-                <Text style={styles.colorLabel}>warning.100</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>warning.100</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.warning[300] }]}>
-                <Text style={styles.colorLabel}>warning.300</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>warning.300</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.warning[500] }]}>
-                <Text style={styles.colorLabel}>warning.500</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>warning.500</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.warning[700] }]}>
-                <Text style={styles.colorLabel}>warning.700</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>warning.700</ThemedText>
               </View>
             </View>
           </View>
           
           {/* Error Colors */}
           <View style={styles.colorSection}>
-            <Text style={styles.colorSectionTitle}>Error</Text>
+            <ThemedText style={[typography.label, styles.colorSectionTitle]}>Error</ThemedText>
             <View style={styles.colorRow}>
               <View style={[styles.colorSwatch, { backgroundColor: colors.error[100] }]}>
-                <Text style={styles.colorLabel}>error.100</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>error.100</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.error[300] }]}>
-                <Text style={styles.colorLabel}>error.300</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>error.300</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.error[500] }]}>
-                <Text style={styles.colorLabel}>error.500</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>error.500</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.error[700] }]}>
-                <Text style={styles.colorLabel}>error.700</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>error.700</ThemedText>
               </View>
             </View>
           </View>
           
           {/* Neutral Colors */}
           <View style={styles.colorSection}>
-            <Text style={styles.colorSectionTitle}>Neutral</Text>
+            <ThemedText style={[typography.label, styles.colorSectionTitle]}>Neutral</ThemedText>
             <View style={styles.colorRow}>
               <View style={[styles.colorSwatch, { backgroundColor: colors.neutral[100] }]}>
-                <Text style={styles.colorLabel}>neutral.100</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>neutral.100</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.neutral[300] }]}>
-                <Text style={styles.colorLabel}>neutral.300</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>neutral.300</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.neutral[500] }]}>
-                <Text style={styles.colorLabel}>neutral.500</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>neutral.500</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.neutral[700] }]}>
-                <Text style={styles.colorLabel}>neutral.700</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel]}>neutral.700</ThemedText>
               </View>
             </View>
           </View>
           
-          {/* Text Colors */}
+          {/* ThemedText Colors */}
           <View style={styles.colorSection}>
-            <Text style={styles.colorSectionTitle}>Text</Text>
+            <ThemedText style={[typography.label, styles.colorSectionTitle]}>ThemedText</ThemedText>
             <View style={styles.colorRow}>
               <View style={[styles.colorSwatch, { backgroundColor: colors.text.primary }]}>
-                <Text style={[styles.colorLabel, { color: colors.text.inverse }]}>text.primary</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>text.primary</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.text.secondary }]}>
-                <Text style={[styles.colorLabel, { color: colors.text.inverse }]}>text.secondary</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>text.secondary</ThemedText>
               </View>
               <View style={[styles.colorSwatch, { backgroundColor: colors.text.tertiary }]}>
-                <Text style={[styles.colorLabel, { color: colors.text.inverse }]}>text.tertiary</Text>
+                <ThemedText style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>text.tertiary</ThemedText>
               </View>
             </View>
           </View>
@@ -223,11 +225,11 @@ export default function LoginScreen() {
           padding={16}
           style={styles.buttonShowcaseCard}
         >
-          <Text style={styles.buttonShowcaseTitle}>Button Components</Text>
+          <ThemedText style={[typography.h3, styles.buttonShowcaseTitle]}>Button Components</ThemedText>
           
           {/* Light Rounded Buttons */}
           <View style={styles.buttonSection}>
-            <Text style={styles.buttonSectionTitle}>Light Rounded</Text>
+            <ThemedText style={[typography.label, styles.buttonSectionTitle]}>Light Rounded</ThemedText>
             <View style={styles.buttonRow}>
               <PrimaryButton onPress={() => Alert.alert('Primary')}>
                 Primary
@@ -253,7 +255,7 @@ export default function LoginScreen() {
           
           {/* Full Rounded (Pill) Buttons */}
           <View style={styles.buttonSection}>
-            <Text style={styles.buttonSectionTitle}>Full Rounded (Pill)</Text>
+            <ThemedText style={[typography.label, styles.buttonSectionTitle]}>Full Rounded (Pill)</ThemedText>
             <View style={styles.buttonRow}>
               <PrimaryButton borderRadius="full" onPress={() => Alert.alert('Primary Pill')}>
                 Primary
@@ -279,7 +281,7 @@ export default function LoginScreen() {
           
           {/* Different Sizes */}
           <View style={styles.buttonSection}>
-            <Text style={styles.buttonSectionTitle}>Different Sizes</Text>
+            <ThemedText style={[typography.label, styles.buttonSectionTitle]}>Different Sizes</ThemedText>
             <View style={styles.buttonRow}>
               <PrimaryButton size="small" onPress={() => Alert.alert('Small')}>
                 Small
@@ -295,7 +297,7 @@ export default function LoginScreen() {
           
           {/* Disabled and Loading States */}
           <View style={styles.buttonSection}>
-            <Text style={styles.buttonSectionTitle}>States</Text>
+            <ThemedText style={[typography.label, styles.buttonSectionTitle]}>States</ThemedText>
             <View style={styles.buttonRow}>
               <PrimaryButton disabled onPress={() => Alert.alert('Disabled')}>
                 Disabled
@@ -312,25 +314,25 @@ export default function LoginScreen() {
           padding={40}
           style={styles.loginCard}
         >
-          <Text style={styles.title}>로그인</Text>
+          <ThemedText style={[globalStyles.text, typography.h2, styles.title]}>로그인</ThemedText>
           
           {error ? (
             <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>{error}</Text>
+              <ThemedText style={[typography.error, styles.errorThemedText]}>{error}</ThemedText>
             </View>
           ) : null}
           
           {success ? (
             <View style={styles.successContainer}>
-              <Text style={styles.successText}>{success}</Text>
+              <ThemedText style={[typography.success, styles.successThemedText]}>{success}</ThemedText>
             </View>
           ) : null}
           
-          <TextInput
-            style={styles.input}
+          <ThemedTextInput
+            style={[typography.input, styles.input]}
             placeholder="Email"
             value={email}
-            onChangeText={(text) => {
+            onChangeThemedText={(text) => {
               setEmail(text);
               if (error) setError('');
             }}
@@ -344,16 +346,16 @@ export default function LoginScreen() {
             }}
           />
           
-          <TextInput
-            style={styles.input}
+          <ThemedTextInput
+            style={[typography.input, styles.input]}
             placeholder="Password"
             value={password}
-            onChangeText={(text) => {
+            onChangeThemedText={(text) => {
               setPassword(text);
               if (error) setError('');
             }}
             onKeyPress={handleKeyPress}
-            secureTextEntry
+            secureThemedTextEntry
             autoCapitalize="none"
             autoCorrect={false}
             returnKeyType="done"
@@ -362,10 +364,10 @@ export default function LoginScreen() {
           
           <View style={styles.forgotLinksContainer}>
             <TouchableOpacity onPress={handleForgotId} style={styles.forgotLink}>
-              <Text style={styles.forgotLinkText}>Forgot ID</Text>
+              <ThemedText style={[typography.link, styles.forgotLinkThemedText]}>Forgot ID</ThemedText>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotLink}>
-              <Text style={styles.forgotLinkText}>Forgot Password</Text>
+              <ThemedText style={[typography.link, styles.forgotLinkThemedText]}>Forgot Password</ThemedText>
             </TouchableOpacity>
           </View>
           
@@ -377,7 +379,7 @@ export default function LoginScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.loginButtonText}>로그인</Text>
+              <ThemedText style={[typography.button, styles.loginButtonThemedText]}>로그인</ThemedText>
             )}
           </TouchableOpacity>
         </Card>
@@ -420,7 +422,7 @@ const styles = StyleSheet.create({
   loginButtonDisabled: {
     backgroundColor: '#ccc',
   },
-  loginButtonText: {
+  loginButtonThemedText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
@@ -433,7 +435,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 16,
   },
-  errorText: {
+  errorThemedText: {
     color: '#D32F2F',
     fontSize: 14,
     textAlign: 'center',
@@ -446,7 +448,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 16,
   },
-  successText: {
+  successThemedText: {
     color: '#2E7D32',
     fontSize: 14,
     textAlign: 'center',
@@ -461,7 +463,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 4,
   },
-  forgotLinkText: {
+  forgotLinkThemedText: {
     color: '#007AFF',
     fontSize: 14,
     textDecorationLine: 'underline',

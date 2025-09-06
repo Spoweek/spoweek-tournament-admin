@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, Animated, Platform } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, ActivityIndicator, Animated, Platform } from 'react-native';
+import ThemedText from './ThemedText';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 
@@ -9,8 +10,14 @@ const Button = ({
   disabled = false,
   loading = false,
   variant = 'primary',
+  colorName, // New prop to specify the actual color to use
   size = 'medium',
   borderRadius = 'light',
+  // Animation customization props
+  animationSpeed = 2000, // Duration in milliseconds
+  animationColors = ['rgba(255, 255, 255, 0.3)', 'rgba(255, 255, 255, 0.5)'], // Array of colors for lines
+  animationAngle = 45, // Angle in degrees
+  animationLines = 3, // Number of diagonal lines
   style,
   textStyle,
   ...props
@@ -18,19 +25,35 @@ const Button = ({
   const [isHovered, setIsHovered] = useState(false);
   const [animationValue] = useState(new Animated.Value(0));
 
+  // Function to get the correct colors based on colorName or fallback to variant
+  const getButtonColors = () => {
+    if (colorName && colors[colorName]) {
+      return colors[colorName];
+    }
+    
+    // Fallback to variant if colorName is not provided or doesn't exist
+    if (colors[variant]) {
+      return colors[variant];
+    }
+    
+    // Final fallback to primary
+    console.warn(`Color not found for colorName: ${colorName} or variant: ${variant}. Using primary.`);
+    return colors.primary;
+  };
+
   useEffect(() => {
     if (isHovered) {
       Animated.loop(
         Animated.timing(animationValue, {
           toValue: 1,
-          duration: 2000,
+          duration: animationSpeed,
           useNativeDriver: Platform.OS !== 'web',
         })
       ).start();
     } else {
       animationValue.setValue(0);
     }
-  }, [isHovered, animationValue]);
+  }, [isHovered, animationValue, animationSpeed]);
 
   const handlePressIn = () => {
     if (disabled || loading) return;
@@ -70,7 +93,23 @@ const Button = ({
   };
 
   const getButtonStyles = () => {
-    const baseStyles = [styles.button, styles[`${variant}Button`]];
+    const buttonColors = getButtonColors();
+    const baseStyles = [styles.button];
+    
+    // Apply color-specific styles
+    if (variant === 'primary') {
+      baseStyles.push({
+        backgroundColor: buttonColors[500],
+        borderColor: buttonColors[500],
+        borderWidth: 1,
+      });
+    } else {
+      baseStyles.push({
+        backgroundColor: colors.background.primary,
+        borderColor: buttonColors[500],
+        borderWidth: 1,
+      });
+    }
     
     // Size styles
     if (size === 'small') {
@@ -93,7 +132,19 @@ const Button = ({
   };
 
   const getTextStyles = () => {
-    const baseTextStyles = [styles.buttonText, styles[`${variant}ButtonText`]];
+    const buttonColors = getButtonColors();
+    const baseTextStyles = [styles.buttonText];
+    
+    // Apply color-specific text styles
+    if (variant === 'primary') {
+      baseTextStyles.push({
+        color: colors.text.inverse,
+      });
+    } else {
+      baseTextStyles.push({
+        color: buttonColors[500],
+      });
+    }
     
     // Size text styles
     if (size === 'small') {
@@ -113,19 +164,11 @@ const Button = ({
   const getHoveredStyles = () => {
     if (!isHovered) return {};
     
-    // Ensure variant exists and has the 500 shade
-    const variantColors = colors[variant];
-    if (!variantColors || !variantColors[500]) {
-      console.warn(`Invalid variant: ${variant}. Using primary as fallback.`);
-      return {
-        backgroundColor: colors.primary[500],
-        borderColor: colors.primary[500],
-      };
-    }
+    const buttonColors = getButtonColors();
     
     return {
-      backgroundColor: variantColors[500],
-      borderColor: variantColors[500],
+      backgroundColor: buttonColors[500],
+      borderColor: buttonColors[500],
     };
   };
 
@@ -157,33 +200,47 @@ const Button = ({
       >
         {/* Animated diagonal lines background */}
         {isHovered && (
-          <Animated.View
-            style={[
-              styles.animatedBackground,
-              {
-                transform: [
+          <View style={styles.animatedContainer}>
+            {Array.from({ length: animationLines }, (_, index) => (
+              <Animated.View
+                key={index}
+                style={[
+                  styles.animatedLine,
                   {
-                    translateX: animationValue.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [-100, 100],
+                    backgroundColor: animationColors[index % animationColors.length],
+                    transform: [
+                      {
+                        translateX: animationValue.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [-150, 150],
+                        }),
+                      },
+                      {
+                        rotate: `${animationAngle}deg`,
+                      },
+                    ],
+                    // Stagger the animation for each line
+                    opacity: animationValue.interpolate({
+                      inputRange: [0, 0.2, 0.8, 1],
+                      outputRange: [0, 1, 1, 0],
                     }),
                   },
-                ],
-              },
-            ]}
-          />
+                ]}
+              />
+            ))}
+          </View>
         )}
         
         {loading ? (
           <ActivityIndicator 
-            color={isHovered ? colors.text.inverse : (variant === 'primary' ? colors.text.inverse : (colors[variant]?.[700] || colors.primary[700]))} 
+            color={isHovered ? colors.text.inverse : (variant === 'primary' ? colors.text.inverse : getButtonColors()[700])} 
             size="small" 
           />
-        ) : (
-          <Text style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
-            {children}
-          </Text>
-        )}
+                        ) : (
+                          <ThemedText style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
+                            {children}
+                          </ThemedText>
+                        )}
       </Animated.View>
     </TouchableOpacity>
   );
@@ -289,16 +346,24 @@ const styles = StyleSheet.create({
     color: colors.error[500],
   },
   
-  // Animated background for hover effect
-  animatedBackground: {
+  // Animated background container
+  animatedContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    // Create diagonal lines effect using pseudo-elements
-    // This is a simplified version - in a real app you might use a more complex pattern
+    overflow: 'hidden',
+  },
+  
+  // Individual animated line
+  animatedLine: {
+    position: 'absolute',
+    top: '50%',
+    left: -150,
+    width: 400,
+    height: 3,
+    marginTop: -1.5,
   },
 });
 

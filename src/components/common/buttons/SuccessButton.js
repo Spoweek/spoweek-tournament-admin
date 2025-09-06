@@ -3,7 +3,7 @@ import Button from '../Button';
 
 const SuccessButton = ({ children, ...props }) => {
   return (
-    <Button variant="success" {...props}>
+    <Button variant="success" colorName="success" {...props}>
       {children}
     </Button>
   );

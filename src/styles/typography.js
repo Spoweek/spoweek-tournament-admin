@@ -40,6 +40,15 @@ export const lineHeights = {
   loose: 1.8,
 };
 
+// Global default styles
+export const globalStyles = {
+  fontFamily: fontFamilies.primary,
+  fontSize: fontSizes.base,
+  fontWeight: fontWeights.normal,
+  lineHeight: lineHeights.base,
+  color: colors.text.primary,
+};
+
 // Typography styles
 export const typography = {
   // Headings

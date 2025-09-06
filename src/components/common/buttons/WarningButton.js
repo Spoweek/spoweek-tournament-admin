@@ -3,7 +3,7 @@ import Button from '../Button';
 
 const WarningButton = ({ children, ...props }) => {
   return (
-    <Button variant="warning" {...props}>
+    <Button variant="warning" colorName="warning" {...props}>
       {children}
     </Button>
   );
