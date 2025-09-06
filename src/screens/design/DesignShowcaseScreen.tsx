@@ -202,7 +202,7 @@ const DesignShowcaseScreen: React.FC = () => {
           label="Pill Input"
           value={inputValues.pill}
           onChange={handleInputChange('pill')}
-          roundness="pill"
+          borderRadius="full"
           placeholder="Rounded corners"
           InputComponent={TextInputAdapter}
         />
@@ -211,7 +211,7 @@ const DesignShowcaseScreen: React.FC = () => {
           label="Small Input"
           value={inputValues.small}
           onChange={handleInputChange('small')}
-          roundness="small"
+          borderRadius="light"
           placeholder="Compact size"
           InputComponent={TextInputAdapter}
         />
@@ -220,7 +220,7 @@ const DesignShowcaseScreen: React.FC = () => {
           label="Large Input"
           value={inputValues.large}
           onChange={handleInputChange('large')}
-          roundness="small"
+          borderRadius="light"
           placeholder="Larger size"
           InputComponent={TextInputAdapter}
         />
@@ -244,7 +244,7 @@ const DesignShowcaseScreen: React.FC = () => {
           value={inputValues.pillFloating}
           onChange={handleInputChange('pillFloating')}
           inline={true}
-          roundness="pill"
+          borderRadius="full"
           placeholder="Rounded corners"
           InputComponent={TextInputAdapter}
         />
@@ -254,7 +254,7 @@ const DesignShowcaseScreen: React.FC = () => {
           value={inputValues.smallFloating}
           onChange={handleInputChange('smallFloating')}
           inline={true}
-          roundness="small"
+          borderRadius="light"
           placeholder="Compact size"
           InputComponent={TextInputAdapter}
         />
@@ -264,7 +264,7 @@ const DesignShowcaseScreen: React.FC = () => {
           value={inputValues.largeFloating}
           onChange={handleInputChange('largeFloating')}
           inline={true}
-          roundness="small"
+          borderRadius="light"
           placeholder="Larger size"
           InputComponent={TextInputAdapter}
         />

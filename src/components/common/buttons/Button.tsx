@@ -10,8 +10,8 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { colors, type Colors } from '../../styles/colors';
-import { typography } from '../../styles/typography';
+import { colors, type Colors } from '../../../styles/colors';
+import { typography } from '../../../styles/typography'; 
 
 export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error';
 export type ButtonSize = 'small' | 'medium' | 'large';
@@ -47,18 +47,18 @@ const Button: React.FC<ButtonProps> = ({
 
   // Function to get the correct colors based on colorName or fallback to variant
   const getButtonColors = () => {
-    if (colorName && colors[colorName]) {
-      return colors[colorName];
+    if (colorName && colors[colorName] && '500' in colors[colorName]) {
+      return colors[colorName] as any;
     }
     
     // Fallback to variant if colorName is not provided or doesn't exist
-    if (colors[variant]) {
-      return colors[variant];
+    if (colors[variant] && '500' in colors[variant]) {
+      return colors[variant] as any;
     }
     
     // Final fallback to primary
     console.warn(`Color not found for colorName: ${colorName} or variant: ${variant}. Using primary.`);
-    return colors.primary;
+    return colors.primary as any;
   };
 
   const handlePressIn = (): void => {
@@ -183,8 +183,10 @@ const Button: React.FC<ButtonProps> = ({
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       activeOpacity={1}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      {...(Platform.OS === 'web' ? {
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
+      } : {})}
       {...props}
     >
       <View

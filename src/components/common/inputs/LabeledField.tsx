@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
 import { colors } from '../../../styles/colors';
-export type Roundness = 'small' | 'pill';
-
 export type InputAdapterProps<T = any> = {
   value: T;
   onChange: (val: T) => void;
@@ -18,7 +16,7 @@ export type InputAdapterProps<T = any> = {
 export type LabeledFieldProps<T = any> = {
   label: string;
   inline?: boolean;
-  roundness?: Roundness;
+  borderRadius?: 'light' | 'full';
 
   value: T;
   onChange: (val: T) => void;
@@ -36,14 +34,14 @@ export type LabeledFieldProps<T = any> = {
 };
 
 const BORDER_RADIUS = {
-  small: 8,
-  pill: 9999,
+  light: 8,
+  full: 9999,
 } as const;
 
 export function LabeledField<T = any>({
   label,
   inline = false,
-  roundness = 'small',
+  borderRadius = 'light',
   value,
   onChange,
   placeholder,
@@ -55,10 +53,10 @@ export function LabeledField<T = any>({
   inputProps = {},
 }: LabeledFieldProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
-  const radius = BORDER_RADIUS[roundness];
+  const radius = BORDER_RADIUS[borderRadius];
 
   return (
-    <View style={[styles.container, inline && styles.inlineContainer, containerStyle, roundness === 'pill' && styles.pillRoundness, isFocused && styles.focused]}>
+    <View style={[styles.container, inline && styles.inlineContainer, containerStyle, borderRadius === 'full' && styles.fullRounded, isFocused && styles.focused]}>
       <Text style={[styles.label, inline && styles.inlineLabel, labelStyle]}>{label}</Text>
 
       <View
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     borderColor: colors.gray[300],
     alignItems: 'stretch',
   },
-  pillRoundness: {
+  fullRounded: {
     borderRadius: 9999,
   },
   label: {

@@ -103,7 +103,7 @@ const LoginScreen: React.FC = () => {
             label="Email"
             inline={true}
             value={email}
-            roundness="pill"
+            borderRadius="full"
             onChange={setEmail}
             placeholder="Enter your email"
             InputComponent={TextInputAdapter}
@@ -119,6 +119,7 @@ const LoginScreen: React.FC = () => {
             label="Password"
             inline={true}
             value={password}
+            borderRadius="full"
             onChange={setPassword}
             placeholder="Enter your password"
             InputComponent={TextInputAdapter}
@@ -144,6 +145,7 @@ const LoginScreen: React.FC = () => {
               onPress={handleLogin}
               loading={loading}
               disabled={loading}
+              borderRadius="full"
               style={styles.loginButton}
             >
               로그인
@@ -208,10 +210,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: 'stretch',
+    width: '100%',
   },
   loginButton: {
-    width: '100%',
     minWidth: 200,
   },
 });
