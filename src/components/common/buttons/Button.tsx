@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useRef } from 'react';
 import {
   TouchableOpacity,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   TouchableOpacityProps,
   ViewStyle,
   TextStyle,
+  Animated,
 } from 'react-native';
 import { colors, type Colors } from '../../../styles/colors';
 import { typography } from '../../../styles/typography'; 
@@ -44,6 +45,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const fillAnimation = useRef(new Animated.Value(0)).current;
 
   // Function to get the correct colors based on colorName or fallback to variant
   const getButtonColors = () => {
@@ -61,20 +63,35 @@ const Button: React.FC<ButtonProps> = ({
     return colors.primary as any;
   };
 
+  const animateFill = (toValue: number, instant = false) => {
+    if (instant) {
+      fillAnimation.setValue(toValue);
+    } else {
+      Animated.timing(fillAnimation, {
+        toValue,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    }
+  };
+
   const handlePressIn = (): void => {
     if (disabled || loading) return;
     setIsHovered(true);
+    animateFill(1);
   };
 
   const handlePressOut = (): void => {
     if (disabled || loading) return;
     setIsHovered(false);
+    animateFill(0, true); // Instant hide
   };
 
   const handlePress = (): void => {
     if (disabled || loading) return;
     // Keep the effect active during the entire press
     setIsHovered(true);
+    animateFill(1);
     // Call the original onPress
     if (onPress) {
       onPress();
@@ -82,6 +99,7 @@ const Button: React.FC<ButtonProps> = ({
     // Reset after a short delay to show the effect
     setTimeout(() => {
       setIsHovered(false);
+      animateFill(0, true); // Instant hide
     }, 200);
   };
 
@@ -89,12 +107,14 @@ const Button: React.FC<ButtonProps> = ({
   const handleMouseEnter = (): void => {
     if (Platform.OS === 'web' && !disabled && !loading) {
       setIsHovered(true);
+      animateFill(1);
     }
   };
 
   const handleMouseLeave = (): void => {
     if (Platform.OS === 'web' && !disabled && !loading) {
       setIsHovered(false);
+      animateFill(0, true); // Instant hide
     }
   };
 
@@ -168,12 +188,8 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   const getHoveredTextStyles = (): TextStyle => {
-    if (!isHovered) return {};
-    
-    // Simple underline on hover
-    return {
-      textDecorationLine: 'underline',
-    };
+    // No text decoration for the new fill animation
+    return {};
   };
 
   return (
@@ -195,6 +211,31 @@ const Button: React.FC<ButtonProps> = ({
           style,
         ]}
       >
+        {/* Animated fill overlay */}
+        <Animated.View
+          style={[
+            styles.fillOverlay,
+            {
+              backgroundColor: variant === 'primary' 
+                ? colors.text.inverse 
+                : getButtonColors()[500],
+              opacity: fillAnimation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 0.1],
+              }),
+              transform: [
+                {
+                  scale: fillAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 1],
+                  }),
+                },
+              ],
+              borderRadius: borderRadius === 'full' ? 9999 : 8,
+            },
+          ]}
+        />
+        
         {loading ? (
           <ActivityIndicator 
             color={variant === 'primary' ? colors.text.inverse : getButtonColors()[700]} 
@@ -220,6 +261,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 44,
     ...typography.button,
+    overflow: 'hidden', // Ensure the fill animation stays within bounds
+  },
+  
+  // Fill overlay for hover animation
+  fillOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 8, // Match button border radius
   },
   
   // Size variants
