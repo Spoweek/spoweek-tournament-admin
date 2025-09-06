@@ -1,17 +1,17 @@
 import React, { ReactNode } from 'react';
-import { View, StyleSheet, ViewStyle, ViewProps } from 'react-native';
+import { View, StyleSheet, ViewStyle, ViewProps, DimensionValue } from 'react-native';
 
 export interface CardProps extends Omit<ViewProps, 'style'> {
   children: ReactNode;
-  width?: string | number;
-  height?: string | number;
+  width?: DimensionValue;
+  height?: DimensionValue;
   backgroundColor?: string;
   borderRadius?: number;
   shadow?: boolean;
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
   padding?: number;
-  margin?: number | string;
+  margin?: DimensionValue;
   style?: ViewStyle;
 }
 
@@ -41,8 +41,8 @@ const Card: React.FC<CardProps> = ({
       justifyContent,
       ...(margin && { margin }),
     },
-    shadow && styles.shadow,
-    style,
+    ...(shadow ? [styles.shadow] : []),
+    ...(style ? [style] : []),
   ];
 
   return (
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   card: {
     // Base card styles
     flexDirection: 'column', // Default vertical flow
+    gap: 16,
   },
   shadow: {
     // iOS shadow
