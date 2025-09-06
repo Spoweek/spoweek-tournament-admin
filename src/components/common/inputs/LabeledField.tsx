@@ -137,7 +137,8 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 40,
     height: '100%',
-    padding: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   focused: {
     borderColor: colors.primary[500],
