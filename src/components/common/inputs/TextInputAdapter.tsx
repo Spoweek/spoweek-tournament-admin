@@ -3,7 +3,10 @@ import React from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 import type { InputAdapterProps } from './LabeledField';
 
-const TextInputAdapter: React.FC<InputAdapterProps<string> & TextInputProps> = ({
+// Create a type that omits the conflicting onChange from TextInputProps
+type TextInputAdapterProps = Omit<TextInputProps, 'onChange'> & InputAdapterProps<string>;
+
+const TextInputAdapter: React.FC<TextInputAdapterProps> = ({
   value,
   onChange,
   placeholder,

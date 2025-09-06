@@ -325,10 +325,8 @@ const LoginScreen: React.FC = () => {
               label="Standard Input"
               value=""
               onChange={() => {}}
+              placeholder="Enter text here"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Enter text here"
-              }}
             />
             
             <LabeledField
@@ -336,10 +334,8 @@ const LoginScreen: React.FC = () => {
               value=""
               onChange={() => {}}
               roundness="pill"
+              placeholder="Rounded corners"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Rounded corners"
-              }}
             />
             
             <LabeledField
@@ -347,10 +343,8 @@ const LoginScreen: React.FC = () => {
               value=""
               onChange={() => {}}
               roundness="small"
+              placeholder="Compact size"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Compact size"
-              }}
             />
             
             <LabeledField
@@ -358,10 +352,8 @@ const LoginScreen: React.FC = () => {
               value=""
               onChange={() => {}}
               roundness="small"
+              placeholder="Larger size"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Larger size"
-              }}
             />
           </View>
           
@@ -374,10 +366,8 @@ const LoginScreen: React.FC = () => {
               value=""
               onChange={() => {}}
               inline={true}
+              placeholder="Enter text here"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Enter text here"
-              }}
             />
             
             <LabeledField
@@ -386,10 +376,8 @@ const LoginScreen: React.FC = () => {
               onChange={() => {}}
               inline={true}
               roundness="pill"
+              placeholder="Rounded corners"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Rounded corners"
-              }}
             />
             
             <LabeledField
@@ -398,10 +386,8 @@ const LoginScreen: React.FC = () => {
               onChange={() => {}}
               inline={true}
               roundness="small"
+              placeholder="Compact size"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Compact size"
-              }}
             />
             
             <LabeledField
@@ -410,10 +396,8 @@ const LoginScreen: React.FC = () => {
               onChange={() => {}}
               inline={true}
               roundness="small"
+              placeholder="Larger size"
               InputComponent={TextInputAdapter}
-              InputComponentProps={{
-                placeholder: "Larger size"
-              }}
             />
           </View>
         </Card>
@@ -439,11 +423,12 @@ const LoginScreen: React.FC = () => {
           
           <LabeledField
             label="Email"
+            inline={true}
             value={email}
             onChange={setEmail}
+            placeholder="Enter your email"
             InputComponent={TextInputAdapter}
-            InputComponentProps={{
-              placeholder: "Enter your email",
+            inputProps={{
               keyboardType: "email-address",
               autoCapitalize: "none",
               autoCorrect: false,
@@ -453,11 +438,12 @@ const LoginScreen: React.FC = () => {
           
           <LabeledField
             label="Password"
+            inline={true}
             value={password}
             onChange={setPassword}
+            placeholder="Enter your password"
             InputComponent={TextInputAdapter}
-            InputComponentProps={{
-              placeholder: "Enter your password",
+            inputProps={{
               secureTextEntry: true,
               autoCapitalize: "none",
               autoCorrect: false,

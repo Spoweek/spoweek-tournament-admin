@@ -27,6 +27,9 @@ export type LabeledFieldProps<T = any> = {
   containerStyle?: ViewStyle;
   labelStyle?: TextStyle;
   inputContainerStyle?: ViewStyle;
+  
+  // Additional props to pass to InputComponent
+  inputProps?: Record<string, any>;
 };
 
 const BORDER_RADIUS = {
@@ -46,6 +49,7 @@ export function LabeledField<T = any>({
   containerStyle,
   labelStyle,
   inputContainerStyle,
+  inputProps = {},
 }: LabeledFieldProps<T>) {
   const radius = BORDER_RADIUS[roundness];
 
@@ -68,6 +72,7 @@ export function LabeledField<T = any>({
           placeholder={placeholder}
           disabled={disabled}
           style={styles.input}
+          {...inputProps}
         />
       </View>
     </View>

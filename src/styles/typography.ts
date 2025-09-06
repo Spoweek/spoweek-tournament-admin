@@ -1,4 +1,5 @@
 import { colors, type Colors } from './colors';
+import { TextStyle } from 'react-native';
 
 // Font families
 export interface FontFamilies {
@@ -40,15 +41,15 @@ export const fontSizes: FontSizes = {
   '6xl': 60,
 };
 
-// Font weights
+// Font weights - using React Native compatible types
 export interface FontWeights {
-  light: string;
-  normal: string;
-  medium: string;
-  semibold: string;
-  bold: string;
-  extrabold: string;
-  black: string;
+  light: TextStyle['fontWeight'];
+  normal: TextStyle['fontWeight'];
+  medium: TextStyle['fontWeight'];
+  semibold: TextStyle['fontWeight'];
+  bold: TextStyle['fontWeight'];
+  extrabold: TextStyle['fontWeight'];
+  black: TextStyle['fontWeight'];
 }
 
 export const fontWeights: FontWeights = {
@@ -56,7 +57,7 @@ export const fontWeights: FontWeights = {
   normal: '400',
   medium: '500',
   semibold: '600',
-  bold: '700',
+  bold: 'bold',
   extrabold: '800',
   black: '900',
 };
@@ -76,11 +77,11 @@ export const lineHeights: LineHeights = {
   loose: 1.8,
 };
 
-// Typography style interface
-export interface TypographyStyle {
+// Typography style interface - extending React Native TextStyle
+export interface TypographyStyle extends Partial<TextStyle> {
   fontFamily: string;
   fontSize: number;
-  fontWeight: string;
+  fontWeight: TextStyle['fontWeight'];
   lineHeight: number;
   color: string;
 }
