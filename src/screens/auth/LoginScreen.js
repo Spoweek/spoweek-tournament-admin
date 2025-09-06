@@ -3,7 +3,6 @@ import {
   View, 
   TouchableOpacity, 
   StyleSheet, 
-  ActivityIndicator,
   Alert
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
@@ -371,17 +370,14 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
           
-          <TouchableOpacity 
-            style={[styles.loginButton, loading && styles.loginButtonDisabled]} 
+          <PrimaryButton 
             onPress={handleLogin}
+            loading={loading}
             disabled={loading}
+            borderRadius="full"
           >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <ThemedText style={[typography.button, styles.loginButtonThemedText]}>로그인</ThemedText>
-            )}
-          </TouchableOpacity>
+            로그인
+          </PrimaryButton>
         </Card>
       </View>
     </AuthLayout>
@@ -411,21 +407,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#ddd',
-  },
-  loginButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  loginButtonDisabled: {
-    backgroundColor: '#ccc',
-  },
-  loginButtonThemedText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
   },
   errorContainer: {
     backgroundColor: '#FFEBEE',
