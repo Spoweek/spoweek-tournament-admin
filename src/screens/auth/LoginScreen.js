@@ -13,6 +13,13 @@ import AuthLayout from '../../layouts/AuthLayout';
 import Logo from '../../components/common/Logo';
 import Card from '../../components/common/Card';
 import { colors } from '../../styles/colors';
+import { 
+  PrimaryButton, 
+  SecondaryButton, 
+  SuccessButton, 
+  WarningButton, 
+  DangerButton 
+} from '../../components/common/buttons';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -206,6 +213,96 @@ export default function LoginScreen() {
               <View style={[styles.colorSwatch, { backgroundColor: colors.text.tertiary }]}>
                 <Text style={[styles.colorLabel, { color: colors.text.inverse }]}>text.tertiary</Text>
               </View>
+            </View>
+          </View>
+        </Card>
+        
+        {/* Button Showcase - Temporary for Testing */}
+        <Card 
+          width="100%" 
+          padding={16}
+          style={styles.buttonShowcaseCard}
+        >
+          <Text style={styles.buttonShowcaseTitle}>Button Components</Text>
+          
+          {/* Light Rounded Buttons */}
+          <View style={styles.buttonSection}>
+            <Text style={styles.buttonSectionTitle}>Light Rounded</Text>
+            <View style={styles.buttonRow}>
+              <PrimaryButton onPress={() => Alert.alert('Primary')}>
+                Primary
+              </PrimaryButton>
+              <SecondaryButton onPress={() => Alert.alert('Secondary')}>
+                Secondary
+              </SecondaryButton>
+            </View>
+            <View style={styles.buttonRow}>
+              <SuccessButton onPress={() => Alert.alert('Success')}>
+                Success
+              </SuccessButton>
+              <WarningButton onPress={() => Alert.alert('Warning')}>
+                Warning
+              </WarningButton>
+            </View>
+            <View style={styles.buttonRow}>
+              <DangerButton onPress={() => Alert.alert('Danger')}>
+                Danger
+              </DangerButton>
+            </View>
+          </View>
+          
+          {/* Full Rounded (Pill) Buttons */}
+          <View style={styles.buttonSection}>
+            <Text style={styles.buttonSectionTitle}>Full Rounded (Pill)</Text>
+            <View style={styles.buttonRow}>
+              <PrimaryButton borderRadius="full" onPress={() => Alert.alert('Primary Pill')}>
+                Primary
+              </PrimaryButton>
+              <SecondaryButton borderRadius="full" onPress={() => Alert.alert('Secondary Pill')}>
+                Secondary
+              </SecondaryButton>
+            </View>
+            <View style={styles.buttonRow}>
+              <SuccessButton borderRadius="full" onPress={() => Alert.alert('Success Pill')}>
+                Success
+              </SuccessButton>
+              <WarningButton borderRadius="full" onPress={() => Alert.alert('Warning Pill')}>
+                Warning
+              </WarningButton>
+            </View>
+            <View style={styles.buttonRow}>
+              <DangerButton borderRadius="full" onPress={() => Alert.alert('Danger Pill')}>
+                Danger
+              </DangerButton>
+            </View>
+          </View>
+          
+          {/* Different Sizes */}
+          <View style={styles.buttonSection}>
+            <Text style={styles.buttonSectionTitle}>Different Sizes</Text>
+            <View style={styles.buttonRow}>
+              <PrimaryButton size="small" onPress={() => Alert.alert('Small')}>
+                Small
+              </PrimaryButton>
+              <PrimaryButton size="medium" onPress={() => Alert.alert('Medium')}>
+                Medium
+              </PrimaryButton>
+              <PrimaryButton size="large" onPress={() => Alert.alert('Large')}>
+                Large
+              </PrimaryButton>
+            </View>
+          </View>
+          
+          {/* Disabled and Loading States */}
+          <View style={styles.buttonSection}>
+            <Text style={styles.buttonSectionTitle}>States</Text>
+            <View style={styles.buttonRow}>
+              <PrimaryButton disabled onPress={() => Alert.alert('Disabled')}>
+                Disabled
+              </PrimaryButton>
+              <PrimaryButton loading onPress={() => Alert.alert('Loading')}>
+                Loading
+              </PrimaryButton>
             </View>
           </View>
         </Card>
@@ -408,5 +505,32 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#333',
     textAlign: 'center',
+  },
+  // Button Showcase Styles - Temporary for Testing
+  buttonShowcaseCard: {
+    marginBottom: 16,
+  },
+  buttonShowcaseTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 16,
+    color: '#333',
+  },
+  buttonSection: {
+    marginBottom: 20,
+  },
+  buttonSectionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 12,
+    color: '#666',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 12,
+    flexWrap: 'wrap',
+    gap: 8,
   },
 });
