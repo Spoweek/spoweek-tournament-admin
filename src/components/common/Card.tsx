@@ -20,11 +20,11 @@ const Card: React.FC<CardProps> = ({
   width, 
   height, 
   backgroundColor = '#FFFFFF',
-  borderRadius = 12,
+  borderRadius = 30,
   shadow = true,
   alignItems = 'stretch',
   justifyContent = 'flex-start',
-  padding = 16,
+  padding = 30,
   margin,
   style,
   ...props 
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
       height: 0,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 10,
+    shadowRadius: 40,
     // Android shadow
     elevation: 3,
   },

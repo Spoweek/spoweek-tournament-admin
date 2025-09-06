@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     width: '30%',
     fontWeight: '400',
-    borderRightWidth: 1,
+    borderRightWidth: 0.5,
     borderRightColor: colors.gray[300],
     height: '100%',
     flexDirection: 'column',
