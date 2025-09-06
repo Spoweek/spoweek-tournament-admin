@@ -1,13 +1,16 @@
 // components/LabeledField.tsx
-import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
+import { colors } from '../../../styles/colors';
 export type Roundness = 'small' | 'pill';
 
 export type InputAdapterProps<T = any> = {
   value: T;
   onChange: (val: T) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   placeholder?: string;
+  placeholderTextColor?: string;
   disabled?: boolean;
   style?: any;
 };
@@ -51,10 +54,11 @@ export function LabeledField<T = any>({
   inputContainerStyle,
   inputProps = {},
 }: LabeledFieldProps<T>) {
+  const [isFocused, setIsFocused] = useState(false);
   const radius = BORDER_RADIUS[roundness];
 
   return (
-    <View style={[styles.container, inline && styles.inlineContainer, containerStyle]}>
+    <View style={[styles.container, inline && styles.inlineContainer, containerStyle, roundness === 'pill' && styles.pillRoundness, isFocused && styles.focused]}>
       <Text style={[styles.label, inline && styles.inlineLabel, labelStyle]}>{label}</Text>
 
       <View
@@ -64,12 +68,16 @@ export function LabeledField<T = any>({
           inline && styles.inlineInputWrapper,
           disabled && styles.disabled,
           inputContainerStyle,
+          isFocused && styles.focused
         ]}
       >
         <InputComponent
           value={value}
           onChange={onChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
+          placeholderTextColor={colors.gray[400]}
           disabled={disabled}
           style={styles.input}
           {...inputProps}
@@ -85,7 +93,14 @@ const styles = StyleSheet.create({
   },
   inlineContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    borderWidth: 1,
+    overflow: 'hidden',
+    borderRadius: 8,
+    borderColor: colors.gray[300],
+    alignItems: 'stretch',
+  },
+  pillRoundness: {
+    borderRadius: 9999,
   },
   label: {
     marginBottom: 6,
@@ -94,25 +109,38 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   inlineLabel: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     marginBottom: 0,
-    width: '20%',
-    paddingRight: 8,
+    width: '30%',
+    fontWeight: '400',
+    borderRightWidth: 1,
+    borderRightColor: colors.gray[300],
+    height: '100%',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    display: 'flex',
   },
   inputWrapper: {
     borderWidth: 1,
-    borderColor: '#D0D5DD',
+    borderColor: colors.gray[300],
     backgroundColor: '#FFF',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
   },
   inlineInputWrapper: {
     flex: 1,
+    borderWidth: 0,
   },
   disabled: {
     opacity: 0.6,
   },
   input: {
-    minHeight: 20,
+    minHeight: 40,
+    height: '100%',
+    padding: 8,
+  },
+  focused: {
+    borderColor: colors.primary[500],
   },
 });
 

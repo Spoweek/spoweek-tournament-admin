@@ -381,7 +381,7 @@ const LoginScreen: React.FC = () => {
             />
             
             <LabeledField
-              label="Small Floating"
+              label="Small Floating asdasd asdsa das dasds ads"
               value=""
               onChange={() => {}}
               inline={true}
@@ -425,6 +425,7 @@ const LoginScreen: React.FC = () => {
             label="Email"
             inline={true}
             value={email}
+            roundness="pill"
             onChange={setEmail}
             placeholder="Enter your email"
             InputComponent={TextInputAdapter}

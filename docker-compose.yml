@@ -14,6 +14,7 @@ services:
       - API_BASE_URL=http://spoweek-tournament-api-laravel.test-1:80
       - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
       - REACT_NATIVE_PACKAGER_HOSTNAME=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - spoweek-network
 
