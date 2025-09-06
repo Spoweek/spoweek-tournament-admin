@@ -88,9 +88,20 @@ const AppNavigator: React.FC = () => {
     return <LoadingScreen />;
   }
 
+  // Check URL for design page
+  const isDesignPage = typeof window !== 'undefined' && 
+    window.location.pathname === '/design';
+
+  if (isDesignPage) {
+    return <DesignShowcaseScreen />;
+  }
+
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator 
+        screenOptions={{ headerShown: false }}
+        initialRouteName={isAuthenticated ? "Main" : "Auth"}
+      >
         {isAuthenticated ? (
           <Stack.Screen name="Main" component={MainTabs} />
         ) : (

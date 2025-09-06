@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, Alert, Dimensions } from 'react-native';
-import { Card } from '../../components/common/Card';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, Alert, Dimensions } from 'react-native';
+import Card from '../../components/common/Card';
 import { PrimaryButton, SecondaryButton, SuccessButton, WarningButton, DangerButton } from '../../components/common/buttons';
 import { LabeledField } from '../../components/common/inputs';
-import { TextInputAdapter } from '../../components/common/inputs/TextInputAdapter';
+import TextInputAdapter from '../../components/common/inputs/TextInputAdapter';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 import { globalStyles } from '../../components/common/GlobalStyles';
 
-const { width: screenWidth } = Dimensions.get('window');
-
 const DesignShowcaseScreen: React.FC = () => {
+  const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
   const [inputValues, setInputValues] = useState({
     standard: '',
     pill: '',
@@ -21,6 +20,15 @@ const DesignShowcaseScreen: React.FC = () => {
     smallFloating: '',
     largeFloating: '',
   });
+
+  // Listen for screen size changes
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      setScreenWidth(window.width);
+    });
+
+    return () => subscription?.remove();
+  }, []);
 
   // Calculate responsive grid columns based on screen width
   const getGridColumns = () => {
@@ -52,10 +60,10 @@ const DesignShowcaseScreen: React.FC = () => {
           <View style={[styles.colorSwatch, { backgroundColor: colors.primary[500] }]}>
             <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>primary.500</Text>
           </View>
-          <View style={[styles.colorSwatch, { backgroundColor: colors.primary[600] }]}>
+          <View style={[styles.colorSwatch, { backgroundColor: (colors.primary as any)[600] || colors.primary[500] }]}>
             <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>primary.600</Text>
           </View>
-          <View style={[styles.colorSwatch, { backgroundColor: colors.primary[700] }]}>
+          <View style={[styles.colorSwatch, { backgroundColor: (colors.primary as any)[700] || colors.primary[500] }]}>
             <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>primary.700</Text>
           </View>
         </View>
@@ -281,30 +289,27 @@ const DesignShowcaseScreen: React.FC = () => {
         </Text>
       </View>
       
-      <View style={[styles.grid, { 
-        flexDirection: gridColumns === 1 ? 'column' : 'row',
-        flexWrap: gridColumns > 1 ? 'wrap' : 'nowrap'
-      }]}>
+      <View style={styles.grid}>
         <View style={[styles.gridItem, { 
           width: gridColumns === 1 ? '100%' : `${100 / gridColumns}%`,
-          paddingRight: gridColumns > 1 ? 12 : 0,
-          paddingBottom: 12
+          paddingHorizontal: 6,
+          paddingBottom: 16
         }]}>
           <ColorPaletteCard />
         </View>
         
         <View style={[styles.gridItem, { 
           width: gridColumns === 1 ? '100%' : `${100 / gridColumns}%`,
-          paddingRight: gridColumns > 1 ? 12 : 0,
-          paddingBottom: 12
+          paddingHorizontal: 6,
+          paddingBottom: 16
         }]}>
           <ButtonShowcaseCard />
         </View>
         
         <View style={[styles.gridItem, { 
           width: gridColumns === 1 ? '100%' : `${100 / gridColumns}%`,
-          paddingRight: gridColumns > 1 ? 12 : 0,
-          paddingBottom: 12
+          paddingHorizontal: 6,
+          paddingBottom: 16
         }]}>
           <InputShowcaseCard />
         </View>
@@ -336,12 +341,16 @@ const styles = StyleSheet.create({
   },
   grid: {
     width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: -6,
   },
   gridItem: {
-    // Grid item styles handled dynamically
+    flexDirection: 'column',
   },
   showcaseCard: {
-    marginBottom: 0, // Handled by grid item padding
+    marginBottom: 0, // Handled by mosaic grid spacing
+    height: '100%', // Fill available space
   },
   cardTitle: {
     textAlign: 'center',
