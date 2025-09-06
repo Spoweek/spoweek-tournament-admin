@@ -124,7 +124,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes['5xl'],
     fontWeight: fontWeights.bold,
-    lineHeight: lineHeights.tight,
+    lineHeight: fontSizes['5xl'] * lineHeights.tight, // 48 * 1.2 = 57.6
     color: colors.text.primary,
   },
   
@@ -132,7 +132,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes['4xl'],
     fontWeight: fontWeights.bold,
-    lineHeight: lineHeights.tight,
+    lineHeight: fontSizes['4xl'] * lineHeights.tight, // 36 * 1.2 = 43.2
     color: colors.text.primary,
   },
   
@@ -140,7 +140,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes['3xl'],
     fontWeight: fontWeights.semibold,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes['3xl'] * lineHeights.normal, // 30 * 1.4 = 42
     color: colors.text.primary,
   },
   
@@ -148,7 +148,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes['2xl'],
     fontWeight: fontWeights.semibold,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes['2xl'] * lineHeights.normal, // 24 * 1.4 = 33.6
     color: colors.text.primary,
   },
   
@@ -156,7 +156,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.xl,
     fontWeight: fontWeights.medium,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.xl * lineHeights.normal, // 20 * 1.4 = 28
     color: colors.text.primary,
   },
   
@@ -164,7 +164,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.medium,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.lg * lineHeights.normal, // 18 * 1.4 = 25.2
     color: colors.text.primary,
   },
 
@@ -173,7 +173,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.base,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.base * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.text.primary,
   },
   
@@ -181,7 +181,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.relaxed,
+    lineHeight: fontSizes.lg * lineHeights.relaxed, // 18 * 1.6 = 28.8
     color: colors.text.primary,
   },
   
@@ -189,7 +189,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.sm * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.text.secondary,
   },
 
@@ -198,7 +198,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.medium,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.sm * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.text.primary,
   },
   
@@ -206,7 +206,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.xs,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.xs * lineHeights.normal, // 12 * 1.4 = 16.8
     color: colors.text.tertiary,
   },
 
@@ -215,7 +215,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.base,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.base * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.primary[500],
     textDecorationLine: 'underline',
   },
@@ -224,7 +224,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.base,
     fontWeight: fontWeights.medium,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.base * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.text.inverse,
   },
   
@@ -232,7 +232,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.base,
     fontWeight: fontWeights.medium,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.base * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.text.primary,
   },
 
@@ -241,7 +241,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.sm * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.success[700],
   },
   
@@ -249,7 +249,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.sm * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.warning[700],
   },
   
@@ -257,7 +257,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.sm,
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.sm * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.error[700],
   },
 
@@ -266,7 +266,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.sm, // Changed from base (16px) to sm (14px)
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.sm * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.text.primary,
   },
   
@@ -274,7 +274,7 @@ export const typography: Typography = {
     fontFamily: fontFamilies.primary,
     fontSize: fontSizes.sm, // Changed from base (16px) to sm (14px)
     fontWeight: fontWeights.normal,
-    lineHeight: lineHeights.normal,
+    lineHeight: fontSizes.sm * lineHeights.normal, // 14 * 1.4 = 19.6
     color: colors.text.tertiary,
   },
 };

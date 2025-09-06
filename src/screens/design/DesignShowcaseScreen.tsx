@@ -283,8 +283,8 @@ const DesignShowcaseScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <View style={styles.header}>
-        <Text style={[globalStyles.text, typography.h1, styles.title]}>Design Showcase</Text>
-        <Text style={[globalStyles.text, typography.body, styles.subtitle]}>
+        <Text style={[typography.h1]}>Design Showcase</Text>
+        <Text style={[typography.body, styles.subtitle]}>
           A comprehensive view of all design system components
         </Text>
       </View>
@@ -329,6 +329,9 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 32,
     alignItems: 'center',
+    paddingTop: 20,
+    position: 'relative',
+    zIndex: 1,
   },
   title: {
     textAlign: 'center',
