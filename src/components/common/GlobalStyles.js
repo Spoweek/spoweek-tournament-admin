@@ -29,15 +29,24 @@ export const GlobalStyles = ({ children }) => {
   if (Platform.OS === 'web') {
     React.useEffect(() => {
       const style = document.createElement('style');
-      style.textContent = `
-        * {
-          font-family: 'NotoSansKR_400Regular', 'Noto Sans KR', sans-serif !important;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          text-rendering: optimizeLegibility;
-          font-smooth: always;
-        }
-      `;
+                  style.textContent = `
+                    * {
+                      font-family: 'NotoSansKR_400Regular', 'Noto Sans KR', sans-serif !important;
+                      -webkit-font-smoothing: antialiased;
+                      -moz-osx-font-smoothing: grayscale;
+                      text-rendering: optimizeLegibility;
+                      font-smooth: always;
+                    }
+                    input:focus {
+                      outline: none !important;
+                      box-shadow: none !important;
+                      border: none !important;
+                    }
+                    input {
+                      outline: none !important;
+                      box-shadow: none !important;
+                    }
+                  `;
       document.head.appendChild(style);
       
       return () => {
