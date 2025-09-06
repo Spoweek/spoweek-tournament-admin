@@ -8,6 +8,7 @@ import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 import { globalStyles } from '../../components/common/GlobalStyles';
 
+
 const DesignShowcaseScreen: React.FC = () => {
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
   const [inputValues, setInputValues] = useState({
@@ -39,6 +40,7 @@ const DesignShowcaseScreen: React.FC = () => {
 
   const gridColumns = getGridColumns();
 
+
   const handleInputChange = (key: string) => (value: string) => {
     setInputValues(prev => ({ ...prev, [key]: value }));
   };
@@ -48,6 +50,7 @@ const DesignShowcaseScreen: React.FC = () => {
       // Handle enter key if needed
     }
   };
+
 
   const ColorPaletteCard = () => (
     <Card width="100%" padding={16} style={styles.showcaseCard}>
@@ -280,10 +283,11 @@ const DesignShowcaseScreen: React.FC = () => {
     </Card>
   );
 
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <View style={styles.header}>
-        <Text style={[typography.h1]}>Design Showcase</Text>
+        <Text style={[typography.h1, styles.title]}>Design Showcase</Text>
         <Text style={[typography.body, styles.subtitle]}>
           A comprehensive view of all design system components
         </Text>
@@ -352,8 +356,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   showcaseCard: {
-    marginBottom: 0, // Handled by mosaic grid spacing
-    height: '100%', // Fill available space
+    marginBottom: 0,
+    height: '100%',
   },
   cardTitle: {
     textAlign: 'center',
@@ -410,6 +414,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontWeight: '600',
   },
+  
 });
 
 export default DesignShowcaseScreen;
