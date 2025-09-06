@@ -1,18 +1,40 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import config from '../../config';
 
-const AuthContext = createContext();
+// User interface
+export interface User {
+  email: string;
+  id?: string;
+  name?: string;
+  role?: string;
+}
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+// Auth context value interface
+export interface AuthContextValue {
+  user: User | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+  logout: () => void;
+}
+
+// Auth provider props interface
+export interface AuthProviderProps {
+  children: ReactNode;
+}
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = async (): Promise<void> => {
     try {
       const token = localStorage.getItem('auth_token');
       if (token) {
@@ -29,7 +51,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; data?: any; error?: string }> => {
     try {
       const response = await fetch(`${config.API_BASE_URL}/api/v1/auth/login`, {
         method: 'POST',
@@ -58,13 +80,13 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
+  const logout = (): void => {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('auth_token');
   };
 
-  const value = {
+  const value: AuthContextValue = {
     user,
     loading,
     isAuthenticated,
@@ -79,7 +101,7 @@ export function AuthProvider({ children }) {
   );
 }
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextValue => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');

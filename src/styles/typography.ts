@@ -1,14 +1,33 @@
-import { colors } from './colors';
+import { colors, type Colors } from './colors';
 
 // Font families
-export const fontFamilies = {
+export interface FontFamilies {
+  primary: string;
+  secondary: string;
+  fallback: string;
+}
+
+export const fontFamilies: FontFamilies = {
   primary: 'NotoSansKR_400Regular',
   secondary: 'sans-serif',
   fallback: 'system',
 };
 
 // Font sizes
-export const fontSizes = {
+export interface FontSizes {
+  xs: number;
+  sm: number;
+  base: number;
+  lg: number;
+  xl: number;
+  '2xl': number;
+  '3xl': number;
+  '4xl': number;
+  '5xl': number;
+  '6xl': number;
+}
+
+export const fontSizes: FontSizes = {
   xs: 12,
   sm: 14,
   base: 16,
@@ -22,7 +41,17 @@ export const fontSizes = {
 };
 
 // Font weights
-export const fontWeights = {
+export interface FontWeights {
+  light: string;
+  normal: string;
+  medium: string;
+  semibold: string;
+  bold: string;
+  extrabold: string;
+  black: string;
+}
+
+export const fontWeights: FontWeights = {
   light: '300',
   normal: '400',
   medium: '500',
@@ -33,24 +62,62 @@ export const fontWeights = {
 };
 
 // Line heights
-export const lineHeights = {
+export interface LineHeights {
+  tight: number;
+  normal: number;
+  relaxed: number;
+  loose: number;
+}
+
+export const lineHeights: LineHeights = {
   tight: 1.2,
   normal: 1.4,
   relaxed: 1.6,
   loose: 1.8,
 };
 
+// Typography style interface
+export interface TypographyStyle {
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: string;
+  lineHeight: number;
+  color: string;
+}
+
 // Global default styles
-export const globalStyles = {
+export const globalStyles: TypographyStyle = {
   fontFamily: fontFamilies.primary,
   fontSize: fontSizes.base,
   fontWeight: fontWeights.normal,
-  lineHeight: lineHeights.base,
+  lineHeight: lineHeights.normal,
   color: colors.text.primary,
 };
 
 // Typography styles
-export const typography = {
+export interface Typography {
+  h1: TypographyStyle;
+  h2: TypographyStyle;
+  h3: TypographyStyle;
+  h4: TypographyStyle;
+  h5: TypographyStyle;
+  h6: TypographyStyle;
+  body: TypographyStyle;
+  bodyLarge: TypographyStyle;
+  bodySmall: TypographyStyle;
+  label: TypographyStyle;
+  caption: TypographyStyle;
+  link: TypographyStyle;
+  button: TypographyStyle;
+  buttonSecondary: TypographyStyle;
+  success: TypographyStyle;
+  warning: TypographyStyle;
+  error: TypographyStyle;
+  input: TypographyStyle;
+  placeholder: TypographyStyle;
+}
+
+export const typography: Typography = {
   // Headings
   h1: {
     fontFamily: fontFamilies.primary,
@@ -196,7 +263,7 @@ export const typography = {
   // Input text
   input: {
     fontFamily: fontFamilies.primary,
-    fontSize: fontSizes.base,
+    fontSize: fontSizes.sm, // Changed from base (16px) to sm (14px)
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal,
     color: colors.text.primary,
@@ -204,7 +271,7 @@ export const typography = {
   
   placeholder: {
     fontFamily: fontFamilies.primary,
-    fontSize: fontSizes.base,
+    fontSize: fontSizes.sm, // Changed from base (16px) to sm (14px)
     fontWeight: fontWeights.normal,
     lineHeight: lineHeights.normal,
     color: colors.text.tertiary,
@@ -212,7 +279,19 @@ export const typography = {
 };
 
 // Spacing scale
-export const spacing = {
+export interface Spacing {
+  xs: number;
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  '2xl': number;
+  '3xl': number;
+  '4xl': number;
+  '5xl': number;
+}
+
+export const spacing: Spacing = {
   xs: 4,
   sm: 8,
   md: 16,
@@ -225,7 +304,17 @@ export const spacing = {
 };
 
 // Border radius scale
-export const borderRadius = {
+export interface BorderRadius {
+  none: number;
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+  '2xl': number;
+  full: number;
+}
+
+export const borderRadius: BorderRadius = {
   none: 0,
   sm: 4,
   md: 8,
@@ -236,7 +325,21 @@ export const borderRadius = {
 };
 
 // Shadow styles
-export const shadows = {
+export interface ShadowStyle {
+  shadowColor: string;
+  shadowOffset: { width: number; height: number };
+  shadowOpacity: number;
+  shadowRadius: number;
+  elevation: number;
+}
+
+export interface Shadows {
+  sm: ShadowStyle;
+  md: ShadowStyle;
+  lg: ShadowStyle;
+}
+
+export const shadows: Shadows = {
   sm: {
     shadowColor: colors.shadow.light,
     shadowOffset: { width: 0, height: 1 },

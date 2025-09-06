@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAuth } from '../context/AuthContext';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, ViewStyle } from 'react-native';
 
 // Import screens
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // Main authenticated navigation with tabs
-function MainTabs() {
+const MainTabs: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -52,28 +52,28 @@ function MainTabs() {
       />
     </Tab.Navigator>
   );
-}
+};
 
 // Auth navigation (login, register, etc.)
-function AuthStack() {
+const AuthStack: React.FC = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
     </Stack.Navigator>
   );
-}
+};
 
 // Loading component
-function LoadingScreen() {
+const LoadingScreen: React.FC = () => {
   return (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" color="#007AFF" />
     </View>
   );
-}
+};
 
 // Main app navigator
-export default function AppNavigator() {
+const AppNavigator: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
@@ -91,7 +91,7 @@ export default function AppNavigator() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   loadingContainer: {
@@ -101,3 +101,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
 });
+
+export default AppNavigator;

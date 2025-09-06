@@ -1,8 +1,13 @@
-import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { ReactNode } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, ViewStyle, TextStyle } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 
-export default function MainLayout({ children, title }) {
+export interface MainLayoutProps {
+  children: ReactNode;
+  title: string;
+}
+
+const MainLayout: React.FC<MainLayoutProps> = ({ children, title }) => {
   const { user, logout } = useAuth();
 
   return (
@@ -21,7 +26,7 @@ export default function MainLayout({ children, title }) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -68,3 +73,5 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
+
+export default MainLayout;

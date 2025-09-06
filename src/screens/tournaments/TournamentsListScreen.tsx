@@ -5,24 +5,34 @@ import {
   FlatList, 
   TouchableOpacity, 
   StyleSheet, 
-  ActivityIndicator 
+  ActivityIndicator,
+  ViewStyle,
+  TextStyle,
+  ListRenderItem
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MainLayout from '../../layouts/MainLayout';
 
-export default function TournamentsListScreen() {
+interface Tournament {
+  id: number;
+  name: string;
+  status: 'Active' | 'Upcoming' | 'Completed';
+  participants: number;
+}
+
+const TournamentsListScreen: React.FC = () => {
   const navigation = useNavigation();
-  const [tournaments, setTournaments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     loadTournaments();
   }, []);
 
-  const loadTournaments = async () => {
+  const loadTournaments = async (): Promise<void> => {
     try {
       // Mock data for now - replace with actual API call
-      const mockTournaments = [
+      const mockTournaments: Tournament[] = [
         { id: 1, name: 'Summer Championship 2024', status: 'Active', participants: 32 },
         { id: 2, name: 'Winter League 2024', status: 'Upcoming', participants: 16 },
         { id: 3, name: 'Spring Tournament 2024', status: 'Completed', participants: 24 },
@@ -38,10 +48,10 @@ export default function TournamentsListScreen() {
     }
   };
 
-  const renderTournament = ({ item }) => (
+  const renderTournament: ListRenderItem<Tournament> = ({ item }) => (
     <TouchableOpacity 
       style={styles.tournamentItem}
-      onPress={() => navigation.navigate('TournamentDetail', { tournamentId: item.id })}
+      onPress={() => navigation.navigate('TournamentDetail' as never, { tournamentId: item.id } as never)}
     >
       <View style={styles.tournamentInfo}>
         <Text style={styles.tournamentName}>{item.name}</Text>
@@ -53,7 +63,7 @@ export default function TournamentsListScreen() {
     </TouchableOpacity>
   );
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: Tournament['status']): string => {
     switch (status) {
       case 'Active': return '#4CAF50';
       case 'Upcoming': return '#FF9800';
@@ -78,7 +88,7 @@ export default function TournamentsListScreen() {
       <View style={styles.container}>
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => navigation.navigate('CreateTournament')}
+          onPress={() => navigation.navigate('CreateTournament' as never)}
         >
           <Text style={styles.addButtonText}>+ Create New Tournament</Text>
         </TouchableOpacity>
@@ -92,7 +102,7 @@ export default function TournamentsListScreen() {
       </View>
     </MainLayout>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -159,3 +169,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default TournamentsListScreen;

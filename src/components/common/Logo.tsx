@@ -1,7 +1,16 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, ImageStyle, ImageProps } from 'react-native';
 
-const Logo = ({ 
+export type LogoSize = 'small' | 'medium' | 'large' | 'xlarge';
+
+export interface LogoProps extends Omit<ImageProps, 'style'> {
+  size?: LogoSize | number;
+  width?: number;
+  height?: number;
+  style?: ImageStyle;
+}
+
+const Logo: React.FC<LogoProps> = ({ 
   size = 'medium', 
   width, 
   height, 
@@ -9,7 +18,7 @@ const Logo = ({
   ...props 
 }) => {
   // Define size presets
-  const sizePresets = {
+  const sizePresets: Record<LogoSize, number> = {
     small: 40,
     medium: 80,
     large: 120,
@@ -20,8 +29,8 @@ const Logo = ({
   const logoSize = typeof size === 'number' ? size : sizePresets[size] || sizePresets.medium;
 
   // Determine width and height
-  let logoWidth = width || logoSize;
-  let logoHeight = height || logoSize;
+  let logoWidth: number | undefined = width || logoSize;
+  let logoHeight: number | undefined = height || logoSize;
 
   // If only width is specified, let height adjust automatically
   if (width && !height) {

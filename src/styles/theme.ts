@@ -1,8 +1,104 @@
-import { colors } from './colors';
-import { typography } from './typography';
+import { colors, type Colors } from './colors';
+import { typography, type Typography } from './typography';
+
+// Component style interfaces
+export interface ButtonStyle {
+  backgroundColor: string;
+  paddingVertical: number;
+  paddingHorizontal: number;
+  borderRadius: number;
+  alignItems: 'center';
+  justifyContent: 'center';
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: string;
+  lineHeight: number;
+  color: string;
+}
+
+export interface InputStyle {
+  backgroundColor: string;
+  borderWidth: number;
+  borderColor: string;
+  borderRadius: number;
+  paddingHorizontal: number;
+  paddingVertical: number;
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: string;
+  lineHeight: number;
+  color: string;
+}
+
+export interface CardStyle {
+  backgroundColor: string;
+  borderRadius: number;
+  padding: number;
+  shadowColor: string;
+  shadowOffset: { width: number; height: number };
+  shadowOpacity: number;
+  shadowRadius: number;
+  elevation: number;
+}
+
+export interface AlertStyle {
+  backgroundColor: string;
+  borderColor: string;
+  borderWidth: number;
+  borderRadius: number;
+  padding: number;
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: string;
+  lineHeight: number;
+  color: string;
+}
+
+export interface ComponentStyles {
+  button: {
+    primary: ButtonStyle;
+    secondary: ButtonStyle;
+    disabled: ButtonStyle;
+  };
+  input: {
+    default: InputStyle;
+    focused: Partial<InputStyle>;
+    error: Partial<InputStyle>;
+  };
+  card: {
+    default: CardStyle;
+  };
+  alert: {
+    success: AlertStyle;
+    error: AlertStyle;
+    warning: AlertStyle;
+  };
+}
+
+export interface Layout {
+  containerPadding: number;
+  screenPadding: number;
+  cardSpacing: number;
+  sectionSpacing: number;
+}
+
+export interface Breakpoints {
+  sm: number;
+  md: number;
+  lg: number;
+  xl: number;
+}
+
+export interface Theme {
+  colors: Colors;
+  typography: Typography;
+  components: ComponentStyles;
+  layout: Layout;
+  breakpoints: Breakpoints;
+}
 
 // Main theme object
-export const theme = {
+export const theme: Theme = {
   colors,
   typography,
   
@@ -65,7 +161,7 @@ export const theme = {
         backgroundColor: colors.background.primary,
         borderRadius: 12,
         padding: 16,
-        shadowColor: colors.neutral[900],
+        shadowColor: colors.neutral[700],
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,

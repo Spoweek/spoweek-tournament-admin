@@ -1,12 +1,19 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ViewStyle, TextStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MainLayout from '../../layouts/MainLayout';
 
-export default function DashboardScreen() {
+interface MenuItem {
+  title: string;
+  description: string;
+  screen: string;
+  color: string;
+}
+
+const DashboardScreen: React.FC = () => {
   const navigation = useNavigation();
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     {
       title: 'Manage Users',
       description: 'View, add, and manage user accounts',
@@ -33,8 +40,8 @@ export default function DashboardScreen() {
     },
   ];
 
-  const handleNavigate = (screen) => {
-    navigation.navigate(screen);
+  const handleNavigate = (screen: string): void => {
+    navigation.navigate(screen as never);
   };
 
   return (
@@ -63,7 +70,7 @@ export default function DashboardScreen() {
       </ScrollView>
     </MainLayout>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -125,3 +132,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default DashboardScreen;

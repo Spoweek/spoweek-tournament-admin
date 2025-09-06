@@ -1,7 +1,21 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { ReactNode } from 'react';
+import { View, StyleSheet, ViewStyle, ViewProps } from 'react-native';
 
-const Card = ({ 
+export interface CardProps extends Omit<ViewProps, 'style'> {
+  children: ReactNode;
+  width?: string | number;
+  height?: string | number;
+  backgroundColor?: string;
+  borderRadius?: number;
+  shadow?: boolean;
+  alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+  justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+  padding?: number;
+  margin?: number | string;
+  style?: ViewStyle;
+}
+
+const Card: React.FC<CardProps> = ({ 
   children, 
   width, 
   height, 
@@ -15,7 +29,7 @@ const Card = ({
   style,
   ...props 
 }) => {
-  const cardStyle = [
+  const cardStyle: ViewStyle[] = [
     styles.card,
     {
       width,

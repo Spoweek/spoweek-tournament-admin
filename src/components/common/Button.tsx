@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import {
   TouchableOpacity,
   StyleSheet,
@@ -6,24 +6,44 @@ import {
   Platform,
   View,
   Text,
+  TouchableOpacityProps,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
-import { colors } from '../../styles/colors';
+import { colors, type Colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 
-const Button = ({
+export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+export type ButtonSize = 'small' | 'medium' | 'large';
+export type ButtonBorderRadius = 'light' | 'full';
+
+export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
+  children: ReactNode;
+  onPress?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  variant?: ButtonVariant;
+  colorName?: keyof Colors;
+  size?: ButtonSize;
+  borderRadius?: ButtonBorderRadius;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+}
+
+const Button: React.FC<ButtonProps> = ({
   children,
   onPress,
   disabled = false,
   loading = false,
   variant = 'primary',
-  colorName, // New prop to specify the actual color to use
+  colorName,
   size = 'medium',
   borderRadius = 'light',
   style,
   textStyle,
   ...props
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   // Function to get the correct colors based on colorName or fallback to variant
   const getButtonColors = () => {
@@ -41,18 +61,17 @@ const Button = ({
     return colors.primary;
   };
 
-
-  const handlePressIn = () => {
+  const handlePressIn = (): void => {
     if (disabled || loading) return;
     setIsHovered(true);
   };
 
-  const handlePressOut = () => {
+  const handlePressOut = (): void => {
     if (disabled || loading) return;
     setIsHovered(false);
   };
 
-  const handlePress = () => {
+  const handlePress = (): void => {
     if (disabled || loading) return;
     // Keep the effect active during the entire press
     setIsHovered(true);
@@ -67,21 +86,21 @@ const Button = ({
   };
 
   // Web-specific hover handlers
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (): void => {
     if (Platform.OS === 'web' && !disabled && !loading) {
       setIsHovered(true);
     }
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (): void => {
     if (Platform.OS === 'web' && !disabled && !loading) {
       setIsHovered(false);
     }
   };
 
-  const getButtonStyles = () => {
+  const getButtonStyles = (): ViewStyle[] => {
     const buttonColors = getButtonColors();
-    const baseStyles = [styles.button];
+    const baseStyles: ViewStyle[] = [styles.button];
     
     // Apply color-specific styles
     if (variant === 'primary') {
@@ -118,9 +137,9 @@ const Button = ({
     return baseStyles;
   };
 
-  const getTextStyles = () => {
+  const getTextStyles = (): TextStyle[] => {
     const buttonColors = getButtonColors();
-    const baseTextStyles = [styles.buttonText];
+    const baseTextStyles: TextStyle[] = [styles.buttonText];
     
     // Apply color-specific text styles
     if (variant === 'primary') {
@@ -148,7 +167,7 @@ const Button = ({
     return baseTextStyles;
   };
 
-  const getHoveredTextStyles = () => {
+  const getHoveredTextStyles = (): TextStyle => {
     if (!isHovered) return {};
     
     // Simple underline on hover
@@ -156,7 +175,6 @@ const Button = ({
       textDecorationLine: 'underline',
     };
   };
-
 
   return (
     <TouchableOpacity
@@ -238,7 +256,6 @@ const styles = StyleSheet.create({
   disabledButtonText: {
     opacity: 0.7,
   },
-  
 });
 
 export default Button;

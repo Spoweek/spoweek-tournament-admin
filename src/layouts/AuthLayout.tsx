@@ -1,7 +1,11 @@
-import React, { useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Platform } from 'react-native';
+import React, { useEffect, ReactNode } from 'react';
+import { View, ScrollView, StyleSheet, Platform, ViewStyle } from 'react-native';
 
-export default function AuthLayout({ children }) {
+export interface AuthLayoutProps {
+  children: ReactNode;
+}
+
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   // Fix body overflow on web
   useEffect(() => {
     if (Platform.OS === 'web') {
@@ -47,7 +51,7 @@ export default function AuthLayout({ children }) {
       </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -85,3 +89,5 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
+
+export default AuthLayout;

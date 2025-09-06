@@ -1,5 +1,86 @@
 // Color palette for Spoweek Tournament Admin
-export const colors = {
+
+export interface ColorShades {
+  100: string;
+  300: string;
+  500: string;
+  700: string;
+}
+
+export interface GrayScale {
+  50: string;
+  100: string;
+  200: string;
+  300: string;
+  400: string;
+  500: string;
+  600: string;
+  700: string;
+  800: string;
+  900: string;
+}
+
+export interface BackgroundColors {
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  dark: string;
+}
+
+export interface TextColors {
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  inverse: string;
+  disabled: string;
+}
+
+export interface BorderColors {
+  light: string;
+  medium: string;
+  dark: string;
+  focus: string;
+}
+
+export interface ShadowColors {
+  light: string;
+  medium: string;
+  dark: string;
+}
+
+export interface StatusColors {
+  active: string;
+  inactive: string;
+  pending: string;
+  completed: string;
+  cancelled: string;
+}
+
+export interface TournamentColors {
+  gold: string;
+  silver: string;
+  bronze: string;
+  participant: string;
+  spectator: string;
+}
+
+export interface Colors {
+  primary: ColorShades;
+  secondary: ColorShades;
+  success: ColorShades;
+  warning: ColorShades;
+  error: ColorShades;
+  neutral: ColorShades;
+  gray: GrayScale;
+  background: BackgroundColors;
+  text: TextColors;
+  border: BorderColors;
+  shadow: ShadowColors;
+  status: StatusColors;
+  tournament: TournamentColors;
+}
+
+export const colors: Colors = {
   // Primary Colors (4 shades)
   primary: {
     100: '#E3F2FD', // Lightest
@@ -113,50 +194,93 @@ export const colors = {
   },
 };
 
+export interface ColorCombination {
+  background: string;
+  text: string;
+  border: string;
+}
+
+export interface ColorCombinations {
+  primary: ColorCombination;
+  success: ColorCombination;
+  error: ColorCombination;
+  warning: ColorCombination;
+  neutral: ColorCombination;
+}
+
 // Common color combinations for quick access
-export const colorCombinations = {
+export const colorCombinations: ColorCombinations = {
   // Primary combinations
   primary: {
     background: colors.primary[500],
     text: colors.text.inverse,
-    border: colors.primary[600],
+    border: colors.primary[700],
   },
   
   // Success combinations
   success: {
-    background: colors.success[50],
-    text: colors.success[800],
-    border: colors.success[200],
+    background: colors.gray[50],
+    text: colors.success[700],
+    border: colors.success[300],
   },
   
   // Error combinations
   error: {
-    background: colors.error[50],
-    text: colors.error[800],
-    border: colors.error[200],
+    background: colors.gray[50],
+    text: colors.error[700],
+    border: colors.error[300],
   },
   
   // Warning combinations
   warning: {
-    background: colors.warning[50],
-    text: colors.warning[800],
-    border: colors.warning[200],
+    background: colors.gray[50],
+    text: colors.warning[700],
+    border: colors.warning[300],
   },
   
   // Neutral combinations
   neutral: {
-    background: colors.neutral[50],
-    text: colors.neutral[800],
-    border: colors.neutral[200],
+    background: colors.gray[50],
+    text: colors.neutral[700],
+    border: colors.neutral[300],
   },
 };
 
+export interface SemanticColors {
+  button: {
+    primary: string;
+    secondary: string;
+    success: string;
+    warning: string;
+    error: string;
+    disabled: string;
+  };
+  input: {
+    background: string;
+    border: string;
+    borderFocus: string;
+    text: string;
+    placeholder: string;
+  };
+  card: {
+    background: string;
+    border: string;
+    shadow: string;
+  };
+  navigation: {
+    background: string;
+    text: string;
+    textActive: string;
+    border: string;
+  };
+}
+
 // Semantic color mappings
-export const semanticColors = {
+export const semanticColors: SemanticColors = {
   // Interactive elements
   button: {
     primary: colors.primary[500],
-    secondary: colors.neutral[200],
+    secondary: colors.neutral[300],
     success: colors.success[500],
     warning: colors.warning[500],
     error: colors.error[500],

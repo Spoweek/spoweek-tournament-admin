@@ -6,25 +6,35 @@ import {
   TouchableOpacity, 
   StyleSheet, 
   ActivityIndicator,
-  RefreshControl 
+  RefreshControl,
+  ViewStyle,
+  TextStyle,
+  ListRenderItem
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MainLayout from '../../layouts/MainLayout';
 
-export default function UsersListScreen() {
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
+
+const UsersListScreen: React.FC = () => {
   const navigation = useNavigation();
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     loadUsers();
   }, []);
 
-  const loadUsers = async () => {
+  const loadUsers = async (): Promise<void> => {
     try {
       // Mock data for now - replace with actual API call
-      const mockUsers = [
+      const mockUsers: User[] = [
         { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
         { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
         { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
@@ -42,15 +52,15 @@ export default function UsersListScreen() {
     }
   };
 
-  const onRefresh = () => {
+  const onRefresh = (): void => {
     setRefreshing(true);
     loadUsers();
   };
 
-  const renderUser = ({ item }) => (
+  const renderUser: ListRenderItem<User> = ({ item }) => (
     <TouchableOpacity 
       style={styles.userItem}
-      onPress={() => navigation.navigate('UserDetail', { userId: item.id })}
+      onPress={() => navigation.navigate('UserDetail' as never, { userId: item.id } as never)}
     >
       <View style={styles.userInfo}>
         <Text style={styles.userName}>{item.name}</Text>
@@ -63,7 +73,7 @@ export default function UsersListScreen() {
     </TouchableOpacity>
   );
 
-  const renderEmpty = () => (
+  const renderEmpty = (): React.ReactElement => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyText}>No users found</Text>
     </View>
@@ -85,7 +95,7 @@ export default function UsersListScreen() {
       <View style={styles.container}>
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => navigation.navigate('CreateUser')}
+          onPress={() => navigation.navigate('CreateUser' as never)}
         >
           <Text style={styles.addButtonText}>+ Add New User</Text>
         </TouchableOpacity>
@@ -103,7 +113,7 @@ export default function UsersListScreen() {
       </View>
     </MainLayout>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -182,3 +192,5 @@ const styles = StyleSheet.create({
     color: '#666',
   },
 });
+
+export default UsersListScreen;

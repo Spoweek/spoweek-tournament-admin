@@ -4,7 +4,9 @@ import {
   TouchableOpacity, 
   StyleSheet, 
   Alert,
-  Text
+  Text,
+  ViewStyle,
+  TextStyle
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import AuthLayout from '../../layouts/AuthLayout';
@@ -22,18 +24,17 @@ import {
 } from '../../components/common/buttons';
 import { LabeledField, TextInputAdapter } from '../../components/common/inputs';
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
+const LoginScreen: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
   const { login } = useAuth();
 
-  const handleLogin = async () => {
+  const handleLogin = async (): Promise<void> => {
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError('Please enter both email and password');
       return;
     }
 
@@ -48,7 +49,7 @@ export default function LoginScreen() {
         setSuccess('Login successful!');
         // Navigation will be handled by the AuthContext state change
       } else {
-        setError(result.error);
+        setError(result.error || 'Login failed');
       }
     } catch (error) {
       setError('An unexpected error occurred');
@@ -57,15 +58,15 @@ export default function LoginScreen() {
     }
   };
 
-  const handleForgotId = () => {
+  const handleForgotId = (): void => {
     Alert.alert('Forgot ID', 'Please contact your administrator to recover your ID.');
   };
 
-  const handleForgotPassword = () => {
+  const handleForgotPassword = (): void => {
     Alert.alert('Forgot Password', 'Please contact your administrator to reset your password.');
   };
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = (event: any): void => {
     if (event.nativeEvent.key === 'Enter') {
       handleLogin();
     } 
@@ -308,6 +309,115 @@ export default function LoginScreen() {
           </View>
         </Card>
         
+        {/* Input Showcase - Temporary for Testing */}
+        <Card 
+          width="100%" 
+          padding={16}
+          style={styles.inputShowcaseCard}
+        >
+          <Text style={[typography.h3, styles.inputShowcaseTitle]}>Input Components</Text>
+          
+          {/* Above Label Inputs */}
+          <View style={styles.inputSection}>
+            <Text style={[typography.h4, styles.subsectionTitle]}>Above Label Inputs</Text>
+            
+            <LabeledField
+              label="Standard Input"
+              value=""
+              onChange={() => {}}
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Enter text here"
+              }}
+            />
+            
+            <LabeledField
+              label="Pill Input"
+              value=""
+              onChange={() => {}}
+              roundness="pill"
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Rounded corners"
+              }}
+            />
+            
+            <LabeledField
+              label="Small Input"
+              value=""
+              onChange={() => {}}
+              roundness="small"
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Compact size"
+              }}
+            />
+            
+            <LabeledField
+              label="Large Input"
+              value=""
+              onChange={() => {}}
+              roundness="small"
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Larger size"
+              }}
+            />
+          </View>
+          
+          {/* Inside Label Inputs */}
+          <View style={styles.inputSection}>
+            <Text style={[typography.h4, styles.subsectionTitle]}>Inside Label Inputs (Floating)</Text>
+            
+            <LabeledField
+              label="Floating Label"
+              value=""
+              onChange={() => {}}
+              inline={true}
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Enter text here"
+              }}
+            />
+            
+            <LabeledField
+              label="Pill Floating"
+              value=""
+              onChange={() => {}}
+              inline={true}
+              roundness="pill"
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Rounded corners"
+              }}
+            />
+            
+            <LabeledField
+              label="Small Floating"
+              value=""
+              onChange={() => {}}
+              inline={true}
+              roundness="small"
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Compact size"
+              }}
+            />
+            
+            <LabeledField
+              label="Large Floating"
+              value=""
+              onChange={() => {}}
+              inline={true}
+              roundness="small"
+              InputComponent={TextInputAdapter}
+              InputComponentProps={{
+                placeholder: "Larger size"
+              }}
+            />
+          </View>
+        </Card>
+        
         <Card 
           width="100%" 
           padding={40}
@@ -315,11 +425,11 @@ export default function LoginScreen() {
         >
           <Text style={[globalStyles.text, typography.h2, styles.title]}>로그인</Text>
           
-          {error ? (
+          {error && (
             <View style={styles.errorContainer}>
               <Text style={[typography.error, styles.errorText]}>{error}</Text>
             </View>
-          ) : null}
+          )}
           
           {success && (
             <View style={styles.successContainer}>
@@ -331,158 +441,79 @@ export default function LoginScreen() {
             label="Email"
             value={email}
             onChange={setEmail}
-            placeholder="Enter your email"
             InputComponent={TextInputAdapter}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            returnKeyType="next"
-            onKeyPress={handleKeyPress}
-            onSubmitEditing={() => {
-              passwordRef.current.focus(); // use ref for next input
+            InputComponentProps={{
+              placeholder: "Enter your email",
+              keyboardType: "email-address",
+              autoCapitalize: "none",
+              autoCorrect: false,
+              onKeyPress: handleKeyPress
             }}
           />
-
+          
           <LabeledField
             label="Password"
             value={password}
             onChange={setPassword}
-            placeholder="Enter your password"
             InputComponent={TextInputAdapter}
-            secureTextEntry
-            autoCapitalize="none"
-            autoCorrect={false}
-            returnKeyType="done"
-            onKeyPress={handleKeyPress}
-            onSubmitEditing={handleLogin}
-            ref={passwordRef} // needed for focusing
+            InputComponentProps={{
+              placeholder: "Enter your password",
+              secureTextEntry: true,
+              autoCapitalize: "none",
+              autoCorrect: false,
+              onKeyPress: handleKeyPress
+            }}
           />
-
           
-          <View style={styles.forgotLinksContainer}>
+          <View style={styles.forgotContainer}>
             <TouchableOpacity onPress={handleForgotId} style={styles.forgotLink}>
-              <Text style={[typography.link, styles.forgotLinkText]}>Forgot ID</Text>
+              <Text style={[typography.link, styles.forgotText]}>Forgot ID?</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotLink}>
-              <Text style={[typography.link, styles.forgotLinkText]}>Forgot Password</Text>
+              <Text style={[typography.link, styles.forgotText]}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
           
-          <PrimaryButton 
-            onPress={handleLogin}
-            loading={loading}
-            disabled={loading}
-            borderRadius="full"
-          >
-            로그인
-          </PrimaryButton>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton
+              onPress={handleLogin}
+              loading={loading}
+              disabled={loading}
+              style={styles.loginButton}
+            >
+              로그인
+            </PrimaryButton>
+          </View>
         </Card>
       </View>
     </AuthLayout>
   );
-}
+};
 
 const styles = StyleSheet.create({
   loginContainer: {
-    width: '100%',
-  },
-  loginCard: {
-    marginTop: 20,
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   
-  // Input showcase styles
-  inputShowcaseCard: {
-    marginTop: 20,
-    padding: 20,
-  },
-  inputSection: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  subsectionTitle: {
-    marginBottom: 12,
-    color: colors.text.secondary,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 24,
-    color: '#333',
-  },
-  input: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  errorContainer: {
-    backgroundColor: '#FFEBEE',
-    borderColor: '#F44336',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-  },
-  errorText: {
-    color: '#D32F2F',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  successContainer: {
-    backgroundColor: '#E8F5E8',
-    borderColor: '#4CAF50',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-  },
-  successText: {
-    color: '#2E7D32',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  forgotLinksContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-    paddingHorizontal: 4,
-  },
-  forgotLink: {
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  forgotLinkText: {
-    color: '#007AFF',
-    fontSize: 14,
-    textDecorationLine: 'underline',
-  },
-  // Color Palette Styles - Temporary for Testing
+  // Color palette styles
   colorPaletteCard: {
-    marginBottom: 16,
+    marginBottom: 20,
+    width: '100%',
+    maxWidth: 800,
   },
   colorPaletteTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 16,
-    color: '#333',
+    marginBottom: 20,
   },
   colorSection: {
-    marginBottom: 12,
+    marginBottom: 16,
   },
   colorSectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
     marginBottom: 8,
-    color: '#666',
+    fontWeight: '600',
   },
   colorRow: {
     flexDirection: 'row',
@@ -491,44 +522,111 @@ const styles = StyleSheet.create({
   },
   colorSwatch: {
     width: 60,
-    height: 30,
+    height: 40,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    marginHorizontal: 2,
   },
   colorLabel: {
-    fontSize: 9,
-    fontWeight: '500',
-    color: '#333',
+    fontSize: 10,
     textAlign: 'center',
+    fontWeight: '500',
   },
-  // Button Showcase Styles - Temporary for Testing
+  
+  // Button showcase styles
   buttonShowcaseCard: {
-    marginBottom: 16,
+    marginBottom: 20,
+    width: '100%',
+    maxWidth: 800,
   },
   buttonShowcaseTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 16,
-    color: '#333',
+    marginBottom: 20,
   },
   buttonSection: {
     marginBottom: 20,
   },
   buttonSectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
     marginBottom: 12,
-    color: '#666',
+    fontWeight: '600',
   },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 12,
     flexWrap: 'wrap',
-    gap: 8,
+  },
+  
+  // Input showcase styles
+  inputShowcaseCard: {
+    marginBottom: 20,
+    width: '100%',
+    maxWidth: 800,
+  },
+  inputShowcaseTitle: {
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  inputSection: {
+    marginBottom: 24,
+  },
+  subsectionTitle: {
+    marginBottom: 16,
+    fontWeight: '600',
+  },
+  
+  // Login form styles
+  loginCard: {
+    width: '100%',
+    maxWidth: 400,
+    marginBottom: 20,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 30,
+    fontWeight: '700',
+  },
+  errorContainer: {
+    backgroundColor: colors.error[100],
+    borderColor: colors.error[300],
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  errorText: {
+    textAlign: 'center',
+  },
+  successContainer: {
+    backgroundColor: colors.success[100],
+    borderColor: colors.success[300],
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  successText: {
+    textAlign: 'center',
+  },
+  forgotContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  forgotLink: {
+    padding: 8,
+  },
+  forgotText: {
+    fontSize: 14,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+  },
+  loginButton: {
+    width: '100%',
+    minWidth: 200,
   },
 });
+
+export default LoginScreen;
