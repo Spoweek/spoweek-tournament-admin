@@ -60,14 +60,68 @@ const DesignShowcaseScreen: React.FC = () => {
       <View style={styles.colorSection}>
         <Text style={[typography.label, styles.colorSectionTitle]}>Primary</Text>
         <View style={styles.colorRow}>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.primary[100] }]}>
+            <Text style={[typography.caption, styles.colorLabel]}>primary.100</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.primary[300] }]}>
+            <Text style={[typography.caption, styles.colorLabel]}>primary.300</Text>
+          </View>
           <View style={[styles.colorSwatch, { backgroundColor: colors.primary[500] }]}>
             <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>primary.500</Text>
           </View>
-          <View style={[styles.colorSwatch, { backgroundColor: (colors.primary as any)[600] || colors.primary[500] }]}>
-            <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>primary.600</Text>
-          </View>
-          <View style={[styles.colorSwatch, { backgroundColor: (colors.primary as any)[700] || colors.primary[500] }]}>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.primary[700] }]}>
             <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>primary.700</Text>
+          </View>
+        </View>
+      </View>
+      
+      {/* Secondary Colors */}
+      <View style={styles.colorSection}>
+        <Text style={[typography.label, styles.colorSectionTitle]}>Secondary</Text>
+        <View style={styles.colorRow}>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[100] }]}>
+            <Text style={[typography.caption, styles.colorLabel]}>secondary.100</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[300] }]}>
+            <Text style={[typography.caption, styles.colorLabel]}>secondary.300</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[500] }]}>
+            <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>secondary.500</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.secondary[700] }]}>
+            <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>secondary.700</Text>
+          </View>
+        </View>
+      </View>
+      
+      {/* Status Colors */}
+      <View style={styles.colorSection}>
+        <Text style={[typography.label, styles.colorSectionTitle]}>Status</Text>
+        <View style={styles.colorRow}>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.success[500] }]}>
+            <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>success</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.warning[500] }]}>
+            <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>warning</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.error[500] }]}>
+            <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>error</Text>
+          </View>
+        </View>
+      </View>
+      
+      {/* Tournament Colors */}
+      <View style={styles.colorSection}>
+        <Text style={[typography.label, styles.colorSectionTitle]}>Tournament</Text>
+        <View style={styles.colorRow}>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.tournament.gold }]}>
+            <Text style={[typography.caption, styles.colorLabel]}>gold</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.tournament.silver }]}>
+            <Text style={[typography.caption, styles.colorLabel]}>silver</Text>
+          </View>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.tournament.bronze }]}>
+            <Text style={[typography.caption, styles.colorLabel, { color: colors.text.inverse }]}>bronze</Text>
           </View>
         </View>
       </View>
@@ -76,6 +130,9 @@ const DesignShowcaseScreen: React.FC = () => {
       <View style={styles.colorSection}>
         <Text style={[typography.label, styles.colorSectionTitle]}>Neutral</Text>
         <View style={styles.colorRow}>
+          <View style={[styles.colorSwatch, { backgroundColor: colors.neutral[100] }]}>
+            <Text style={[typography.caption, styles.colorLabel]}>neutral.100</Text>
+          </View>
           <View style={[styles.colorSwatch, { backgroundColor: colors.neutral[300] }]}>
             <Text style={[typography.caption, styles.colorLabel]}>neutral.300</Text>
           </View>
@@ -195,7 +252,7 @@ const DesignShowcaseScreen: React.FC = () => {
 
   const InputShowcaseCard = () => (
     <Card width="100%" padding={16} style={styles.showcaseCard}>
-      <Text style={[typography.h3, styles.cardTitle]}>Input Components</Text>
+      <Text style={[typography.h3, styles.cardTitle]}>Text Input Components</Text>
       
       {/* Above Label Inputs */}
       <View style={styles.inputSection}>
