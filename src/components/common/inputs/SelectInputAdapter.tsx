@@ -34,6 +34,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
+  const [isClearHovered, setIsClearHovered] = useState(false);
   const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const selectRef = useRef<any>(null);
 
@@ -65,12 +66,18 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
     onBlur?.();
   };
 
-  const renderOption = ({ item }: { item: SelectOption }) => (
+  const handleClear = () => {
+    onChange(''); // Clear the selection
+    onBlur?.();
+  };
+
+  const renderOption = ({ item, index }: { item: SelectOption; index: number }) => (
     <TouchableOpacity
       style={[
         styles.option,
         item.value === value && styles.selectedOption,
-        hoveredOption === item.value && styles.hoveredOption
+        hoveredOption === item.value && styles.hoveredOption,
+        index === options.length - 1 && styles.lastOption
       ]}
       onPress={() => handleSelect(item.value)}
       {...(Platform.OS === 'web' ? {
@@ -111,11 +118,35 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         ]}>
           {selectedOption ? selectedOption.label : placeholder}
         </Text>
-        <Ionicons 
-          name={isOpen ? "chevron-up" : "chevron-down"} 
-          size={16} 
-          color={disabled ? colors.neutral[300] : colors.neutral[500]} 
-        />
+        
+        <View style={styles.iconContainer}>
+          {selectedOption && !disabled && (
+            <TouchableOpacity 
+              onPress={handleClear}
+              style={[
+                styles.clearButton,
+                isClearHovered && styles.clearButtonHovered
+              ]}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              {...(Platform.OS === 'web' ? {
+                onMouseEnter: () => setIsClearHovered(true),
+                onMouseLeave: () => setIsClearHovered(false)
+              } : {})}
+            >
+              <Ionicons 
+                name="close" 
+                size={14} 
+                color={isClearHovered ? 'white' : (disabled ? colors.neutral[300] : colors.neutral[500])} 
+              />
+            </TouchableOpacity>
+          )}
+          
+          <Ionicons 
+            name={isOpen ? "chevron-up" : "chevron-down"} 
+            size={16} 
+            color={disabled ? colors.neutral[300] : colors.neutral[500]} 
+          />
+        </View>
       </TouchableOpacity>
 
       <Modal
@@ -146,7 +177,9 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
               renderItem={renderOption}
               keyExtractor={(item) => item.value.toString()}
               style={styles.optionsList}
-              showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={true}
+              indicatorStyle="default"
+              scrollIndicatorInsets={{ right: 1 }}
               nestedScrollEnabled={true}
             />
           </View>
@@ -222,6 +255,7 @@ const styles = StyleSheet.create({
   },
   optionsList: {
     maxHeight: 200,
+    paddingRight: Platform.OS === 'web' ? 0 : 2, // Add padding for scrollbar on native
   },
   option: {
     flexDirection: 'row',
@@ -247,6 +281,22 @@ const styles = StyleSheet.create({
   selectedOptionText: {
     color: colors.primary[700],
     fontWeight: '400',
+  },
+  lastOption: {
+    borderBottomWidth: 0,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  clearButton: {
+    padding: 2,
+    borderRadius: 10,
+    backgroundColor: 'transparent',
+  },
+  clearButtonHovered: {
+    backgroundColor: colors.primary[300],
   },
 });
 
