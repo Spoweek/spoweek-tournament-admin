@@ -465,6 +465,46 @@ const DesignShowcaseScreen: React.FC = () => {
           inputProps={{ options: statusOptions }}
         />
       </View>
+      
+      {/* Fixed Width Select Examples */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Fixed Width Examples</Text>
+        
+        <View style={{ width: 200 }}>
+          <LabeledField
+            label="200px Width"
+            value={selectValues.country}
+            onChange={handleSelectChange('country')}
+            placeholder="Clean 200px width"
+            InputComponent={SelectInputAdapter}
+            inputProps={{ options: countryOptions }}
+          />
+        </View>
+        
+        <View style={{ width: 300 }}>
+          <LabeledField
+            label="300px Width (Pill)"
+            value={selectValues.category}
+            onChange={handleSelectChange('category')}
+            borderRadius="full"
+            placeholder="Clean 300px width"
+            InputComponent={SelectInputAdapter}
+            inputProps={{ options: categoryOptions }}
+          />
+        </View>
+        
+        <View style={{ width: 250, flexDirection: 'row' }}>
+          <LabeledField
+            label="250px Inline"
+            value={selectValues.priority}
+            onChange={handleSelectChange('priority')}
+            inline={true}
+            placeholder="250px inline"
+            InputComponent={SelectInputAdapter}
+            inputProps={{ options: priorityOptions }}
+          />
+        </View>
+      </View>
     </Card>
   );
 
