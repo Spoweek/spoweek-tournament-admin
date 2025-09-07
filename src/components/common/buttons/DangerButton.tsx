@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import Button, { type ButtonProps } from './Button';
 
 export interface DangerButtonProps extends Omit<ButtonProps, 'variant' | 'colorName'> {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const DangerButton: React.FC<DangerButtonProps> = ({ children, ...props }) => {

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import Button, { type ButtonProps } from './Button';
 
 export interface PrimaryButtonProps extends Omit<ButtonProps, 'variant' | 'colorName'> {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const PrimaryButton: React.FC<PrimaryButtonProps> = ({ children, ...props }) => {

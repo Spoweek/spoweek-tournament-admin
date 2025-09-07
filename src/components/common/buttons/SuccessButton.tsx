@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import Button, { type ButtonProps } from './Button';
 
 export interface SuccessButtonProps extends Omit<ButtonProps, 'variant' | 'colorName'> {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const SuccessButton: React.FC<SuccessButtonProps> = ({ children, ...props }) => {

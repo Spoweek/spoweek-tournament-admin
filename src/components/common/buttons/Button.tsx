@@ -19,7 +19,7 @@ export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonBorderRadius = 'light' | 'full';
 
 export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
-  children: ReactNode;
+  children?: ReactNode;
   onPress?: () => void;
   disabled?: boolean;
   loading?: boolean;
@@ -29,6 +29,8 @@ export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   borderRadius?: ButtonBorderRadius;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -42,6 +44,8 @@ const Button: React.FC<ButtonProps> = ({
   borderRadius = 'light',
   style,
   textStyle,
+  leftIcon,
+  rightIcon,
   ...props
 }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -192,6 +196,88 @@ const Button: React.FC<ButtonProps> = ({
     return {};
   };
 
+  const getIconSpacing = () => {
+    if (size === 'small') return 6;
+    if (size === 'large') return 10;
+    return 8; // medium
+  };
+
+  const getIconColor = () => {
+    if (variant === 'primary') {
+      return colors.text.inverse;
+    } else {
+      return getButtonColors()[500];
+    }
+  };
+
+  const cloneIconWithColor = (icon: ReactNode) => {
+    if (React.isValidElement(icon)) {
+      return React.cloneElement(icon as React.ReactElement<any>, {
+        color: getIconColor(),
+      });
+    }
+    return icon;
+  };
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <ActivityIndicator 
+          color={variant === 'primary' ? colors.text.inverse : getButtonColors()[700]} 
+          size="small" 
+        />
+      );
+    }
+
+    const hasText = children != null;
+    const hasLeftIcon = leftIcon != null;
+    const hasRightIcon = rightIcon != null;
+    const iconSpacing = getIconSpacing();
+
+    // Icon-only button
+    if (!hasText && (hasLeftIcon || hasRightIcon)) {
+      const iconToRender = hasLeftIcon ? leftIcon : rightIcon;
+      return cloneIconWithColor(iconToRender);
+    }
+
+    // Text-only button
+    if (hasText && !hasLeftIcon && !hasRightIcon) {
+      return (
+        <Text style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
+          {children}
+        </Text>
+      );
+    }
+
+    // Button with text and icons
+    if (hasText) {
+      return (
+        <View style={styles.contentContainer}>
+          {hasLeftIcon && (
+            <View style={[styles.iconContainer, { marginRight: iconSpacing }]}>
+              {cloneIconWithColor(leftIcon)}
+            </View>
+          )}
+          <Text style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
+            {children}
+          </Text>
+          {hasRightIcon && (
+            <View style={[styles.iconContainer, { marginLeft: iconSpacing }]}>
+              {cloneIconWithColor(rightIcon)}
+            </View>
+          )}
+        </View>
+      );
+    }
+
+    // Fallback to text if no icons
+    return (
+      <Text style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
+        {children}
+      </Text>
+    );
+  };
+
   return (
     <TouchableOpacity
       onPress={handlePress}
@@ -236,16 +322,7 @@ const Button: React.FC<ButtonProps> = ({
           ]}
         />
         
-        {loading ? (
-          <ActivityIndicator 
-            color={variant === 'primary' ? colors.text.inverse : getButtonColors()[700]} 
-            size="small" 
-          />
-        ) : (
-          <Text style={[...getTextStyles(), getHoveredTextStyles(), textStyle]}>
-            {children}
-          </Text>
-        )}
+        {renderContent()}
       </View>
     </TouchableOpacity>
   );
@@ -309,6 +386,17 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     opacity: 0.7,
+  },
+  
+  // Icon layout styles
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

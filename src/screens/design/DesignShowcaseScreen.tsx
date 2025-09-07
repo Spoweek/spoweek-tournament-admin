@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Alert, Dimensions } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Card from '../../components/common/Card';
 import { PrimaryButton, SecondaryButton, SuccessButton, WarningButton, DangerButton } from '../../components/common/buttons';
 import { LabeledField } from '../../components/common/inputs';
@@ -247,6 +248,76 @@ const DesignShowcaseScreen: React.FC = () => {
           </PrimaryButton>
         </View>
       </View>
+      
+      {/* Icon Buttons */}
+      <View style={styles.buttonSection}>
+        <Text style={[typography.label, styles.buttonSectionTitle]}>Icon Buttons</Text>
+        <View style={styles.buttonRow}>
+          <PrimaryButton 
+            leftIcon={<Ionicons name="add" size={16} />}
+            onPress={() => Alert.alert('Add')}
+          >
+            Add Item
+          </PrimaryButton>
+          <SecondaryButton 
+            rightIcon={<Ionicons name="arrow-forward" size={14} />}
+            onPress={() => Alert.alert('Next')}
+          >
+            Next
+          </SecondaryButton>
+        </View>
+        <View style={styles.buttonRow}>
+          <SuccessButton 
+            leftIcon={<Ionicons name="checkmark" size={14} />}
+            rightIcon={<Ionicons name="arrow-forward" size={12} />}
+            onPress={() => Alert.alert('Save & Continue')}
+          >
+            Save & Continue
+          </SuccessButton>
+        </View>
+      </View>
+      
+      {/* Icon-Only Buttons */}
+      <View style={styles.buttonSection}>
+        <Text style={[typography.label, styles.buttonSectionTitle]}>Icon-Only Buttons</Text>
+        <View style={styles.buttonRow}>
+          <PrimaryButton 
+            leftIcon={<Ionicons name="add" size={18} />}
+            onPress={() => Alert.alert('Add')}
+            style={{ minWidth: 44 }}
+          />
+          <SecondaryButton 
+            leftIcon={<Ionicons name="pencil" size={16} />}
+            onPress={() => Alert.alert('Edit')}
+            style={{ minWidth: 44 }}
+          />
+          <DangerButton 
+            leftIcon={<Ionicons name="trash" size={16} />}
+            onPress={() => Alert.alert('Delete')}
+            style={{ minWidth: 44 }}
+          />
+        </View>
+        <View style={styles.buttonRow}>
+          <PrimaryButton 
+            leftIcon={<Ionicons name="heart" size={16} />}
+            onPress={() => Alert.alert('Like')}
+            borderRadius="full"
+            style={{ minWidth: 44 }}
+          />
+          <WarningButton 
+            leftIcon={<Ionicons name="warning" size={16} />}
+            onPress={() => Alert.alert('Warning')}
+            borderRadius="full"
+            style={{ minWidth: 44 }}
+          />
+          <SuccessButton 
+            leftIcon={<Ionicons name="checkmark" size={16} />}
+            onPress={() => Alert.alert('Confirm')}
+            borderRadius="full"
+            style={{ minWidth: 44 }}
+          />
+        </View>
+      </View>
     </Card>
   );
 
@@ -274,24 +345,6 @@ const DesignShowcaseScreen: React.FC = () => {
           placeholder="Rounded corners"
           InputComponent={TextInputAdapter}
         />
-        
-        <LabeledField
-          label="Small Input"
-          value={inputValues.small}
-          onChange={handleInputChange('small')}
-          borderRadius="light"
-          placeholder="Compact size"
-          InputComponent={TextInputAdapter}
-        />
-        
-        <LabeledField
-          label="Large Input"
-          value={inputValues.large}
-          onChange={handleInputChange('large')}
-          borderRadius="light"
-          placeholder="Larger size"
-          InputComponent={TextInputAdapter}
-        />
       </View>
       
       {/* Inside Label Inputs */}
@@ -314,26 +367,6 @@ const DesignShowcaseScreen: React.FC = () => {
           inline={true}
           borderRadius="full"
           placeholder="Rounded corners"
-          InputComponent={TextInputAdapter}
-        />
-        
-        <LabeledField
-          label="Small Floating with Long Label Text"
-          value={inputValues.smallFloating}
-          onChange={handleInputChange('smallFloating')}
-          inline={true}
-          borderRadius="light"
-          placeholder="Compact size"
-          InputComponent={TextInputAdapter}
-        />
-        
-        <LabeledField
-          label="Large Floating"
-          value={inputValues.largeFloating}
-          onChange={handleInputChange('largeFloating')}
-          inline={true}
-          borderRadius="light"
-          placeholder="Larger size"
           InputComponent={TextInputAdapter}
         />
       </View>

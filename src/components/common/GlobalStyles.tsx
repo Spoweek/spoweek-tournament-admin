@@ -34,7 +34,7 @@ export const GlobalStyles: React.FC<GlobalStylesProps> = ({ children }) => {
       const style = document.createElement('style');
       style.textContent = `
         * {
-          font-family: 'NotoSansKR_400Regular', 'Noto Sans KR', sans-serif !important;
+          font-family: 'NotoSansKR_400Regular', 'Noto Sans KR', sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           text-rendering: optimizeLegibility;
