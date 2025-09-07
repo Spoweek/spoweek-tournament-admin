@@ -193,8 +193,9 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
               style={styles.optionsList}
               showsVerticalScrollIndicator={true}
               indicatorStyle="default"
-              scrollIndicatorInsets={{ right: 1 }}
+              scrollIndicatorInsets={{ right: 2, top: 0, bottom: 0 }}
               nestedScrollEnabled={true}
+              contentContainerStyle={{ paddingRight: Platform.OS === 'web' ? 0 : 4 }}
             />
           </View>
         </TouchableOpacity>
@@ -233,9 +234,11 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     color: colors.text.tertiary,
+    fontSize: 14,
   },
   disabledText: {
     color: colors.neutral[500],
+    fontSize: 14,
   },
   modalOverlay: {
     flex: 1,
@@ -252,6 +255,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
     maxHeight: 200,
     zIndex: uiLayers.selectDropdown,
+    overflow: 'hidden', // Clip scrollbar to dropdown bounds
   },
   optionsList: {
     maxHeight: 200,
@@ -281,6 +285,7 @@ const styles = StyleSheet.create({
   selectedOptionText: {
     color: colors.primary[700],
     fontWeight: '400',
+    fontSize: 14,
   },
   lastOption: {
     borderBottomWidth: 0,
