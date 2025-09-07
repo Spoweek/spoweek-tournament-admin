@@ -1,5 +1,5 @@
 // components/LabeledField.tsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
 import { colors } from '../../../styles/colors';
 export type InputAdapterProps<T = any> = {
@@ -14,6 +14,7 @@ export type InputAdapterProps<T = any> = {
   onDropdownStateChange?: (isOpen: boolean) => void;
   inline?: boolean;
   calculatedRadius?: number;
+  containerRef?: React.RefObject<any>;
 };
 
 export type LabeledFieldProps<T = any> = {
@@ -58,6 +59,7 @@ export function LabeledField<T = any>({
   const [isFocused, setIsFocused] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [elementHeight, setElementHeight] = useState(44); // Default height
+  const inputWrapperRef = useRef<any>(null);
   
   const radius = borderRadius === 'full' ? elementHeight / 2 : BORDER_RADIUS[borderRadius];
 
@@ -93,6 +95,7 @@ export function LabeledField<T = any>({
       ]}>{label}</Text>
 
       <View
+        ref={inputWrapperRef}
         style={[
           styles.inputWrapper,
           { borderRadius: radius },
@@ -129,6 +132,7 @@ export function LabeledField<T = any>({
           inline={inline}
           onDropdownStateChange={handleDropdownStateChange}
           calculatedRadius={radius}
+          containerRef={inputWrapperRef}
         />
       </View>
     </View>
@@ -142,6 +146,7 @@ const styles = StyleSheet.create({
   inlineContainer: {
     flexDirection: 'row',
     alignItems: 'stretch',
+    minHeight: 44, // Ensure minimum height for proper centering
   },
   fullRounded: {
     borderRadius: 9999,
@@ -183,15 +188,16 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderRadius: 0,
+    justifyContent: 'center', // Center input content vertically
   },
   disabled: {
     opacity: 0.6,
   },
   input: {
     minHeight: 40,
-    height: '100%',
     paddingHorizontal: 16,
     paddingVertical: 8,
+    // Remove height: '100%' to allow proper centering
   },
   focused: {
     borderColor: colors.primary[500],

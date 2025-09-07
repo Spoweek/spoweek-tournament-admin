@@ -17,6 +17,7 @@ export interface SelectInputAdapterProps extends InputAdapterProps<string | numb
   borderRadius?: 'light' | 'full';
   inline?: boolean;
   onDropdownStateChange?: (isOpen: boolean) => void;
+  containerRef?: React.RefObject<any>;
 }
 
 const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
@@ -32,6 +33,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   onDropdownStateChange,
   inline = false,
   calculatedRadius,
+  containerRef,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
@@ -63,10 +65,33 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
 
   const handleOpen = () => {
     if (!disabled) {
-      selectRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
-        // Position dropdown right below the input for seamless connection
-        // Add 2px to width to account for LabeledField's left and right borders (1px each)
-        setDropdownLayout({ x: pageX - (inline ? 0.5 : 0.5), y: pageY + height, width: width + (inline ? 2.5 : 1.5), height });
+      // Use container ref if available for more precise measurements
+      const elementToMeasure = containerRef?.current || selectRef.current;
+      
+      elementToMeasure?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
+        let adjustedX, adjustedWidth, adjustedY;
+        
+        if (containerRef?.current) {
+          // If we have container ref, we're measuring the bordered container directly
+          // Round to avoid sub-pixel issues
+          adjustedX = Math.round(pageX);
+          adjustedWidth = Math.round(width);
+          adjustedY = Math.round(pageY + height - 1); // Overlap by 1px for seamless connection
+        } else {
+          // Fallback to measuring SelectInputAdapter with border adjustments
+          const borderWidth = 1;
+          adjustedX = Math.round(pageX - borderWidth);
+          adjustedWidth = Math.round(width + (borderWidth * 2));
+          adjustedY = Math.round(pageY + height - 1);
+        }
+        
+        setDropdownLayout({ 
+          x: adjustedX, 
+          y: adjustedY - 1, 
+          width: adjustedWidth, 
+          height 
+        });
+        
         setIsOpen(true);
         onDropdownStateChange?.(true);
         // Don't call onFocus to prevent blinking from focus state changes
@@ -176,16 +201,18 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
           onPress={handleClose}
         >
           <View style={[
-            styles.dropdown,
-            { 
-              position: 'absolute',
-              left: dropdownLayout.x,
-              top: dropdownLayout.y,
-              width: dropdownLayout.width,
-              borderBottomLeftRadius: getDropdownRadius(),
-              borderBottomRightRadius: getDropdownRadius(),
-            }
-          ]}>
+              styles.dropdown,
+              { 
+                position: 'absolute',
+                left: dropdownLayout.x,
+                top: dropdownLayout.y,
+                width: dropdownLayout.width,
+                borderBottomLeftRadius: getDropdownRadius(),
+                borderBottomRightRadius: getDropdownRadius(),
+                // Ensure pixel-perfect rendering
+                transform: [{ translateX: 0 }, { translateY: 0 }],
+              }
+            ]}>
             <FlatList
               data={options}
               renderItem={renderOption}
