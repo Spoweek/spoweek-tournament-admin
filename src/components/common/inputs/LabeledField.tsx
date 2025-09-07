@@ -11,6 +11,7 @@ export type InputAdapterProps<T = any> = {
   placeholderTextColor?: string;
   disabled?: boolean;
   style?: any;
+  onDropdownStateChange?: (isOpen: boolean) => void;
 };
 
 export type LabeledFieldProps<T = any> = {
@@ -53,7 +54,13 @@ export function LabeledField<T = any>({
   inputProps = {},
 }: LabeledFieldProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const radius = BORDER_RADIUS[borderRadius];
+
+  // Handle dropdown state changes from SelectInputAdapter
+  const handleDropdownStateChange = (isOpen: boolean) => {
+    setIsDropdownOpen(isOpen);
+  };
 
   return (
     <View style={[styles.container, inline && styles.inlineContainer, containerStyle, borderRadius === 'full' && styles.fullRounded, isFocused && styles.focused]}>
@@ -66,7 +73,13 @@ export function LabeledField<T = any>({
           inline && styles.inlineInputWrapper,
           disabled && styles.disabled,
           inputContainerStyle,
-          isFocused && styles.focused
+          isFocused && styles.focused,
+          isDropdownOpen && styles.dropdownOpen,
+          isDropdownOpen && {
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            borderBottomWidth: 0,
+          }
         ]}
       >
         <InputComponent
@@ -79,6 +92,7 @@ export function LabeledField<T = any>({
           disabled={disabled}
           style={styles.input}
           {...inputProps}
+          onDropdownStateChange={handleDropdownStateChange}
         />
       </View>
     </View>
@@ -139,6 +153,9 @@ const styles = StyleSheet.create({
   },
   focused: {
     borderColor: colors.primary[500],
+  },
+  dropdownOpen: {
+    // Additional styles for when dropdown is open can be added here
   },
 });
 

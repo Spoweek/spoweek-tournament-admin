@@ -15,6 +15,7 @@ export interface SelectInputAdapterProps extends InputAdapterProps<string | numb
   options?: SelectOption[];
   placeholder?: string;
   borderRadius?: 'light' | 'full';
+  onDropdownStateChange?: (isOpen: boolean) => void;
 }
 
 const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
@@ -27,6 +28,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   style,
   onFocus,
   onBlur,
+  onDropdownStateChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
@@ -38,14 +40,17 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   const handleSelect = (selectedValue: string | number) => {
     onChange(selectedValue);
     setIsOpen(false);
+    onDropdownStateChange?.(false);
     onBlur?.();
   };
 
   const handleOpen = () => {
     if (!disabled) {
       selectRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
+        // Position dropdown right below the input for seamless connection
         setDropdownLayout({ x: pageX, y: pageY + height, width, height });
         setIsOpen(true);
+        onDropdownStateChange?.(true);
         // Don't call onFocus to prevent blinking from focus state changes
       });
     }
@@ -53,6 +58,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
 
   const handleClose = () => {
     setIsOpen(false);
+    onDropdownStateChange?.(false);
     onBlur?.();
   };
 
@@ -88,6 +94,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         style={[
           styles.selectContainer,
           disabled && styles.disabledContainer,
+          isOpen && styles.dropdownOpenContainer,
           style
         ]}
         onPress={handleOpen}
@@ -160,6 +167,10 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     minHeight: 44,
   },
+  dropdownOpenContainer: {
+    // This style will be applied when dropdown is open
+    // The parent LabeledField will handle the border styling
+  },
   disabledContainer: {
     backgroundColor: colors.neutral[100],
     opacity: 0.6,
@@ -185,6 +196,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.neutral[300],
     borderTopWidth: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
     maxHeight: 200,
     zIndex: uiLayers.selectDropdown,
     ...Platform.select({
