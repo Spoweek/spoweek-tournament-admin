@@ -13,6 +13,7 @@ export type InputAdapterProps<T = any> = {
   style?: any;
   onDropdownStateChange?: (isOpen: boolean) => void;
   inline?: boolean;
+  calculatedRadius?: number;
 };
 
 export type LabeledFieldProps<T = any> = {
@@ -56,11 +57,19 @@ export function LabeledField<T = any>({
 }: LabeledFieldProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const radius = BORDER_RADIUS[borderRadius];
+  const [elementHeight, setElementHeight] = useState(44); // Default height
+  
+  const radius = borderRadius === 'full' ? elementHeight / 2 : BORDER_RADIUS[borderRadius];
 
   // Handle dropdown state changes from SelectInputAdapter
   const handleDropdownStateChange = (isOpen: boolean) => {
     setIsDropdownOpen(isOpen);
+  };
+
+  // Handle layout to get actual height for pill calculation
+  const handleLayout = (event: any) => {
+    const { height } = event.nativeEvent.layout;
+    setElementHeight(height);
   };
 
   return (
@@ -105,6 +114,7 @@ export function LabeledField<T = any>({
             borderBottomLeftRadius: 0,
           }
         ]}
+        onLayout={handleLayout}
       >
         <InputComponent
           value={value}
@@ -118,6 +128,7 @@ export function LabeledField<T = any>({
           {...inputProps}
           inline={inline}
           onDropdownStateChange={handleDropdownStateChange}
+          calculatedRadius={radius}
         />
       </View>
     </View>

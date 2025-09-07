@@ -31,12 +31,26 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   onBlur,
   onDropdownStateChange,
   inline = false,
+  calculatedRadius,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
   const [isClearHovered, setIsClearHovered] = useState(false);
   const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const selectRef = useRef<any>(null);
+
+  // Use the calculated radius from LabeledField for perfect matching
+  const getDropdownRadius = () => {
+    // Use the radius calculated by LabeledField if available
+    if (calculatedRadius !== undefined) {
+      return calculatedRadius;
+    }
+    // Fallback to original logic
+    if (borderRadius === 'full') {
+      return dropdownLayout.height / 2;
+    }
+    return 8; // Default light radius
+  };
 
   const selectedOption = options.find(option => option.value === value);
 
@@ -168,8 +182,8 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
               left: dropdownLayout.x,
               top: dropdownLayout.y,
               width: dropdownLayout.width,
-              borderBottomLeftRadius: borderRadius === 'full' ? 9999 : 8,
-              borderBottomRightRadius: borderRadius === 'full' ? 9999 : 8,
+              borderBottomLeftRadius: getDropdownRadius(),
+              borderBottomRightRadius: getDropdownRadius(),
             }
           ]}>
             <FlatList
