@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   // Base button styles
   button: {
     paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingHorizontal: 12,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',

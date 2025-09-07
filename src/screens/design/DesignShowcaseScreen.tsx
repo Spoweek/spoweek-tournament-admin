@@ -5,6 +5,7 @@ import Card from '../../components/common/Card';
 import { PrimaryButton, SecondaryButton, SuccessButton, WarningButton, DangerButton } from '../../components/common/buttons';
 import { LabeledField } from '../../components/common/inputs';
 import TextInputAdapter from '../../components/common/inputs/TextInputAdapter';
+import SelectInputAdapter from '../../components/common/inputs/SelectInputAdapter';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 import { globalStyles } from '../../components/common/GlobalStyles';
@@ -21,6 +22,13 @@ const DesignShowcaseScreen: React.FC = () => {
     pillFloating: '',
     smallFloating: '',
     largeFloating: '',
+  });
+
+  const [selectValues, setSelectValues] = useState({
+    country: '',
+    category: '',
+    priority: '',
+    status: '',
   });
 
   // Listen for screen size changes
@@ -45,6 +53,43 @@ const DesignShowcaseScreen: React.FC = () => {
   const handleInputChange = (key: string) => (value: string) => {
     setInputValues(prev => ({ ...prev, [key]: value }));
   };
+
+  const handleSelectChange = (key: string) => (value: string | number) => {
+    setSelectValues(prev => ({ ...prev, [key]: value }));
+  };
+
+  // Sample data for select inputs
+  const countryOptions = [
+    { label: 'United States', value: 'us' },
+    { label: 'Canada', value: 'ca' },
+    { label: 'United Kingdom', value: 'uk' },
+    { label: 'Germany', value: 'de' },
+    { label: 'France', value: 'fr' },
+    { label: 'Japan', value: 'jp' },
+    { label: 'Australia', value: 'au' },
+  ];
+
+  const categoryOptions = [
+    { label: 'Technology', value: 'tech' },
+    { label: 'Design', value: 'design' },
+    { label: 'Marketing', value: 'marketing' },
+    { label: 'Sales', value: 'sales' },
+    { label: 'Support', value: 'support' },
+  ];
+
+  const priorityOptions = [
+    { label: 'Low', value: 'low' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'High', value: 'high' },
+    { label: 'Critical', value: 'critical' },
+  ];
+
+  const statusOptions = [
+    { label: 'Active', value: 'active' },
+    { label: 'Inactive', value: 'inactive' },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Archived', value: 'archived' },
+  ];
 
   const handleKeyPress = (e: any) => {
     if (e.nativeEvent.key === 'Enter') {
@@ -368,6 +413,56 @@ const DesignShowcaseScreen: React.FC = () => {
           borderRadius="full"
           placeholder="Rounded corners"
           InputComponent={TextInputAdapter}
+        />
+      </View>
+      
+      {/* Select Inputs */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Select Inputs</Text>
+        
+        <LabeledField
+          label="Country"
+          value={selectValues.country}
+          onChange={handleSelectChange('country')}
+          placeholder="Choose your country"
+          InputComponent={SelectInputAdapter}
+          inputProps={{ options: countryOptions }}
+        />
+        
+        <LabeledField
+          label="Category (Pill)"
+          value={selectValues.category}
+          onChange={handleSelectChange('category')}
+          borderRadius="full"
+          placeholder="Select category"
+          InputComponent={SelectInputAdapter}
+          inputProps={{ options: categoryOptions }}
+        />
+      </View>
+      
+      {/* Floating Select Inputs */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Floating Select Inputs</Text>
+        
+        <LabeledField
+          label="Priority Level"
+          value={selectValues.priority}
+          onChange={handleSelectChange('priority')}
+          inline={true}
+          placeholder="Set priority"
+          InputComponent={SelectInputAdapter}
+          inputProps={{ options: priorityOptions }}
+        />
+        
+        <LabeledField
+          label="Status (Pill Floating)"
+          value={selectValues.status}
+          onChange={handleSelectChange('status')}
+          inline={true}
+          borderRadius="full"
+          placeholder="Choose status"
+          InputComponent={SelectInputAdapter}
+          inputProps={{ options: statusOptions }}
         />
       </View>
     </Card>

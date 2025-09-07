@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
   inlineContainer: {
     flexDirection: 'row',
     borderWidth: 1,
-    overflow: 'hidden',
     borderRadius: 8,
     borderColor: colors.gray[300],
     alignItems: 'stretch',
