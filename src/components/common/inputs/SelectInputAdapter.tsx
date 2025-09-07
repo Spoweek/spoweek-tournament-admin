@@ -46,7 +46,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
       selectRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
         setDropdownLayout({ x: pageX, y: pageY + height, width, height });
         setIsOpen(true);
-        onFocus?.();
+        // Don't call onFocus to prevent blinking from focus state changes
       });
     }
   };
@@ -92,6 +92,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         ]}
         onPress={handleOpen}
         disabled={disabled}
+        activeOpacity={1}
       >
         <Text style={[
           styles.selectText,
@@ -112,6 +113,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         transparent={true}
         animationType="none"
         onRequestClose={handleClose}
+        presentationStyle="overFullScreen"
       >
         <TouchableOpacity 
           style={styles.modalOverlay} 
@@ -226,7 +228,7 @@ const styles = StyleSheet.create({
   },
   selectedOptionText: {
     color: colors.primary[700],
-    fontWeight: '500',
+    fontWeight: '400',
   },
 });
 
