@@ -108,9 +108,9 @@ export function LabeledField<T = any>({
           isDropdownOpen && {
             borderBottomRightRadius: 0,
             borderColor: colors.primary[500],
+            borderBottomColor: 'white',
           },
           (!inline && isDropdownOpen) && {
-            borderBottomWidth: 0,
             borderBottomLeftRadius: 0,
           }
         ]}
