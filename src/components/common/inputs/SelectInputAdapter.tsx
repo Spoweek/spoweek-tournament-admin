@@ -15,6 +15,7 @@ export interface SelectInputAdapterProps extends InputAdapterProps<string | numb
   options?: SelectOption[];
   placeholder?: string;
   borderRadius?: 'light' | 'full';
+  inline?: boolean;
   onDropdownStateChange?: (isOpen: boolean) => void;
 }
 
@@ -29,6 +30,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   onFocus,
   onBlur,
   onDropdownStateChange,
+  inline = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
@@ -48,7 +50,8 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
     if (!disabled) {
       selectRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
         // Position dropdown right below the input for seamless connection
-        setDropdownLayout({ x: pageX, y: pageY + height, width, height });
+        // Add 2px to width to account for LabeledField's left and right borders (1px each)
+        setDropdownLayout({ x: pageX - (inline ? 0.5 : 0.5), y: pageY + height, width: width + (inline ? 2.5 : 1.5), height });
         setIsOpen(true);
         onDropdownStateChange?.(true);
         // Don't call onFocus to prevent blinking from focus state changes
@@ -194,7 +197,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: colors.background.primary,
     borderWidth: 1,
-    borderColor: colors.neutral[300],
+    borderColor: colors.primary[500],
     borderTopWidth: 0,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,

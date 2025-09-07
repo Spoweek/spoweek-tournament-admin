@@ -12,6 +12,7 @@ export type InputAdapterProps<T = any> = {
   disabled?: boolean;
   style?: any;
   onDropdownStateChange?: (isOpen: boolean) => void;
+  inline?: boolean;
 };
 
 export type LabeledFieldProps<T = any> = {
@@ -63,8 +64,24 @@ export function LabeledField<T = any>({
   };
 
   return (
-    <View style={[styles.container, inline && styles.inlineContainer, containerStyle, borderRadius === 'full' && styles.fullRounded, isFocused && styles.focused]}>
-      <Text style={[styles.label, inline && styles.inlineLabel, labelStyle]}>{label}</Text>
+    <View style={[
+      styles.container, 
+      inline && styles.inlineContainer, 
+      containerStyle, 
+    ]}>
+      <Text style={[
+        styles.label, 
+        inline && styles.inlineLabel, 
+        labelStyle,
+        { 
+          borderBottomLeftRadius: radius,
+          borderTopLeftRadius: radius,
+        },
+        isFocused && styles.focused,
+        isDropdownOpen && {
+          borderColor: colors.primary[500],
+        },
+      ]}>{label}</Text>
 
       <View
         style={[
@@ -74,11 +91,18 @@ export function LabeledField<T = any>({
           disabled && styles.disabled,
           inputContainerStyle,
           isFocused && styles.focused,
-          isDropdownOpen && styles.dropdownOpen,
+          inline && 
+          { 
+            borderBottomRightRadius: radius,
+            borderTopRightRadius: radius,
+          },
           isDropdownOpen && {
-            borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
+            borderColor: colors.primary[500],
+          },
+          (!inline && isDropdownOpen) && {
             borderBottomWidth: 0,
+            borderBottomLeftRadius: 0,
           }
         ]}
       >
@@ -92,6 +116,7 @@ export function LabeledField<T = any>({
           disabled={disabled}
           style={styles.input}
           {...inputProps}
+          inline={inline}
           onDropdownStateChange={handleDropdownStateChange}
         />
       </View>
@@ -105,9 +130,6 @@ const styles = StyleSheet.create({
   },
   inlineContainer: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: colors.gray[300],
     alignItems: 'stretch',
   },
   fullRounded: {
@@ -125,13 +147,17 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     width: '30%',
     fontWeight: '400',
-    borderRightWidth: 0.5,
-    borderRightColor: colors.gray[300],
     height: '100%',
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
     display: 'flex',
+    borderColor: colors.gray[300],
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderRightColor: colors.gray[300],
   },
   inputWrapper: {
     borderWidth: 1,
@@ -141,6 +167,11 @@ const styles = StyleSheet.create({
   inlineInputWrapper: {
     flex: 1,
     borderWidth: 0,
+    borderColor: colors.gray[300],
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderRadius: 0,
   },
   disabled: {
     opacity: 0.6,
@@ -155,7 +186,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary[500],
   },
   dropdownOpen: {
-    // Additional styles for when dropdown is open can be added here
+    borderColor: colors.primary[500],
   },
 });
 
