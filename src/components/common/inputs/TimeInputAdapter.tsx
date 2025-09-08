@@ -29,7 +29,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
   const [minute, setMinute] = useState('');
   const [second, setSecond] = useState('');
   const [ampm, setAmpm] = useState('AM');
-  const [isFocused, setIsFocused] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const slideAnimation = useRef(new Animated.Value(0)).current;
   
@@ -219,54 +218,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     onChange(timeValue);
   };
 
-  const handleFocus = () => {
-    setIsFocused(true);
-    onFocus?.();
-  };
-
-  const handleBlur = () => {
-    // Format all fields when leaving the entire component
-    let hasChanges = false;
-    
-    if (hour) {
-      const formattedHour = hour.padStart(2, '0');
-      if (formattedHour !== hour) {
-        setHour(formattedHour);
-        hasChanges = true;
-      }
-    }
-    
-    if (minute) {
-      const formattedMinute = minute.padStart(2, '0');
-      if (formattedMinute !== minute) {
-        setMinute(formattedMinute);
-        hasChanges = true;
-      }
-    }
-    
-    if (second) {
-      const formattedSecond = second.padStart(2, '0');
-      if (formattedSecond !== second) {
-        setSecond(formattedSecond);
-        hasChanges = true;
-      }
-    }
-    
-    // Update parent value with formatted values
-    if (hasChanges) {
-      updateTimeValue(
-        hour ? hour.padStart(2, '0') : hour,
-        minute ? minute.padStart(2, '0') : minute,
-        second ? second.padStart(2, '0') : second,
-        ampm
-      );
-    } else {
-      updateTimeValue(hour, minute, second, ampm);
-    }
-    
-    setIsFocused(false);
-    onBlur?.();
-  };
 
   const handleHourBlur = () => {
     // Format and validate when user leaves hour field
@@ -318,7 +269,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             keyboardType="numeric"
             maxLength={2}
             editable={!disabled}
-            onFocus={handleFocus}
             onBlur={handleHourBlur}
             textAlign="center"
           />
@@ -338,7 +288,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             keyboardType="numeric"
             maxLength={2}
             editable={!disabled}
-            onFocus={handleFocus}
             onBlur={handleMinuteBlur}
             textAlign="center"
           />
@@ -359,7 +308,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
                 keyboardType="numeric"
                 maxLength={2}
                 editable={!disabled}
-                onFocus={handleFocus}
                 onBlur={handleSecondBlur}
                 textAlign="center"
               />
