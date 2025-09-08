@@ -2,23 +2,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
-  Modal,
   StyleSheet,
-  Dimensions,
-  ScrollView,
+  Modal,
+  Platform,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { colors } from '../../../styles/colors';
 import { typography } from '../../../styles/typography';
+import { uiLayers } from '../../../styles/zIndex';
+import type { InputAdapterProps } from './LabeledField';
 
-interface DateInputAdapterProps {
-  value?: string;
-  onChange?: (value: string) => void;
+export interface DateInputAdapterProps extends InputAdapterProps<string> {
   placeholder?: string;
-  disabled?: boolean;
-  style?: any;
+  borderRadius?: 'light' | 'full';
+  inline?: boolean;
+  onDropdownStateChange?: (isOpen: boolean) => void;
+  containerRef?: React.RefObject<any>;
+  calculatedRadius?: number;
 }
 
 const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
@@ -26,15 +27,48 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   onChange,
   placeholder = 'Select date',
   disabled = false,
+  borderRadius = 'light',
   style,
+  onFocus,
+  onBlur,
+  onDropdownStateChange,
+  inline = false,
+  calculatedRadius,
+  containerRef,
 }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [displayDate, setDisplayDate] = useState<string>(value);
   const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
-  
-  const inputRef = useRef<TextInput>(null);
+  const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [calculatedHeight, setCalculatedHeight] = useState(400);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [hoveredDay, setHoveredDay] = useState<number | null>(null);
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  const dateRef = useRef<any>(null);
+  const calendarContentRef = useRef<any>(null);
+
+  // Use the calculated radius from LabeledField for perfect matching
+  const getDropdownRadius = () => {
+    // Use the radius calculated by LabeledField if available
+    if (calculatedRadius !== undefined) {
+      return calculatedRadius;
+    }
+    // Fallback to original logic
+    if (borderRadius === 'full') {
+      return dropdownLayout.height / 2;
+    }
+    return 8; // Default light radius
+  };
+
+  // Handle content layout measurement
+  const handleContentLayout = (event: any) => {
+    const { height } = event.nativeEvent.layout;
+    setContentHeight(height);
+    // Add some padding for the dropdown container
+    setCalculatedHeight(height);
+  };
 
   // Parse initial value on mount
   useEffect(() => {
@@ -49,6 +83,14 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
     }
   }, [value]);
 
+  // Reset content height when calendar opens to ensure fresh measurement
+  useEffect(() => {
+    if (isCalendarOpen) {
+      setContentHeight(0);
+      setCalculatedHeight(400); // Fallback height
+    }
+  }, [isCalendarOpen]);
+
   // Update display when selectedDate changes
   useEffect(() => {
     const year = selectedDate.getFullYear();
@@ -58,16 +100,12 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
     setDisplayDate(formattedDate);
   }, [selectedDate]);
 
-  const handleInputPress = () => {
-    if (!disabled) {
-      setIsCalendarOpen(true);
-    }
-  };
-
   const handleDateSelect = (day: number) => {
     const newDate = new Date(currentYear, currentMonth, day);
     setSelectedDate(newDate);
     setIsCalendarOpen(false);
+    onDropdownStateChange?.(false);
+    onBlur?.();
     
     const year = newDate.getFullYear();
     const month = String(newDate.getMonth() + 1).padStart(2, '0');
@@ -75,6 +113,48 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
     const formattedDate = `${year}/${month}/${dayStr}`;
     
     onChange?.(formattedDate);
+  };
+
+  const handleOpen = () => {
+    if (!disabled) {
+      // Use container ref if available for more precise measurements
+      const elementToMeasure = containerRef?.current || dateRef.current;
+      
+      elementToMeasure?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
+        let adjustedX, adjustedWidth, adjustedY;
+        
+        if (containerRef?.current) {
+          // If we have container ref, we're measuring the bordered container directly
+          // Round to avoid sub-pixel issues
+          adjustedX = Math.round(pageX);
+          adjustedWidth = Math.round(width);
+          adjustedY = Math.round(pageY + height - 1); // Overlap by 1px for seamless connection
+        } else {
+          // Fallback to measuring DateInputAdapter with border adjustments
+          const borderWidth = 1;
+          adjustedX = Math.round(pageX - borderWidth);
+          adjustedWidth = Math.round(width + (borderWidth * 2));
+          adjustedY = Math.round(pageY + height - 1);
+        }
+        
+        setDropdownLayout({ 
+          x: adjustedX, 
+          y: adjustedY - 1, 
+          width: adjustedWidth, 
+          height 
+        });
+        
+        setIsCalendarOpen(true);
+        onDropdownStateChange?.(true);
+        // Don't call onFocus to prevent blinking from focus state changes
+      });
+    }
+  };
+
+  const handleClose = () => {
+    setIsCalendarOpen(false);
+    onDropdownStateChange?.(false);
+    onBlur?.();
   };
 
   const handleMonthChange = (direction: 'prev' | 'next') => {
@@ -133,6 +213,7 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
       const isToday = new Date().getDate() === day && 
                      new Date().getMonth() === currentMonth && 
                      new Date().getFullYear() === currentYear;
+      const isHovered = hoveredDay === day;
 
       days.push(
         <TouchableOpacity
@@ -141,14 +222,20 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
             styles.calendarDay,
             isSelected && styles.selectedDay,
             isToday && !isSelected && styles.todayDay,
+            isHovered && !isSelected && styles.hoveredDay,
           ]}
           onPress={() => handleDateSelect(day)}
+          {...(Platform.OS === 'web' ? {
+            onMouseEnter: () => setHoveredDay(day),
+            onMouseLeave: () => setHoveredDay(null)
+          } : {})}
         >
           <Text
             style={[
               styles.dayText,
               isSelected && styles.selectedDayText,
               isToday && !isSelected && styles.todayDayText,
+              isHovered && !isSelected && styles.hoveredDayText,
             ]}
           >
             {day}
@@ -161,75 +248,138 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   };
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={styles.container}>
       <TouchableOpacity
-        style={[styles.inputContainer, disabled && styles.disabledInput]}
-        onPress={handleInputPress}
+        ref={dateRef}
+        style={[
+          styles.inputContainer,
+          disabled && styles.disabledInput,
+          isCalendarOpen && styles.dropdownOpenContainer,
+          style
+        ]}
+        onPress={handleOpen}
         disabled={disabled}
+        activeOpacity={1}
       >
         <Ionicons name="calendar-outline" size={16} color={colors.text.secondary} style={styles.icon} />
-        <Text style={[styles.inputText, !displayDate && styles.placeholderText]}>
+        <Text style={[
+          styles.inputText,
+          !displayDate && styles.placeholderText,
+          disabled && styles.disabledText
+        ]}>
           {displayDate || placeholder}
         </Text>
-        <Ionicons name="chevron-down" size={16} color={colors.text.secondary} />
+        <Ionicons 
+          name={isCalendarOpen ? "chevron-up" : "chevron-down"} 
+          size={16} 
+          color={disabled ? colors.neutral[300] : colors.neutral[500]} 
+        />
       </TouchableOpacity>
 
       <Modal
         visible={isCalendarOpen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setIsCalendarOpen(false)}
+        transparent={true}
+        animationType="none"
+        onRequestClose={handleClose}
+        presentationStyle="overFullScreen"
       >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setIsCalendarOpen(false)}
+        <TouchableOpacity 
+          style={styles.modalOverlay} 
+          activeOpacity={1} 
+          onPress={handleClose}
         >
-          <View style={styles.calendarContainer}>
-            <View style={styles.calendarHeader}>
-              <TouchableOpacity
-                style={styles.navButton}
-                onPress={() => handleYearChange('prev')}
-              >
-                <Ionicons name="chevron-back" size={20} color={colors.text.primary} />
-              </TouchableOpacity>
-              
-              <Text style={styles.yearText}>{currentYear}</Text>
-              
-              <TouchableOpacity
-                style={styles.navButton}
-                onPress={() => handleYearChange('next')}
-              >
-                <Ionicons name="chevron-forward" size={20} color={colors.text.primary} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.monthHeader}>
-              <TouchableOpacity
-                style={styles.navButton}
-                onPress={() => handleMonthChange('prev')}
-              >
-                <Ionicons name="chevron-back" size={16} color={colors.text.primary} />
-              </TouchableOpacity>
-              
-              <Text style={styles.monthText}>{getMonthName(currentMonth)}</Text>
-              
-              <TouchableOpacity
-                style={styles.navButton}
-                onPress={() => handleMonthChange('next')}
-              >
-                <Ionicons name="chevron-forward" size={16} color={colors.text.primary} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.calendarGrid}>
-              <View style={styles.dayHeader}>
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <Text key={day} style={styles.dayHeaderText}>{day}</Text>
-                ))}
+          <View style={[
+              styles.dropdown,
+              { 
+                position: 'absolute',
+                left: dropdownLayout.x,
+                top: dropdownLayout.y,
+                width: dropdownLayout.width,
+                height: contentHeight > 0 ? contentHeight : calculatedHeight,
+                borderBottomLeftRadius: getDropdownRadius(),
+                borderBottomRightRadius: getDropdownRadius(),
+                // Ensure pixel-perfect rendering
+                transform: [{ translateX: 0 }, { translateY: 0 }],
+              }
+            ]}>
+            <View 
+              ref={calendarContentRef}
+              style={styles.calendarContainer}
+              onLayout={handleContentLayout}
+            >
+              <View style={styles.calendarHeader}>
+                <TouchableOpacity
+                  style={[
+                    styles.navButton,
+                    hoveredNav === 'year-prev' && styles.hoveredNavButton
+                  ]}
+                  onPress={() => handleYearChange('prev')}
+                  {...(Platform.OS === 'web' ? {
+                    onMouseEnter: () => setHoveredNav('year-prev'),
+                    onMouseLeave: () => setHoveredNav(null)
+                  } : {})}
+                >
+                  <Ionicons name="chevron-back" size={20} color={colors.text.primary} />
+                </TouchableOpacity>
+                
+                <Text style={styles.yearText}>{currentYear}</Text>
+                
+                <TouchableOpacity
+                  style={[
+                    styles.navButton,
+                    hoveredNav === 'year-next' && styles.hoveredNavButton
+                  ]}
+                  onPress={() => handleYearChange('next')}
+                  {...(Platform.OS === 'web' ? {
+                    onMouseEnter: () => setHoveredNav('year-next'),
+                    onMouseLeave: () => setHoveredNav(null)
+                  } : {})}
+                >
+                  <Ionicons name="chevron-forward" size={20} color={colors.text.primary} />
+                </TouchableOpacity>
               </View>
-              <View style={styles.daysGrid}>
-                {renderCalendar()}
+
+              <View style={styles.monthHeader}>
+                <TouchableOpacity
+                  style={[
+                    styles.navButton,
+                    hoveredNav === 'month-prev' && styles.hoveredNavButton
+                  ]}
+                  onPress={() => handleMonthChange('prev')}
+                  {...(Platform.OS === 'web' ? {
+                    onMouseEnter: () => setHoveredNav('month-prev'),
+                    onMouseLeave: () => setHoveredNav(null)
+                  } : {})}
+                >
+                  <Ionicons name="chevron-back" size={16} color={colors.text.primary} />
+                </TouchableOpacity>
+                
+                <Text style={styles.monthText}>{getMonthName(currentMonth)}</Text>
+                
+                <TouchableOpacity
+                  style={[
+                    styles.navButton,
+                    hoveredNav === 'month-next' && styles.hoveredNavButton
+                  ]}
+                  onPress={() => handleMonthChange('next')}
+                  {...(Platform.OS === 'web' ? {
+                    onMouseEnter: () => setHoveredNav('month-next'),
+                    onMouseLeave: () => setHoveredNav(null)
+                  } : {})}
+                >
+                  <Ionicons name="chevron-forward" size={16} color={colors.text.primary} />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.calendarGrid}>
+                <View style={styles.dayHeader}>
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                    <Text key={day} style={styles.dayHeaderText}>{day}</Text>
+                  ))}
+                </View>
+                <View style={styles.daysGrid}>
+                  {renderCalendar()}
+                </View>
               </View>
             </View>
           </View>
@@ -246,40 +396,56 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    minHeight: 44,
+  },
+  dropdownOpenContainer: {
+    // This style will be applied when dropdown is open
+    // The parent LabeledField will handle the border styling
   },
   disabledInput: {
+    backgroundColor: colors.neutral[100],
     opacity: 0.6,
   },
   icon: {
     marginRight: 8,
   },
   inputText: {
-    flex: 1,
-    fontSize: 16,
+    ...typography.body,
+    fontSize: 14,
     color: colors.text.primary,
-    fontFamily: typography.body.fontFamily,
+    flex: 1,
   },
   placeholderText: {
     color: colors.text.tertiary,
+    fontSize: 14,
+  },
+  disabledText: {
+    color: colors.neutral[500],
+    fontSize: 14,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    backgroundColor: 'transparent',
+  },
+  dropdown: {
+    backgroundColor: colors.background.primary,
+    borderWidth: 1,
+    borderColor: colors.primary[500],
+    borderTopWidth: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    zIndex: uiLayers.selectDropdown,
+    overflow: 'hidden', // Clip scrollbar to dropdown bounds
   },
   calendarContainer: {
-    backgroundColor: colors.background.primary,
-    borderRadius: 12,
-    padding: 20,
-    width: '100%',
-    maxWidth: 320,
-    shadowColor: colors.shadow.dark,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    padding: 10,
   },
   calendarHeader: {
     flexDirection: 'row',
@@ -297,6 +463,9 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 6,
     backgroundColor: colors.gray[50],
+  },
+  hoveredNavButton: {
+    backgroundColor: colors.primary[100],
   },
   yearText: {
     fontSize: 18,
@@ -336,11 +505,11 @@ const styles = StyleSheet.create({
   },
   selectedDay: {
     backgroundColor: colors.primary[500],
-    borderRadius: 20,
+    borderRadius: '100%',
   },
   todayDay: {
     backgroundColor: colors.primary[100],
-    borderRadius: 20,
+    borderRadius: '100%',
   },
   dayText: {
     fontSize: 14,
@@ -353,6 +522,14 @@ const styles = StyleSheet.create({
   todayDayText: {
     color: colors.primary[700],
     fontWeight: '600',
+  },
+  hoveredDay: {
+    backgroundColor: colors.primary[100],
+    borderRadius: '100%',
+  },
+  hoveredDayText: {
+    color: colors.primary[700],
+    fontWeight: '500',
   },
 });
 
