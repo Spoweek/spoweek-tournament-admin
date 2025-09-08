@@ -29,83 +29,87 @@ const TimeInputShowcaseCard: React.FC = () => {
       <View style={styles.inputSection}>
         <Text style={[typography.h4, styles.subsectionTitle]}>24-Hour Format</Text>
         
-        <LabeledField
-          label="24-Hour Time"
-          value={timeValues.time24}
-          onChange={handleTimeChange('time24')}
-          placeholder="Select time (24h)"
-          InputComponent={TimeInputAdapter}
-          inputProps={{ use24Hour: true }}
-        />
+        <View style={styles.inputField}>
+          <LabeledField
+            label="24-Hour Time"
+            value={timeValues.time24}
+            onChange={handleTimeChange('time24')}
+            placeholder="Select time (24h)"
+            InputComponent={TimeInputAdapter}
+            inputProps={{ use24Hour: true }}
+          />
+        </View>
         
-        <LabeledField
-          label="24-Hour with Seconds"
-          value={timeValues.timeWithSeconds}
-          onChange={handleTimeChange('timeWithSeconds')}
-          placeholder="Select time with seconds"
-          InputComponent={TimeInputAdapter}
-          inputProps={{ use24Hour: true, showSeconds: true }}
-        />
+        <View style={styles.inputField}>
+          <LabeledField
+            label="24-Hour with Seconds"
+            value={timeValues.timeWithSeconds}
+            onChange={handleTimeChange('timeWithSeconds')}
+            placeholder="Select time with seconds"
+            InputComponent={TimeInputAdapter}
+            inputProps={{ use24Hour: true, showSeconds: true }}
+          />
+        </View>
       </View>
       
       {/* 12-Hour Format */}
       <View style={styles.inputSection}>
         <Text style={[typography.h4, styles.subsectionTitle]}>12-Hour Format</Text>
         
-        <LabeledField
-          label="12-Hour Time"
-          value={timeValues.time12}
-          onChange={handleTimeChange('time12')}
-          placeholder="Select time (12h)"
-          InputComponent={TimeInputAdapter}
-          inputProps={{ use24Hour: false }}
-        />
+        <View style={styles.inputField}>
+          <LabeledField
+            label="12-Hour Time"
+            value={timeValues.time12}
+            onChange={handleTimeChange('time12')}
+            placeholder="Select time (12h)"
+            InputComponent={TimeInputAdapter}
+            inputProps={{ use24Hour: false }}
+          />
+        </View>
         
-        <LabeledField
-          label="12-Hour with Seconds (Pill)"
-          value={timeValues.timeWithSeconds}
-          onChange={handleTimeChange('timeWithSeconds')}
-          borderRadius="full"
-          placeholder="Select time with seconds"
-          InputComponent={TimeInputAdapter}
-          inputProps={{ use24Hour: false, showSeconds: true }}
-        />
+        <View style={styles.inputField}>
+          <LabeledField
+            label="12-Hour with Seconds (Pill)"
+            value={timeValues.timeWithSeconds}
+            onChange={handleTimeChange('timeWithSeconds')}
+            borderRadius="full"
+            placeholder="Select time with seconds"
+            InputComponent={TimeInputAdapter}
+            inputProps={{ use24Hour: false, showSeconds: true }}
+          />
+        </View>
       </View>
       
       {/* Floating/Inline Format */}
       <View style={styles.inputSection}>
         <Text style={[typography.h4, styles.subsectionTitle]}>Inline Time Inputs</Text>
         
-        <LabeledField
-          label="Floating 24h"
-          value={timeValues.timeFloating}
-          onChange={handleTimeChange('timeFloating')}
-          inline={true}
-          placeholder="Select time"
-          InputComponent={TimeInputAdapter}
-          inputProps={{ use24Hour: true }}
-        />
+        <View style={styles.inputField}>
+          <LabeledField
+            label="Floating 24h"
+            value={timeValues.timeFloating}
+            onChange={handleTimeChange('timeFloating')}
+            inline={true}
+            placeholder="Select time"
+            InputComponent={TimeInputAdapter}
+            inputProps={{ use24Hour: true }}
+          />
+        </View>
         
-        <LabeledField
-          label="Floating 12h (Pill)"
-          value={timeValues.time12}
-          onChange={handleTimeChange('time12')}
-          inline={true}
-          borderRadius="full"
-          placeholder="Select time"
-          InputComponent={TimeInputAdapter}
-          inputProps={{ use24Hour: false }}
-        />
+        <View style={styles.inputField}>
+          <LabeledField
+            label="Floating 12h (Pill)"
+            value={timeValues.time12}
+            onChange={handleTimeChange('time12')}
+            inline={true}
+            borderRadius="full"
+            placeholder="Select time"
+            InputComponent={TimeInputAdapter}
+            inputProps={{ use24Hour: false }}
+          />
+        </View>
       </View>
       
-      {/* Display current values for debugging */}
-      <View style={styles.inputSection}>
-        <Text style={[typography.h4, styles.subsectionTitle]}>Current Values (for backend)</Text>
-        <Text style={typography.caption}>24-Hour: {timeValues.time24 || 'Not set'}</Text>
-        <Text style={typography.caption}>12-Hour: {timeValues.time12 || 'Not set'}</Text>
-        <Text style={typography.caption}>With Seconds: {timeValues.timeWithSeconds || 'Not set'}</Text>
-        <Text style={typography.caption}>Floating: {timeValues.timeFloating || 'Not set'}</Text>
-      </View>
     </Card>
   );
 };
@@ -126,6 +130,9 @@ const styles = StyleSheet.create({
   subsectionTitle: {
     ...spacingStyles.subsectionSpacing,
     color: colors.text.secondary,
+  },
+  inputField: {
+    ...spacingStyles.elementSpacing,
   },
 });
 
