@@ -32,45 +32,53 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const slideAnimation = useRef(new Animated.Value(0)).current;
   
-  const hourRef = useRef<TextInput>(null);
-  const minuteRef = useRef<TextInput>(null);
-  const secondRef = useRef<TextInput>(null);
-
-  // Parse existing value on mount and when value changes
-  useEffect(() => {
-    if (value) {
-      const timeParts = value.split(':');
-      if (timeParts.length >= 2) {
-        let hours = parseInt(timeParts[0]);
-        const minutes = timeParts[1];
-        const seconds = timeParts[2] || '00';
-
-        if (!use24Hour) {
-          if (hours === 0) {
-            setHour('12');
-            setAmpm('AM');
-          } else if (hours <= 12) {
-            setHour(hours.toString());
-            setAmpm(hours === 12 ? 'PM' : 'AM');
-          } else {
-            setHour((hours - 12).toString());
-            setAmpm('PM');
-          }
-        } else {
-          setHour(hours.toString());
-        }
-
-        setMinute(minutes);
-        if (showSeconds) {
-          setSecond(seconds);
-        }
-      }
-    } else {
+  const parseAndSetTime = (timeString: string) => {
+    if (!timeString) {
       setHour('');
       setMinute('');
       setSecond('');
       setAmpm('AM');
+      return;
     }
+  
+    const timeParts = timeString.split(':');
+    if (timeParts.length < 2) return;
+  
+    let hours = parseInt(timeParts[0]);
+    const minutes = timeParts[1];
+    const seconds = timeParts[2] || '00';
+  
+    if (use24Hour) {
+      // 24-hour format: just set the hour directly
+      setHour(hours.toString().padStart(2, '0'));
+    } else {
+      // 12-hour format: convert 24-hour to 12-hour
+      if (hours === 0) {
+        setHour('12');
+        setAmpm('AM');
+      } else if (hours < 12) {
+        setHour(hours.toString().padStart(2, '0'));
+        setAmpm('AM');
+      } else if (hours === 12) {
+        setHour('12');
+        setAmpm('PM');
+      } else {
+        setHour((hours - 12).toString().padStart(2, '0'));
+        setAmpm('PM');
+      }
+    }
+  
+    setMinute(minutes.padStart(2, '0'));
+    if (showSeconds) {
+      setSecond(seconds.padStart(2, '0'));
+    } else {
+      setSecond('00'); // Always store seconds as 00 when not showing
+    }
+  };
+  
+  // Initialize fields when component mounts or value changes
+  useEffect(() => {
+    parseAndSetTime(value);
   }, [value, use24Hour, showSeconds]);
 
   // Initialize animation value based on ampm state (only when not animating)
@@ -81,101 +89,114 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     }
   }, [ampm, slideAnimation, isAnimating]);
 
-
-  // Update parent value when individual components change
-  const updateTimeValue = (newHour: string, newMinute: string, newSecond: string, newAmpm: string) => {
-    // Only update if we have both hour and minute
-    if (!newHour || !newMinute) {
-      if (!newHour && !newMinute && !newSecond) {
-        onChange(''); // Clear if all are empty
-      }
-      return;
-    }
-
-    let finalHour = parseInt(newHour);
-    
-    // Only validate and update if we have complete values
-    if (newHour.length < 2 || newMinute.length < 2) {
-      return; // Don't update until we have complete values
-    }
-
-    // Validate hour
-    if (use24Hour) {
-      if (finalHour < 0 || finalHour > 23) return;
-    } else {
-      if (finalHour < 1 || finalHour > 12) return;
-    }
-
-    // Validate minute and second
-    const minuteInt = parseInt(newMinute);
-    if (minuteInt < 0 || minuteInt > 59) return;
-    
-    if (showSeconds && newSecond && newSecond.length >= 2) {
-      const secondInt = parseInt(newSecond);
-      if (secondInt < 0 || secondInt > 59) return;
-    }
-
-    if (!use24Hour) {
-      if (newAmpm === 'AM' && finalHour === 12) {
-        finalHour = 0;
-      } else if (newAmpm === 'PM' && finalHour !== 12) {
-        finalHour += 12;
-      }
-    }
-
-    const hourStr = finalHour.toString().padStart(2, '0');
-    const minuteStr = newMinute.padStart(2, '0');
-    const secondStr = newSecond ? newSecond.padStart(2, '0') : '00';
-    const timeValue = showSeconds 
-      ? `${hourStr}:${minuteStr}:${secondStr}`
-      : `${hourStr}:${minuteStr}`;
-    
-    onChange(timeValue);
-  };
-
-  const handleHourChange = (text: string) => {
+  const validateAndUpdateHour = (text: string) => {
     // Only allow digits
     const cleanText = text.replace(/\D/g, '');
     
-    // Limit length and value
-    let limitedText = cleanText;
-    if (use24Hour) {
-      limitedText = cleanText.slice(0, 2);
-      const num = parseInt(limitedText);
-      if (num > 23) limitedText = '23';
-    } else {
-      limitedText = cleanText.slice(0, 2);
-      const num = parseInt(limitedText);
-      if (num > 12) limitedText = '12';
-      if (num === 0) limitedText = '';
+    // Limit to 2 characters max
+    const limitedText = cleanText.slice(0, 2);
+    
+    if (limitedText === '') {
+      setHour('');
+      return;
     }
     
-    setHour(limitedText);
-    // Don't update parent value until user leaves the field
+    const num = parseInt(limitedText);
+    
+    if (use24Hour) {
+      // 24-hour format: 0-23
+      if (num > 23) {
+        return;
+      } else {
+        setHour(limitedText);
+      }
+    } else {
+      // 12-hour format: 1-12
+      if (num === 0) {
+        setHour('');
+      } else if (num > 12) {
+        return;
+      } else {
+        setHour(limitedText);
+      }
+    }
   };
 
-  const handleMinuteChange = (text: string) => {
-    // Only allow digits
-    const cleanText = text.replace(/\D/g, '').slice(0, 2);
-    const num = parseInt(cleanText);
-    
-    let limitedText = cleanText;
-    if (num > 59) limitedText = '59';
-    
-    setMinute(limitedText);
-    // Don't update parent value until user leaves the field
+  const updateParentValue = () => {
+    let finalHour = parseInt(hour);
+    if (ampm === 'PM') {
+      finalHour = parseInt(hour) + 12;
+    } else if (ampm === 'AM' && finalHour === 12) {
+      finalHour = 0;
+    }
+    let finalMinute = minute;
+    let finalSecond = second;
+    value = `${finalHour.toString().padStart(2, '0')}:${finalMinute.toString().padStart(2, '0')}:${finalSecond.toString().padStart(2, '0')}`;
+    console.log(value);
   };
 
-  const handleSecondChange = (text: string) => {
+  const handleTimeFieldInputBlur = (fieldType: 'hour' | 'minute' | 'second') => {
+    let normalizedValue = '';
+    
+    switch (fieldType) {
+      case 'hour':
+        normalizedValue = hour ? hour.padStart(2, '0') : '';
+        setHour(normalizedValue);
+        break;
+      case 'minute':
+        normalizedValue = minute ? minute.padStart(2, '0') : '';
+        setMinute(normalizedValue);
+        break;
+      case 'second':
+        normalizedValue = second ? second.padStart(2, '0') : '';
+        setSecond(normalizedValue);
+        break;
+    }
+    updateParentValue();
+  };
+
+  const validateAndUpdateMinute = (text: string) => {
     // Only allow digits
-    const cleanText = text.replace(/\D/g, '').slice(0, 2);
-    const num = parseInt(cleanText);
+    const cleanText = text.replace(/\D/g, '');
     
-    let limitedText = cleanText;
-    if (num > 59) limitedText = '59';
+    // Limit to 2 characters max
+    const limitedText = cleanText.slice(0, 2);
     
-    setSecond(limitedText);
-    // Don't update parent value until user leaves the field
+    if (limitedText === '') {
+      setMinute('');
+      return;
+    }
+    
+    const num = parseInt(limitedText);
+    if (num === 0) {
+        setMinute('');
+    } else if (num > 60) {
+        return;
+    } else {
+        setMinute(limitedText);
+    }
+  };
+
+  const validateAndUpdateSecond = (text: string) => {
+    // Only allow digits
+    const cleanText = text.replace(/\D/g, '');
+    
+    // Limit to 2 characters max
+    const limitedText = cleanText.slice(0, 2);
+    
+    if (limitedText === '') {
+      setSecond('');
+      return;
+    }
+    
+    const num = parseInt(limitedText);
+    if (num === 0) {
+        setSecond('');
+    } else if (num > 60) {
+        return;
+    } else {
+        setSecond(limitedText);
+    }
   };
 
   const toggleAmPm = () => {
@@ -218,21 +239,17 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     onChange(timeValue);
   };
 
-
-
-
-
   return (
     <View style={[styles.container, style]}>
       <View style={styles.timeInputsContainer}>
         {/* Hour input */}
         <View style={styles.timeUnit}>
           <TextInput
-            ref={hourRef}
             style={[styles.timeInput, disabled && styles.disabled]}
             value={hour}
-            onChangeText={handleHourChange}
-            placeholder={use24Hour ? "HH" : "HH"}
+            onChangeText={validateAndUpdateHour}
+            onBlur={() => handleTimeFieldInputBlur('hour')}
+            placeholder={"H"}
             placeholderTextColor={colors.text.tertiary}
             keyboardType="numeric"
             maxLength={2}
@@ -246,11 +263,11 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
         {/* Minute input */}
         <View style={styles.timeUnit}>
           <TextInput
-            ref={minuteRef}
             style={[styles.timeInput, disabled && styles.disabled]}
             value={minute}
-            onChangeText={handleMinuteChange}
-            placeholder="MM"
+            onChangeText={validateAndUpdateMinute}
+            onBlur={() => handleTimeFieldInputBlur('minute')}
+            placeholder="M"
             placeholderTextColor={colors.text.tertiary}
             keyboardType="numeric"
             maxLength={2}
@@ -265,11 +282,11 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             <Text style={styles.separator}>:</Text>
             <View style={styles.timeUnit}>
               <TextInput
-                ref={secondRef}
                 style={[styles.timeInput, disabled && styles.disabled]}
                 value={second}
-                onChangeText={handleSecondChange}
-                placeholder="SS"
+                onChangeText={validateAndUpdateSecond}
+                onBlur={() => handleTimeFieldInputBlur('second')}
+                placeholder="S"
                 placeholderTextColor={colors.text.tertiary}
                 keyboardType="numeric"
                 maxLength={2}
