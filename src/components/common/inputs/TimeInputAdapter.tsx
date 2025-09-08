@@ -342,9 +342,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 44,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
   },
   timeInputsContainer: {
     flexDirection: 'row',
@@ -364,10 +361,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text.primary,
     paddingHorizontal: 4,
-    paddingVertical: 6,
     backgroundColor: 'transparent',
     borderWidth: 0,
-    minHeight: 32,
     textAlign: 'center',
     width: 35,
   },
