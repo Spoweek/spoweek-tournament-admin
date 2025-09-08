@@ -219,38 +219,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
   };
 
 
-  const handleHourBlur = () => {
-    // Format and validate when user leaves hour field
-    if (hour) {
-      const formattedHour = hour.padStart(2, '0');
-      setHour(formattedHour);
-      updateTimeValue(formattedHour, minute, second, ampm);
-    } else {
-      updateTimeValue(hour, minute, second, ampm);
-    }
-  };
-
-  const handleMinuteBlur = () => {
-    // Format and validate when user leaves minute field
-    if (minute) {
-      const formattedMinute = minute.padStart(2, '0');
-      setMinute(formattedMinute);
-      updateTimeValue(hour, formattedMinute, second, ampm);
-    } else {
-      updateTimeValue(hour, minute, second, ampm);
-    }
-  };
-
-  const handleSecondBlur = () => {
-    // Format and validate when user leaves second field
-    if (second) {
-      const formattedSecond = second.padStart(2, '0');
-      setSecond(formattedSecond);
-      updateTimeValue(hour, minute, formattedSecond, ampm);
-    } else {
-      updateTimeValue(hour, minute, second, ampm);
-    }
-  };
 
 
 
@@ -269,7 +237,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             keyboardType="numeric"
             maxLength={2}
             editable={!disabled}
-            onBlur={handleHourBlur}
             textAlign="center"
           />
         </View>
@@ -288,7 +255,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             keyboardType="numeric"
             maxLength={2}
             editable={!disabled}
-            onBlur={handleMinuteBlur}
             textAlign="center"
           />
         </View>
@@ -308,7 +274,6 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
                 keyboardType="numeric"
                 maxLength={2}
                 editable={!disabled}
-                onBlur={handleSecondBlur}
                 textAlign="center"
               />
             </View>
