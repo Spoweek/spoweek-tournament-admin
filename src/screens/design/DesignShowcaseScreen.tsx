@@ -6,6 +6,7 @@ import { PrimaryButton, SecondaryButton, SuccessButton, WarningButton, DangerBut
 import { LabeledField } from '../../components/common/inputs';
 import TextInputAdapter from '../../components/common/inputs/TextInputAdapter';
 import SelectInputAdapter from '../../components/common/inputs/SelectInputAdapter';
+import TimeInputAdapter from '../../components/common/inputs/TimeInputAdapter';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 import { globalStyles } from '../../components/common/GlobalStyles';
@@ -29,6 +30,13 @@ const DesignShowcaseScreen: React.FC = () => {
     category: '',
     priority: '',
     status: '',
+  });
+
+  const [timeValues, setTimeValues] = useState({
+    time24: '',
+    time12: '',
+    timeWithSeconds: '',
+    timeFloating: '',
   });
 
   // Listen for screen size changes
@@ -56,6 +64,10 @@ const DesignShowcaseScreen: React.FC = () => {
 
   const handleSelectChange = (key: string) => (value: string | number) => {
     setSelectValues(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleTimeChange = (key: string) => (value: string) => {
+    setTimeValues(prev => ({ ...prev, [key]: value }));
   };
 
   // Sample data for select inputs
@@ -508,6 +520,94 @@ const DesignShowcaseScreen: React.FC = () => {
     </Card>
   );
 
+  const TimeInputShowcaseCard = () => (
+    <Card width="100%" padding={16} style={styles.showcaseCard}>
+      <Text style={[typography.h3, styles.cardTitle]}>Time Input Components</Text>
+      
+      {/* 24-Hour Format */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>24-Hour Format</Text>
+        
+        <LabeledField
+          label="24-Hour Time"
+          value={timeValues.time24}
+          onChange={handleTimeChange('time24')}
+          placeholder="Select time (24h)"
+          InputComponent={TimeInputAdapter}
+          inputProps={{ use24Hour: true }}
+        />
+        
+        <LabeledField
+          label="24-Hour with Seconds"
+          value={timeValues.timeWithSeconds}
+          onChange={handleTimeChange('timeWithSeconds')}
+          placeholder="Select time with seconds"
+          InputComponent={TimeInputAdapter}
+          inputProps={{ use24Hour: true, showSeconds: true }}
+        />
+      </View>
+      
+      {/* 12-Hour Format */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>12-Hour Format</Text>
+        
+        <LabeledField
+          label="12-Hour Time"
+          value={timeValues.time12}
+          onChange={handleTimeChange('time12')}
+          placeholder="Select time (12h)"
+          InputComponent={TimeInputAdapter}
+          inputProps={{ use24Hour: false }}
+        />
+        
+        <LabeledField
+          label="12-Hour with Seconds (Pill)"
+          value={timeValues.timeWithSeconds}
+          onChange={handleTimeChange('timeWithSeconds')}
+          borderRadius="full"
+          placeholder="Select time with seconds"
+          InputComponent={TimeInputAdapter}
+          inputProps={{ use24Hour: false, showSeconds: true }}
+        />
+      </View>
+      
+      {/* Floating/Inline Format */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Inline Time Inputs</Text>
+        
+        <LabeledField
+          label="Floating 24h"
+          value={timeValues.timeFloating}
+          onChange={handleTimeChange('timeFloating')}
+          inline={true}
+          placeholder="Select time"
+          InputComponent={TimeInputAdapter}
+          inputProps={{ use24Hour: true }}
+        />
+        
+        <LabeledField
+          label="Floating 12h (Pill)"
+          value={timeValues.time12}
+          onChange={handleTimeChange('time12')}
+          inline={true}
+          borderRadius="full"
+          placeholder="Select time"
+          InputComponent={TimeInputAdapter}
+          inputProps={{ use24Hour: false }}
+        />
+      </View>
+      
+      {/* Display current values for debugging */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Current Values (for backend)</Text>
+        <Text style={typography.caption}>24-Hour: {timeValues.time24 || 'Not set'}</Text>
+        <Text style={typography.caption}>12-Hour: {timeValues.time12 || 'Not set'}</Text>
+        <Text style={typography.caption}>With Seconds: {timeValues.timeWithSeconds || 'Not set'}</Text>
+        <Text style={typography.caption}>Floating: {timeValues.timeFloating || 'Not set'}</Text>
+      </View>
+    </Card>
+  );
+
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
@@ -541,6 +641,14 @@ const DesignShowcaseScreen: React.FC = () => {
           paddingBottom: 16
         }]}>
           <InputShowcaseCard />
+        </View>
+        
+        <View style={[styles.gridItem, { 
+          width: gridColumns === 1 ? '100%' : `${100 / gridColumns}%`,
+          paddingHorizontal: 6,
+          paddingBottom: 16
+        }]}>
+          <TimeInputShowcaseCard />
         </View>
       </View>
     </ScrollView>
