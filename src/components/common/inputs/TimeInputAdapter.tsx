@@ -85,7 +85,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
   // Initialize animation value based on ampm state (only when not animating)
   useEffect(() => {
     if (!isAnimating) {
-      const initialValue = ampm === 'PM' ? 28 : 0;
+      const initialValue = ampm === 'PM' ? 21 : 0;
       slideAnimation.setValue(initialValue);
     }
   }, [ampm, slideAnimation, isAnimating]);
@@ -212,7 +212,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     setIsAnimating(true);
     
     // Animate the slider
-    const targetValue = newAmpm === 'PM' ? 28 : 0;
+    const targetValue = newAmpm === 'PM' ? 21 : 0;
     
     Animated.timing(slideAnimation, {
       toValue: targetValue,
@@ -368,25 +368,25 @@ const styles = StyleSheet.create({
   },
   ampmContainer: {
     marginLeft: 12,
-    width: 60,
+    width: 45,
   },
   ampmSlider: {
     position: 'relative',
     backgroundColor: colors.gray[200],
-    borderRadius: 16,
-    padding: 2,
-    height: 32,
+    borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    height: 24,
+    padding: 2,
   },
   ampmSliderBackground: {
     position: 'absolute',
     top: 2,
     left: 2,
-    width: 28,
-    height: 28,
+    width: 20,
+    height: 20,
     backgroundColor: colors.primary[500],
-    borderRadius: 14,
+    borderRadius: 10,
     zIndex: 1,
   },
   ampmOptions: {
@@ -396,13 +396,13 @@ const styles = StyleSheet.create({
   },
   ampmOption: {
     flex: 1,
-    height: 28,
+    height: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
   ampmText: {
     ...typography.body,
-    fontSize: 12,
+    fontSize: 10,
     color: colors.text.secondary,
     fontWeight: '500',
     textAlign: 'center',
