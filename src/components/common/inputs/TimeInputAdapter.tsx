@@ -95,6 +95,11 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
 
     let finalHour = parseInt(newHour);
     
+    // Only validate and update if we have complete values
+    if (newHour.length < 2 || newMinute.length < 2) {
+      return; // Don't update until we have complete values
+    }
+
     // Validate hour
     if (use24Hour) {
       if (finalHour < 0 || finalHour > 23) return;
@@ -106,7 +111,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     const minuteInt = parseInt(newMinute);
     if (minuteInt < 0 || minuteInt > 59) return;
     
-    if (showSeconds && newSecond) {
+    if (showSeconds && newSecond && newSecond.length >= 2) {
       const secondInt = parseInt(newSecond);
       if (secondInt < 0 || secondInt > 59) return;
     }
@@ -121,8 +126,9 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
 
     const hourStr = finalHour.toString().padStart(2, '0');
     const minuteStr = newMinute.padStart(2, '0');
+    const secondStr = newSecond ? newSecond.padStart(2, '0') : '00';
     const timeValue = showSeconds 
-      ? `${hourStr}:${minuteStr}:${(newSecond || '00').padStart(2, '0')}`
+      ? `${hourStr}:${minuteStr}:${secondStr}`
       : `${hourStr}:${minuteStr}`;
     
     onChange(timeValue);
@@ -146,12 +152,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     }
     
     setHour(limitedText);
-    updateTimeValue(limitedText, minute, second, ampm);
-    
-    // Auto-advance to minute field when 2 digits entered
-    if (limitedText.length === 2) {
-      minuteRef.current?.focus();
-    }
+    // Don't update parent value until user leaves the field
   };
 
   const handleMinuteChange = (text: string) => {
@@ -163,12 +164,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     if (num > 59) limitedText = '59';
     
     setMinute(limitedText);
-    updateTimeValue(hour, limitedText, second, ampm);
-    
-    // Auto-advance to second field when 2 digits entered
-    if (limitedText.length === 2 && showSeconds) {
-      secondRef.current?.focus();
-    }
+    // Don't update parent value until user leaves the field
   };
 
   const handleSecondChange = (text: string) => {
@@ -180,7 +176,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     if (num > 59) limitedText = '59';
     
     setSecond(limitedText);
-    updateTimeValue(hour, minute, limitedText, ampm);
+    // Don't update parent value until user leaves the field
   };
 
   const toggleAmPm = () => {
@@ -193,7 +189,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     
     Animated.timing(slideAnimation, {
       toValue: targetValue,
-      duration: 200,
+      duration: 100,
       useNativeDriver: false,
     }).start(() => {
       setIsAnimating(false);
@@ -229,9 +225,82 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
   };
 
   const handleBlur = () => {
+    // Format all fields when leaving the entire component
+    let hasChanges = false;
+    
+    if (hour) {
+      const formattedHour = hour.padStart(2, '0');
+      if (formattedHour !== hour) {
+        setHour(formattedHour);
+        hasChanges = true;
+      }
+    }
+    
+    if (minute) {
+      const formattedMinute = minute.padStart(2, '0');
+      if (formattedMinute !== minute) {
+        setMinute(formattedMinute);
+        hasChanges = true;
+      }
+    }
+    
+    if (second) {
+      const formattedSecond = second.padStart(2, '0');
+      if (formattedSecond !== second) {
+        setSecond(formattedSecond);
+        hasChanges = true;
+      }
+    }
+    
+    // Update parent value with formatted values
+    if (hasChanges) {
+      updateTimeValue(
+        hour ? hour.padStart(2, '0') : hour,
+        minute ? minute.padStart(2, '0') : minute,
+        second ? second.padStart(2, '0') : second,
+        ampm
+      );
+    } else {
+      updateTimeValue(hour, minute, second, ampm);
+    }
+    
     setIsFocused(false);
     onBlur?.();
   };
+
+  const handleHourBlur = () => {
+    // Format and validate when user leaves hour field
+    if (hour) {
+      const formattedHour = hour.padStart(2, '0');
+      setHour(formattedHour);
+      updateTimeValue(formattedHour, minute, second, ampm);
+    } else {
+      updateTimeValue(hour, minute, second, ampm);
+    }
+  };
+
+  const handleMinuteBlur = () => {
+    // Format and validate when user leaves minute field
+    if (minute) {
+      const formattedMinute = minute.padStart(2, '0');
+      setMinute(formattedMinute);
+      updateTimeValue(hour, formattedMinute, second, ampm);
+    } else {
+      updateTimeValue(hour, minute, second, ampm);
+    }
+  };
+
+  const handleSecondBlur = () => {
+    // Format and validate when user leaves second field
+    if (second) {
+      const formattedSecond = second.padStart(2, '0');
+      setSecond(formattedSecond);
+      updateTimeValue(hour, minute, formattedSecond, ampm);
+    } else {
+      updateTimeValue(hour, minute, second, ampm);
+    }
+  };
+
 
 
   return (
@@ -250,7 +319,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             maxLength={2}
             editable={!disabled}
             onFocus={handleFocus}
-            onBlur={handleBlur}
+            onBlur={handleHourBlur}
             textAlign="center"
           />
         </View>
@@ -270,7 +339,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             maxLength={2}
             editable={!disabled}
             onFocus={handleFocus}
-            onBlur={handleBlur}
+            onBlur={handleMinuteBlur}
             textAlign="center"
           />
         </View>
@@ -291,7 +360,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
                 maxLength={2}
                 editable={!disabled}
                 onFocus={handleFocus}
-                onBlur={handleBlur}
+                onBlur={handleSecondBlur}
                 textAlign="center"
               />
             </View>
