@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { colors } from '../../../styles/colors';
 import { typography } from '../../../styles/typography';
 import type { InputAdapterProps } from './LabeledField';
@@ -242,6 +243,11 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
   return (
     <View style={[styles.container, style]}>
       <View style={styles.timeInputsContainer}>
+        {/* Clock icon */}
+        <View style={styles.clockIconContainer}>
+          <Icon name="time-outline" size={16} color={colors.text.primary} />
+        </View>
+        
         {/* Hour input */}
         <View style={styles.timeUnit}>
           <TextInput
@@ -249,7 +255,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             value={hour}
             onChangeText={validateAndUpdateHour}
             onBlur={() => handleTimeFieldInputBlur('hour')}
-            placeholder={"H"}
+            placeholder="--"
             placeholderTextColor={colors.text.tertiary}
             keyboardType="numeric"
             maxLength={2}
@@ -267,7 +273,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             value={minute}
             onChangeText={validateAndUpdateMinute}
             onBlur={() => handleTimeFieldInputBlur('minute')}
-            placeholder="M"
+            placeholder="--"
             placeholderTextColor={colors.text.tertiary}
             keyboardType="numeric"
             maxLength={2}
@@ -286,7 +292,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
                 value={second}
                 onChangeText={validateAndUpdateSecond}
                 onBlur={() => handleTimeFieldInputBlur('second')}
-                placeholder="S"
+                placeholder="--"
                 placeholderTextColor={colors.text.tertiary}
                 keyboardType="numeric"
                 maxLength={2}
@@ -338,6 +344,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+  },
+  clockIconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
   },
   timeUnit: {
     width: 35,
