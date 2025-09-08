@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { colors } from '../../../styles/colors';
 import { typography } from '../../../styles/typography';
 import type { InputAdapterProps } from './LabeledField';
@@ -133,7 +133,9 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     let finalMinute = minute;
     let finalSecond = second;
     value = `${finalHour.toString().padStart(2, '0')}:${finalMinute.toString().padStart(2, '0')}:${finalSecond.toString().padStart(2, '0')}`;
-    console.log(value);
+    if (hour !== '' && minute !== '' && (showSeconds ? second !== '' : true)) {
+        onChange(value);
+    }
   };
 
   const handleTimeFieldInputBlur = (fieldType: 'hour' | 'minute' | 'second') => {
@@ -153,7 +155,11 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
         setSecond(normalizedValue);
         break;
     }
-    updateParentValue();
+    
+    // Only update parent if we have valid time values
+    if (hour !== '' && minute !== '' && (showSeconds ? second !== '' : true)) {
+      updateParentValue();
+    }
   };
 
   const validateAndUpdateMinute = (text: string) => {
@@ -245,7 +251,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
       <View style={styles.timeInputsContainer}>
         {/* Clock icon */}
         <View style={styles.clockIconContainer}>
-          <Icon name="time-outline" size={16} color={colors.text.primary} />
+          <Ionicons name="time-outline" size={16} color={colors.text.primary} />
         </View>
         
         {/* Hour input */}
