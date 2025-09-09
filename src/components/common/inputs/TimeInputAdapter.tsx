@@ -359,10 +359,10 @@ const styles = StyleSheet.create({
   clockIconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 8,
+    marginRight: 0,
   },
   timeUnit: {
-    width: 35,
+    width: 28,
   },
   timeInput: {
     ...typography.body,
@@ -371,10 +371,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 0,
     textAlign: 'center',
-    width: 35,
+    width: 28,
   },
   ampmContainer: {
-    marginLeft: 12,
+    marginLeft: 8,
     width: 45,
   },
   ampmSlider: {
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     ...typography.body,
     fontSize: 16,
     color: colors.text.primary,
-    marginHorizontal: 6,
+    marginHorizontal: 4,
     fontWeight: '600',
   },
   disabled: {
