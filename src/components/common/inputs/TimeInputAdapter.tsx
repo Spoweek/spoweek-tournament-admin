@@ -125,10 +125,20 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
 
   const updateParentValue = () => {
     let finalHour = parseInt(hour);
-    if (ampm === 'PM') {
-      finalHour = parseInt(hour) + 12;
-    } else if (ampm === 'AM' && finalHour === 12) {
+    if (!use24Hour) {
+      if (ampm === 'PM') {
+        if (finalHour === 12) {
+          finalHour = parseInt(hour);
+        } else {
+          finalHour = parseInt(hour) + 12;
+        }
+      } else if (ampm === 'AM' && finalHour === 12) {
+        finalHour = 0;
+      }
+    }
+    if (finalHour > 23) {
       finalHour = 0;
+      setHour('00');
     }
     let finalMinute = minute;
     let finalSecond = second;
@@ -239,9 +249,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
 
     const hourStr = finalHour.toString().padStart(2, '0');
     const minuteStr = minute.padStart(2, '0');
-    const timeValue = showSeconds 
-      ? `${hourStr}:${minuteStr}:${(second || '00').padStart(2, '0')}`
-      : `${hourStr}:${minuteStr}`;
+    const timeValue = `${hourStr}:${minuteStr}:${(second || '00').padStart(2, '0')}`;
     
     onChange(timeValue);
   };

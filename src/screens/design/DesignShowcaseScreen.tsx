@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { colors } from '../../styles/colors';
 import { typography } from '../../styles/typography';
 import { globalStyles } from '../../components/common/GlobalStyles';
-import { ColorPaletteCard, ButtonShowcaseCard, InputShowcaseCard, SelectInputShowcaseCard, TimeInputShowcaseCard, DateInputShowcaseCard } from './cards';
+import { ColorPaletteCard, ButtonShowcaseCard, InputShowcaseCard, SelectInputShowcaseCard, TimeInputShowcaseCard, DateInputShowcaseCard, DateTimeInputShowcaseCard } from './cards';
 
 
 const DesignShowcaseScreen: React.FC = () => {
@@ -83,6 +83,14 @@ const DesignShowcaseScreen: React.FC = () => {
           paddingBottom: 16
         }]}>
           <DateInputShowcaseCard />
+        </View>
+        
+        <View style={[styles.gridItem, { 
+          width: gridColumns === 1 ? '100%' : `${100 / gridColumns}%`,
+          paddingHorizontal: 6,
+          paddingBottom: 16
+        }]}>
+          <DateTimeInputShowcaseCard />
         </View>
       </View>
     </ScrollView>

@@ -4,3 +4,4 @@ export { default as InputShowcaseCard } from './InputShowcaseCard';
 export { default as SelectInputShowcaseCard } from './SelectInputShowcaseCard';
 export { default as TimeInputShowcaseCard } from './TimeInputShowcaseCard';
 export { default as DateInputShowcaseCard } from './DateInputShowcaseCard';
+export { default as DateTimeInputShowcaseCard } from './DateTimeInputShowcaseCard';
