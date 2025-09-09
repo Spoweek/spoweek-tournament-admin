@@ -385,6 +385,8 @@ const styles = StyleSheet.create({
     ...typography.body,
     fontSize: 14,
     color: colors.text.primary,
+    minHeight: 40,
+    paddingHorizontal: 16,
   },
   searchIcon: {
     marginLeft: 8,
@@ -399,6 +401,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral[100],
+    minHeight: 40,
+    paddingHorizontal: 16,
   },
   selectedOption: {
     backgroundColor: colors.primary[100],

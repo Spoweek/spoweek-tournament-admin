@@ -50,6 +50,16 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
     return getCountryByCode(value.countryCode) || countryOptions[0];
   }, [value.countryCode, countryOptions]);
 
+  // Get dynamic placeholder based on current country's phone example
+  const dynamicPlaceholder = useMemo(() => {
+    if (currentCountry?.phoneExample) {
+      return currentCountry.phoneExample;
+    }
+    // Fallback to Korea if no country selected
+    const korea = getCountryByCode('KR');
+    return korea?.phoneExample || 'Enter phone number';
+  }, [currentCountry]);
+
   // Convert country data to select options
   const countrySelectOptions: SelectOption[] = useMemo(() => {
     return countryOptions.map(country => ({
@@ -136,7 +146,7 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
             size={20}
           />
         </View>
-        <Text style={styles.countryDialCode}>{option.label}</Text>
+        <Text style={styles.countryDialCode}>{option.customData?.name} ({option.label})</Text>
       </View>
     );
   }, []);
@@ -194,7 +204,7 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
           onChangeText={handlePhoneChange}
           onFocus={handlePhoneFocus}
           onBlur={handlePhoneBlur}
-          placeholder={placeholder}
+          placeholder={dynamicPlaceholder}
           placeholderTextColor={colors.text.tertiary}
           editable={!disabled}
           keyboardType="phone-pad"
