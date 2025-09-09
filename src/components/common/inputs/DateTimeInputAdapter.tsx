@@ -144,15 +144,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   timeContainer: {
-    flexGrow: 1,        // Can grow
-    flexShrink: 1,      // Can shrink
-    flexBasis: 'auto',  // Start with content size
+    flexGrow: 0,        // Don't grow - use content width
+    flexShrink: 0,      // Don't shrink - maintain content width
+    flexBasis: 'auto',  // Use content width
+    minWidth: '50%',    // Minimum 50% of available width
     marginRight: 8,
   },
   dateContainer: {
-    flexGrow: 1,        // Can grow
-    flexShrink: 1,      // Can shrink
-    flexBasis: 'auto',  // Start with content size
+    flexGrow: 1,        // Fill remaining space
+    flexShrink: 1,      // Can shrink when space is tight
+    flexBasis: 'auto',  // Start with content width
+    minWidth: 80,       // Minimum width to ensure it can shrink
   },
   timeInput: {
     // Remove any conflicting styles that might interfere with inline layout
