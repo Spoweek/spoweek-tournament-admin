@@ -332,10 +332,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 8,
     backgroundColor: 'transparent',
     borderWidth: 0,
-    minHeight: 44,
+    height: 40,
   },
   dropdownOpenContainer: {
     // This style will be applied when dropdown is open

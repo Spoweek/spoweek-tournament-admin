@@ -405,7 +405,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'transparent',
     borderWidth: 0,
-    paddingVertical: 1,
+    height: 40,
+    paddingVertical: 8,
   },  
   disabledInput: {
     backgroundColor: colors.neutral[100],

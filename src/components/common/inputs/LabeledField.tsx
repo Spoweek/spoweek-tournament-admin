@@ -60,7 +60,7 @@ export function LabeledField<T = any>({
 }: LabeledFieldProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [elementHeight, setElementHeight] = useState(44); // Default height
+  const [elementHeight, setElementHeight] = useState(40); // Default height
   const inputWrapperRef = useRef<any>(null);
   
   const radius = borderRadius === 'full' ? elementHeight / 2 : BORDER_RADIUS[borderRadius];
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   inlineContainer: {
     flexDirection: 'row',
     alignItems: 'stretch',
-    minHeight: 44, // Ensure minimum height for proper centering
+    minHeight: 40, // Ensure minimum height for proper centering
   },
   fullRounded: {
     borderRadius: 9999,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   input: {
-    minHeight: 40,
+    height: 40,
     paddingHorizontal: 16,
     paddingVertical: 8,
     // Remove height: '100%' to allow proper centering
