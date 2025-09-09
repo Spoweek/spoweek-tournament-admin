@@ -9,13 +9,18 @@ import { cardSpacing, createSpacingStyles } from '../../../styles/spacing';
 
 // Sample data for select inputs
 const countryOptions = [
-  { label: 'United States', value: 'us' },
-  { label: 'Canada', value: 'ca' },
-  { label: 'United Kingdom', value: 'uk' },
-  { label: 'Germany', value: 'de' },
-  { label: 'France', value: 'fr' },
-  { label: 'Japan', value: 'jp' },
-  { label: 'Australia', value: 'au' },
+  { label: 'United States', value: 'us', searchTerms: ['USA', 'America', 'US'] },
+  { label: 'Canada', value: 'ca', searchTerms: ['CA'] },
+  { label: 'United Kingdom', value: 'uk', searchTerms: ['UK', 'Britain', 'England'] },
+  { label: 'Germany', value: 'de', searchTerms: ['Deutschland'] },
+  { label: 'France', value: 'fr', searchTerms: ['Français'] },
+  { label: 'Japan', value: 'jp', searchTerms: ['Nihon', 'Nippon'] },
+  { label: 'Australia', value: 'au', searchTerms: ['Aussie', 'Oz'] },
+  { label: 'South Korea', value: 'kr', searchTerms: ['Korea', '한국'] },
+  { label: 'Brazil', value: 'br', searchTerms: ['Brasil'] },
+  { label: 'India', value: 'in', searchTerms: ['Bharat'] },
+  { label: 'China', value: 'cn', searchTerms: ['中国', 'PRC'] },
+  { label: 'Russia', value: 'ru', searchTerms: ['Россия', 'Russian Federation'] },
 ];
 
 const categoryOptions = [
@@ -47,6 +52,7 @@ const SelectInputShowcaseCard: React.FC = () => {
     category: '',
     priority: '',
     status: '',
+    searchableCountry: '',
   });
 
   // Internal handler
@@ -112,6 +118,26 @@ const SelectInputShowcaseCard: React.FC = () => {
             placeholder="Choose status"
             InputComponent={SelectInputAdapter}
             inputProps={{ options: statusOptions }}
+          />
+        </View>
+      </View>
+      
+      {/* Searchable Examples */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Searchable Examples</Text>
+        
+        <View style={styles.inputField}>
+          <LabeledField
+            label="Searchable Countries"
+            value={selectValues.searchableCountry}
+            onChange={handleSelectChange('searchableCountry')}
+            placeholder="Search for a country..."
+            InputComponent={SelectInputAdapter}
+            inputProps={{ 
+              options: countryOptions,
+              searchable: true,
+              searchPlaceholder: "Type to search countries..."
+            }}
           />
         </View>
       </View>

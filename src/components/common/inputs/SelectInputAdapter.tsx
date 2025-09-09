@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Platform, Dimensions, Modal } from 'react-native';
+import React, { useState, useRef, useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Platform, Dimensions, Modal, TextInput } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { colors } from '../../../styles/colors';
 import { typography } from '../../../styles/typography';
@@ -9,6 +9,9 @@ import type { InputAdapterProps } from './LabeledField';
 export interface SelectOption {
   label: string;
   value: string | number;
+  searchTerms?: string[]; // Additional search terms for filtering
+  icon?: string; // Icon name for custom rendering
+  customData?: any; // Additional data for custom rendering
 }
 
 export interface SelectInputAdapterProps extends InputAdapterProps<string | number> {
@@ -16,6 +19,9 @@ export interface SelectInputAdapterProps extends InputAdapterProps<string | numb
   placeholder?: string;
   borderRadius?: 'light' | 'full';
   inline?: boolean;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  renderOption?: (option: SelectOption, isSelected: boolean, isHovered: boolean) => React.ReactNode;
   onDropdownStateChange?: (isOpen: boolean) => void;
   containerRef?: React.RefObject<any>;
 }
@@ -32,6 +38,9 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   onBlur,
   onDropdownStateChange,
   inline = false,
+  searchable = false,
+  searchPlaceholder = 'Search...',
+  renderOption,
   calculatedRadius,
   containerRef,
 }) => {
@@ -39,7 +48,33 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
   const [isClearHovered, setIsClearHovered] = useState(false);
   const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [searchQuery, setSearchQuery] = useState('');
   const selectRef = useRef<any>(null);
+  const searchInputRef = useRef<TextInput>(null);
+
+  // Filter options based on search query
+  const filteredOptions = useMemo(() => {
+    if (!searchable || !searchQuery.trim()) {
+      return options;
+    }
+    
+    const query = searchQuery.toLowerCase().trim();
+    return options.filter(option => {
+      // Search in label
+      if (option.label.toLowerCase().includes(query)) {
+        return true;
+      }
+      
+      // Search in additional search terms
+      if (option.searchTerms) {
+        return option.searchTerms.some(term => 
+          term.toLowerCase().includes(query)
+        );
+      }
+      
+      return false;
+    });
+  }, [options, searchQuery, searchable]);
 
   // Use the calculated radius from LabeledField for perfect matching
   const getDropdownRadius = () => {
@@ -65,6 +100,9 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
 
   const handleOpen = () => {
     if (!disabled) {
+      // Clear search when opening
+      setSearchQuery('');
+      
       // Use container ref if available for more precise measurements
       const elementToMeasure = containerRef?.current || selectRef.current;
       
@@ -101,8 +139,13 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
 
   const handleClose = () => {
     setIsOpen(false);
+    setSearchQuery(''); // Clear search when closing
     onDropdownStateChange?.(false);
     onBlur?.();
+  };
+
+  const handleSearchChange = (text: string) => {
+    setSearchQuery(text);
   };
 
   const handleClear = () => {
@@ -110,31 +153,58 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
     onBlur?.();
   };
 
-  const renderOption = ({ item, index }: { item: SelectOption; index: number }) => (
-    <TouchableOpacity
-      style={[
-        styles.option,
-        item.value === value && styles.selectedOption,
-        hoveredOption === item.value && styles.hoveredOption,
-        index === options.length - 1 && styles.lastOption
-      ]}
-      onPress={() => handleSelect(item.value)}
-      {...(Platform.OS === 'web' ? {
-        onMouseEnter: () => setHoveredOption(item.value),
-        onMouseLeave: () => setHoveredOption(null)
-      } : {})}
-    >
-      <Text style={[
-        styles.optionText,
-        item.value === value && styles.selectedOptionText
-      ]}>
-        {item.label}
-      </Text>
-      {item.value === value && (
-        <Ionicons name="checkmark" size={16} color={colors.primary[500]} />
-      )}
-    </TouchableOpacity>
-  );
+  const renderOptionItem = ({ item, index }: { item: SelectOption; index: number }) => {
+    const isSelected = item.value === value;
+    const isHovered = hoveredOption === item.value;
+    
+    // Use custom render function if provided
+    if (renderOption) {
+      return (
+        <TouchableOpacity
+          style={[
+            styles.option,
+            isSelected && styles.selectedOption,
+            isHovered && styles.hoveredOption,
+            index === filteredOptions.length - 1 && styles.lastOption
+          ]}
+          onPress={() => handleSelect(item.value)}
+          {...(Platform.OS === 'web' ? {
+            onMouseEnter: () => setHoveredOption(item.value),
+            onMouseLeave: () => setHoveredOption(null)
+          } : {})}
+        >
+          {renderOption(item, isSelected, isHovered)}
+        </TouchableOpacity>
+      );
+    }
+    
+    // Default rendering
+    return (
+      <TouchableOpacity
+        style={[
+          styles.option,
+          isSelected && styles.selectedOption,
+          isHovered && styles.hoveredOption,
+          index === filteredOptions.length - 1 && styles.lastOption
+        ]}
+        onPress={() => handleSelect(item.value)}
+        {...(Platform.OS === 'web' ? {
+          onMouseEnter: () => setHoveredOption(item.value),
+          onMouseLeave: () => setHoveredOption(null)
+        } : {})}
+      >
+        <Text style={[
+          styles.optionText,
+          isSelected && styles.selectedOptionText
+        ]}>
+          {item.label}
+        </Text>
+        {isSelected && (
+          <Ionicons name="checkmark" size={16} color={colors.primary[500]} />
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -213,9 +283,23 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
                 transform: [{ translateX: 0 }, { translateY: 0 }],
               }
             ]}>
+            {searchable && (
+              <View style={styles.searchContainer}>
+                <TextInput
+                  ref={searchInputRef}
+                  style={styles.searchInput}
+                  placeholder={searchPlaceholder}
+                  placeholderTextColor={colors.neutral[500]}
+                  value={searchQuery}
+                  onChangeText={handleSearchChange}
+                  autoFocus={true}
+                />
+                <Ionicons name="search" size={16} color={colors.neutral[500]} style={styles.searchIcon} />
+              </View>
+            )}
             <FlatList
-              data={options}
-              renderItem={renderOption}
+              data={filteredOptions}
+              renderItem={renderOptionItem}
               keyExtractor={(item) => item.value.toString()}
               style={styles.optionsList}
               showsVerticalScrollIndicator={true}
@@ -283,6 +367,26 @@ const styles = StyleSheet.create({
     maxHeight: 200,
     zIndex: uiLayers.selectDropdown,
     overflow: 'hidden', // Clip scrollbar to dropdown bounds
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.neutral[300],
+    backgroundColor: colors.background.primary,
+  },
+  searchInput: {
+    flex: 1,
+    ...typography.body,
+    fontSize: 14,
+    color: colors.text.primary,
+    paddingVertical: 8,
+    paddingRight: 8,
+  },
+  searchIcon: {
+    marginLeft: 8,
   },
   optionsList: {
     maxHeight: 200,
