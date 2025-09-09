@@ -144,13 +144,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   timeContainer: {
-    flex: 1,           // Equal flex to date container
-    maxWidth: '50%',   // But never exceed 50% of parent
+    flexGrow: 1,        // Can grow
+    flexShrink: 1,      // Can shrink
+    flexBasis: 'auto',  // Start with content size
     marginRight: 8,
   },
   dateContainer: {
-    flex: 1,           // Equal flex to time container
-    maxWidth: '50%',   // But never exceed 50% of parent
+    flexGrow: 1,        // Can grow
+    flexShrink: 1,      // Can shrink
+    flexBasis: 'auto',  // Start with content size
   },
   timeInput: {
     // Remove any conflicting styles that might interfere with inline layout

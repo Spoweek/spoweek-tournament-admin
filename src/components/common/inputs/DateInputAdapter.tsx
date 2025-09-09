@@ -255,20 +255,19 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <TouchableOpacity
         ref={dateRef}
         style={[
           styles.inputContainer,
           disabled && styles.disabledInput,
-          isCalendarOpen && styles.dropdownOpenContainer,
           style
         ]}
         onPress={handleOpen}
         disabled={disabled}
         activeOpacity={1}
       >
-        <Ionicons name="calendar-outline" size={16} color={colors.text.secondary} style={styles.icon} />
+        <Ionicons name="calendar-outline" size={16} color={colors.text.primary} style={styles.icon} />
         <Text style={[
           styles.inputText,
           (!displayDate || displayDate === '') && styles.placeholderText,
@@ -404,16 +403,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     backgroundColor: 'transparent',
     borderWidth: 0,
-    minHeight: 44,
-  },
-  dropdownOpenContainer: {
-    // This style will be applied when dropdown is open
-    // The parent LabeledField will handle the border styling
-  },
+    paddingVertical: 1,
+  },  
   disabledInput: {
     backgroundColor: colors.neutral[100],
     opacity: 0.6,
