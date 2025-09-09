@@ -20,7 +20,7 @@ const TextInputAdapter: React.FC<TextInputAdapterProps> = ({
       onChangeText={onChange}
       placeholder={placeholder}
       editable={!disabled}
-      style={[{ paddingVertical: 0 }, style]}
+      style={style}
       {...rest} // <- pass all extra props through
     />
   );

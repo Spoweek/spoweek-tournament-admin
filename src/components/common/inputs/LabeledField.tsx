@@ -150,6 +150,7 @@ export function LabeledField<T = any>({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    minHeight: 40, // Ensure minimum height for proper centering
   },
   inlineContainer: {
     flexDirection: 'row',
@@ -215,10 +216,10 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   input: {
-    height: 40,
+    minHeight: 40,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    // Remove height: '100%' to allow proper centering
+    justifyContent: 'center',
   },
   focused: {
     borderColor: colors.primary[500],

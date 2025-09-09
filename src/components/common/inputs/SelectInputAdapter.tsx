@@ -331,11 +331,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
     backgroundColor: 'transparent',
     borderWidth: 0,
-    height: 40,
   },
   dropdownOpenContainer: {
     // This style will be applied when dropdown is open
@@ -379,8 +376,6 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral[300],
     backgroundColor: colors.background.primary,
@@ -390,8 +385,6 @@ const styles = StyleSheet.create({
     ...typography.body,
     fontSize: 14,
     color: colors.text.primary,
-    paddingVertical: 8,
-    paddingRight: 8,
   },
   searchIcon: {
     marginLeft: 8,
@@ -404,8 +397,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral[100],
   },
@@ -435,7 +426,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   clearButton: {
-    padding: 2,
     borderRadius: 10,
     backgroundColor: 'transparent',
   },

@@ -32,6 +32,7 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
   onDropdownStateChange,
   containerRef,
   calculatedRadius,
+  style,
 }) => {
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
 
@@ -156,7 +157,7 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {/* Country Code Dropdown */}
       {mode === 'international' && (
         <View style={styles.countrySection}>
@@ -229,15 +230,11 @@ const styles = StyleSheet.create({
     // Minimal styling - let LabeledField handle borders/background
     backgroundColor: 'transparent',
     borderWidth: 0,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    height: 40,
   },
   countryOptionContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 4,
     gap: 8,
   },
   countryDialCode: {
@@ -254,9 +251,6 @@ const styles = StyleSheet.create({
     // Minimal styling - let LabeledField handle borders/background
     backgroundColor: 'transparent',
     borderWidth: 0,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    height: 40,
     ...typography.body,
     color: colors.text.primary,
     fontSize: 14,

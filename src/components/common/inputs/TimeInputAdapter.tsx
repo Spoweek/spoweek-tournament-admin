@@ -350,7 +350,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 40,
   },
   timeInputsContainer: {
     flexDirection: 'row',
@@ -369,7 +368,6 @@ const styles = StyleSheet.create({
     ...typography.body,
     fontSize: 14,
     color: colors.text.primary,
-    paddingHorizontal: 4,
     backgroundColor: 'transparent',
     borderWidth: 0,
     textAlign: 'center',

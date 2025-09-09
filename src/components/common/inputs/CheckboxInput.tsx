@@ -130,9 +130,6 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 2,
-    height: 40,
   },
   disabledContainer: {
     opacity: 0.6,
