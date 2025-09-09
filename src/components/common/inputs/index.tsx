@@ -5,4 +5,5 @@ export { default as TimeInputAdapter } from './TimeInputAdapter';
 export { default as DateInputAdapter } from './DateInputAdapter';
 export { default as DateTimeInputAdapter } from './DateTimeInputAdapter';
 export { default as FileInputAdapter } from './FileInputAdapter';
+export { default as PhoneInputAdapter } from './PhoneInputAdapter';
 export { default as CheckboxInput } from './CheckboxInput';

@@ -22,6 +22,8 @@ export interface SelectInputAdapterProps extends InputAdapterProps<string | numb
   searchable?: boolean;
   searchPlaceholder?: string;
   renderOption?: (option: SelectOption, isSelected: boolean, isHovered: boolean) => React.ReactNode;
+  renderSelectedOption?: (option: SelectOption) => React.ReactNode;
+  showClearButton?: boolean;
   onDropdownStateChange?: (isOpen: boolean) => void;
   containerRef?: React.RefObject<any>;
 }
@@ -41,6 +43,8 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   searchable = false,
   searchPlaceholder = 'Search...',
   renderOption,
+  renderSelectedOption,
+  showClearButton = true,
   calculatedRadius,
   containerRef,
 }) => {
@@ -220,16 +224,20 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         disabled={disabled}
         activeOpacity={1}
       >
-        <Text style={[
-          styles.selectText,
-          !selectedOption && styles.placeholderText,
-          disabled && styles.disabledText
-        ]}>
-          {selectedOption ? selectedOption.label : placeholder}
-        </Text>
+        {selectedOption && renderSelectedOption ? (
+          renderSelectedOption(selectedOption)
+        ) : (
+          <Text style={[
+            styles.selectText,
+            !selectedOption && styles.placeholderText,
+            disabled && styles.disabledText
+          ]}>
+            {selectedOption ? selectedOption.label : placeholder}
+          </Text>
+        )}
         
         <View style={styles.iconContainer}>
-          {selectedOption && !disabled && (
+          {selectedOption && !disabled && showClearButton && (
             <TouchableOpacity 
               onPress={handleClear}
               style={[
