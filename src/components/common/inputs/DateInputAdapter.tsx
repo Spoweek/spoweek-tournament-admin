@@ -25,7 +25,7 @@ export interface DateInputAdapterProps extends InputAdapterProps<string> {
 const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   value = '',
   onChange,
-  placeholder = 'Select date',
+  placeholder = '----/--/--',
   disabled = false,
   borderRadius = 'light',
   style,
@@ -37,8 +37,8 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   containerRef,
 }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [displayDate, setDisplayDate] = useState<string>(value);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [displayDate, setDisplayDate] = useState<string>(value || '');
   const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
   const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
@@ -80,6 +80,8 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
         setCurrentMonth(month - 1);
         setCurrentYear(year);
       }
+    } else {
+      setSelectedDate(null);
     }
   }, [value]);
 
@@ -93,11 +95,15 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
 
   // Update display when selectedDate changes
   useEffect(() => {
-    const year = selectedDate.getFullYear();
-    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-    const day = String(selectedDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}/${month}/${day}`;
-    setDisplayDate(formattedDate);
+    if (selectedDate) {
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}/${month}/${day}`;
+      setDisplayDate(formattedDate);
+    } else {
+      setDisplayDate('');
+    }
   }, [selectedDate]);
 
   const handleDateSelect = (day: number) => {
@@ -207,7 +213,8 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
 
     // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-      const isSelected = selectedDate.getDate() === day && 
+      const isSelected = selectedDate && 
+                        selectedDate.getDate() === day && 
                         selectedDate.getMonth() === currentMonth && 
                         selectedDate.getFullYear() === currentYear;
       const isToday = new Date().getDate() === day && 
@@ -264,7 +271,7 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
         <Ionicons name="calendar-outline" size={16} color={colors.text.secondary} style={styles.icon} />
         <Text style={[
           styles.inputText,
-          !displayDate && styles.placeholderText,
+          (!displayDate || displayDate === '') && styles.placeholderText,
           disabled && styles.disabledText
         ]}>
           {displayDate || placeholder}

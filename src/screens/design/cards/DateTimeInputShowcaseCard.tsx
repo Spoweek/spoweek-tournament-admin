@@ -37,7 +37,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
             label="Standard DateTime"
             value={dateTimeValues.standard}
             onChange={handleDateTimeChange('standard')}
-            placeholder="Select date and time"
             InputComponent={DateTimeInputAdapter}
           />
         </View>
@@ -48,7 +47,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
             value={dateTimeValues.pill}
             onChange={handleDateTimeChange('pill')}
             borderRadius="full"
-            placeholder="Select date and time"
             InputComponent={DateTimeInputAdapter}
           />
         </View>
@@ -64,7 +62,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
             value={dateTimeValues.floating}
             onChange={handleDateTimeChange('floating')}
             inline={true}
-            placeholder="Select date and time"
             InputComponent={DateTimeInputAdapter}
           />
         </View>
@@ -76,7 +73,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
             onChange={handleDateTimeChange('pillFloating')}
             inline={true}
             borderRadius="full"
-            placeholder="Select date and time"
             InputComponent={DateTimeInputAdapter}
           />
         </View>
@@ -91,7 +87,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
             label="With Seconds"
             value={dateTimeValues.withSeconds}
             onChange={handleDateTimeChange('withSeconds')}
-            placeholder="Select date and time with seconds"
             InputComponent={DateTimeInputAdapter}
             inputProps={{ showSeconds: true }}
           />
@@ -102,7 +97,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
             label="12-Hour Format"
             value={dateTimeValues.twelveHour}
             onChange={handleDateTimeChange('twelveHour')}
-            placeholder="Select date and time (12h)"
             InputComponent={DateTimeInputAdapter}
             inputProps={{ use24Hour: false }}
           />
@@ -114,7 +108,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
             value={dateTimeValues.twelveHour}
             onChange={handleDateTimeChange('twelveHour')}
             borderRadius="full"
-            placeholder="Select date and time (12h with seconds)"
             InputComponent={DateTimeInputAdapter}
             inputProps={{ use24Hour: false, showSeconds: true }}
           />
@@ -131,7 +124,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
               label="300px Width"
               value={dateTimeValues.standard}
               onChange={handleDateTimeChange('standard')}
-              placeholder="300px width"
               InputComponent={DateTimeInputAdapter}
             />
           </View>
@@ -144,7 +136,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
               value={dateTimeValues.pill}
               onChange={handleDateTimeChange('pill')}
               borderRadius="full"
-              placeholder="400px width"
               InputComponent={DateTimeInputAdapter}
             />
           </View>

@@ -107,7 +107,6 @@ const DateTimeInputAdapter: React.FC<DateTimeInputAdapterProps> = ({
         <TimeInputAdapter
           value={timeValue}
           onChange={handleTimeChange}
-          placeholder="Time"
           disabled={disabled}
           borderRadius={borderRadius}
           inline={inline}
@@ -123,7 +122,6 @@ const DateTimeInputAdapter: React.FC<DateTimeInputAdapterProps> = ({
         <DateInputAdapter
           value={dateValue}
           onChange={handleDateChange}
-          placeholder="Date"
           disabled={disabled}
           borderRadius={borderRadius}
           inline={inline}
