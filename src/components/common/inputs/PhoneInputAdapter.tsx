@@ -62,8 +62,10 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
   // Validate phone number
   const isValidPhone = useMemo(() => {
     if (!value.phoneNumber || !currentCountry) return false;
+    // Clean the phone number to remove formatting (dashes, parentheses, spaces)
+    const cleanedPhone = value.phoneNumber.replace(/\D/g, '');
     const regex = new RegExp(currentCountry.phonePattern);
-    return regex.test(value.phoneNumber);
+    return regex.test(cleanedPhone);
   }, [value.phoneNumber, currentCountry]);
 
   // Format phone number for display

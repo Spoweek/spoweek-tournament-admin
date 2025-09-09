@@ -124,7 +124,7 @@ const PhoneInputShowcaseCard: React.FC = () => {
         <View style={styles.inputField}>
           <LabeledField
             label="Valid Korean Number"
-            value={{ countryCode: 'KR', phoneNumber: '1012345678' }}
+            value={{ countryCode: 'KR', phoneNumber: '010-1234-5678' }}
             onChange={() => {}}
             InputComponent={LocalKoreanPhoneInput}
             disabled={true}
@@ -133,10 +133,10 @@ const PhoneInputShowcaseCard: React.FC = () => {
         
         <View style={styles.inputField}>
           <LabeledField
-            label="Valid US Number"
-            value={{ countryCode: 'US', phoneNumber: '5551234567' }}
+            label="Invalid Korean Number"
+            value={{ countryCode: 'KR', phoneNumber: '123-456-789' }}
             onChange={() => {}}
-            InputComponent={LocalUSPhoneInput}
+            InputComponent={LocalKoreanPhoneInput}
             disabled={true}
           />
         </View>
