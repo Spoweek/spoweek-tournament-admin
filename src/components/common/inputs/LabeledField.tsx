@@ -21,6 +21,7 @@ export type LabeledFieldProps<T = any> = {
   label: string;
   inline?: boolean;
   borderRadius?: 'light' | 'full';
+  required?: boolean;
 
   value: T;
   onChange: (val: T) => void;
@@ -46,6 +47,7 @@ export function LabeledField<T = any>({
   label,
   inline = false,
   borderRadius = 'light',
+  required = false,
   value,
   onChange,
   placeholder,
@@ -80,10 +82,9 @@ export function LabeledField<T = any>({
       inline && styles.inlineContainer, 
       containerStyle, 
     ]}>
-      <Text style={[
-        styles.label, 
-        inline && styles.inlineLabel, 
-        labelStyle,
+      <View style={[
+        styles.labelContainer,
+        inline && styles.inlineLabelContainer,
         { 
           borderBottomLeftRadius: radius,
           borderTopLeftRadius: radius,
@@ -92,7 +93,14 @@ export function LabeledField<T = any>({
         isDropdownOpen && {
           borderColor: colors.primary[500],
         },
-      ]}>{label}</Text>
+      ]}>
+        <Text style={[
+          styles.label, 
+          inline && styles.inlineLabel, 
+          labelStyle,
+        ]}>{label}</Text>
+        {required && <View style={styles.requiredIndicator} />}
+      </View>
 
       <View
         ref={inputWrapperRef}
@@ -151,22 +159,20 @@ const styles = StyleSheet.create({
   fullRounded: {
     borderRadius: 9999,
   },
-  label: {
+  labelContainer: {
     marginBottom: 6,
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#222',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  inlineLabel: {
+  inlineLabelContainer: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginBottom: 0,
     width: '30%',
-    fontWeight: '400',
     height: '100%',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     display: 'flex',
     borderColor: colors.gray[300],
     borderLeftWidth: 1,
@@ -174,6 +180,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderRightWidth: 1,
     borderRightColor: colors.gray[300],
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#222',
+  },
+  inlineLabel: {
+    fontWeight: '400',
+  },
+  requiredIndicator: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.error[500],
+    marginLeft: 4,
   },
   inputWrapper: {
     borderWidth: 1,

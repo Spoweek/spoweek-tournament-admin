@@ -255,7 +255,7 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   };
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container]}>
       <TouchableOpacity
         ref={dateRef}
         style={[

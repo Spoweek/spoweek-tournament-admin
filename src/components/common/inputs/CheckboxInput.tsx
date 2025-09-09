@@ -16,6 +16,7 @@ export interface CheckboxInputProps {
   label?: string;
   text?: string;
   disabled?: boolean;
+  required?: boolean;
   style?: any;
   onFocus?: () => void;
   onBlur?: () => void;
@@ -27,6 +28,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
   label,
   text,
   disabled = false,
+  required = false,
   style,
   onFocus,
   onBlur,
@@ -58,9 +60,12 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
   return (
     <View style={[styles.container, style]}>
       {label && (
-        <Text style={[styles.label, disabled && styles.disabledLabel]}>
-          {label}
-        </Text>
+        <View style={styles.labelContainer}>
+          <Text style={[styles.label, disabled && styles.disabledLabel]}>
+            {label}
+          </Text>
+          {required && <View style={styles.requiredIndicator} />}
+        </View>
       )}
       
       <TouchableOpacity
@@ -101,15 +106,26 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   label: {
     ...typography.body,
     fontSize: 14,
     fontWeight: '600',
     color: colors.text.primary,
-    marginBottom: 8,
   },
   disabledLabel: {
     color: colors.neutral[500],
+  },
+  requiredIndicator: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: colors.error[500],
+    marginLeft: 4,
   },
   checkboxContainer: {
     flexDirection: 'row',

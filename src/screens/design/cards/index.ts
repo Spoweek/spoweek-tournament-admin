@@ -7,3 +7,4 @@ export { default as DateInputShowcaseCard } from './DateInputShowcaseCard';
 export { default as DateTimeInputShowcaseCard } from './DateTimeInputShowcaseCard';
 export { default as FileInputShowcaseCard } from './FileInputShowcaseCard';
 export { default as CheckboxInputShowcaseCard } from './CheckboxInputShowcaseCard';
+export { default as RequiredFieldsShowcaseCard } from './RequiredFieldsShowcaseCard';

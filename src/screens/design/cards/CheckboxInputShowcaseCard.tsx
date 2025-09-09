@@ -22,6 +22,11 @@ const CheckboxInputShowcaseCard: React.FC = () => {
     terms: false,
     newsletter: true,
     notifications: false,
+    required: {
+      terms: false,
+      privacy: false,
+      marketing: true,
+    },
   });
 
   // Internal handler
@@ -34,6 +39,13 @@ const CheckboxInputShowcaseCard: React.FC = () => {
     setCheckboxValues(prev => ({
       ...prev,
       multiple: { ...prev.multiple, [key]: value }
+    }));
+  };
+
+  const handleRequiredChange = (key: string) => (value: boolean) => {
+    setCheckboxValues(prev => ({
+      ...prev,
+      required: { ...prev.required, [key]: value }
     }));
   };
 
@@ -147,6 +159,41 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.notifications}
             onChange={handleCheckboxChange('notifications')}
             text="Enable push notifications"
+          />
+        </View>
+      </View>
+      
+      {/* Required Fields */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Required Fields</Text>
+        
+        <View style={styles.inputField}>
+          <CheckboxInput
+            label="Terms & Conditions"
+            value={checkboxValues.required.terms}
+            onChange={handleRequiredChange('terms')}
+            text="I agree to the terms and conditions"
+            required={true}
+          />
+        </View>
+        
+        <View style={styles.inputField}>
+          <CheckboxInput
+            label="Privacy Policy"
+            value={checkboxValues.required.privacy}
+            onChange={handleRequiredChange('privacy')}
+            text="I have read and understood the privacy policy"
+            required={true}
+          />
+        </View>
+        
+        <View style={styles.inputField}>
+          <CheckboxInput
+            label="Marketing Preferences"
+            value={checkboxValues.required.marketing}
+            onChange={handleRequiredChange('marketing')}
+            text="I consent to receive marketing communications"
+            required={false}
           />
         </View>
       </View>
