@@ -9,6 +9,7 @@ const PasswordInputShowcaseCard: React.FC = () => {
   const [passwordValues, setPasswordValues] = useState({
     passwordWithValidation: '',
     passwordWithoutValidation: '',
+    passwordWithoutToggle: '',
     passwordCreation: '',
     passwordConfirmation: '',
   });
@@ -89,6 +90,28 @@ const PasswordInputShowcaseCard: React.FC = () => {
             }}
             id="showcase-password-without-validation"
             name="showcase-password-without-validation"
+          />
+        </View>
+      </View>
+      
+      {/* Password Input without Toggle and Validation */}
+      <View style={styles.inputSection}>
+        <Text style={[typography.h4, styles.subsectionTitle]}>Password Input without Toggle and Validation</Text>
+        
+        <View style={styles.inputField}>
+          <LabeledField
+            label="Password without Toggle and Validation"
+            value={passwordValues.passwordWithoutToggle}
+            onChange={handlePasswordChange('passwordWithoutToggle')}
+            placeholder="Enter password without toggle and validation"
+            InputComponent={PasswordInputAdapter}
+            inputProps={{
+              validationType: 'password',
+              doLiveValidation: false,
+              showPasswordToggle: false,
+            }}
+            id="showcase-password-without-toggle"
+            name="showcase-password-without-toggle"
           />
         </View>
       </View>

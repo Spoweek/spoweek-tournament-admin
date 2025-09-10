@@ -21,7 +21,7 @@ import {
   WarningButton, 
   DangerButton
 } from '../../components/common/buttons';
-import { LabeledField, TextInputAdapter } from '../../components/common/inputs';
+import { LabeledField, EmailInputAdapter, PasswordInputAdapter } from '../../components/common/inputs';
 
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -105,11 +105,9 @@ const LoginScreen: React.FC = () => {
             borderRadius="full"
             onChange={setEmail}
             placeholder="Enter your email"
-            InputComponent={TextInputAdapter}
+            InputComponent={EmailInputAdapter}
+            doLiveValidation={true}
             inputProps={{
-              keyboardType: "email-address",
-              autoCapitalize: "none",
-              autoCorrect: false,
               onKeyPress: handleKeyPress
             }}
           />
@@ -121,11 +119,10 @@ const LoginScreen: React.FC = () => {
             borderRadius="full"
             onChange={setPassword}
             placeholder="Enter your password"
-            InputComponent={TextInputAdapter}
+            InputComponent={PasswordInputAdapter}
+            doLiveValidation={false}
             inputProps={{
-              secureTextEntry: true,
-              autoCapitalize: "none",
-              autoCorrect: false,
+              showPasswordToggle: true,
               onKeyPress: handleKeyPress
             }}
           />
