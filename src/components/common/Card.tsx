@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet, ViewStyle, ViewProps, DimensionValue } from 'react-native';
+import { shadows } from './styles';
 
 export interface CardProps extends Omit<ViewProps, 'style'> {
   children: ReactNode;
@@ -58,18 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column', // Default vertical flow
     gap: 16,
   },
-  shadow: {
-    // iOS shadow
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 40,
-    // Android shadow
-    elevation: 3,
-  },
+  shadow: shadows.card,
 });
 
 export default Card;

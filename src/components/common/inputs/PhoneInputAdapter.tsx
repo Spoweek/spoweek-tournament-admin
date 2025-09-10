@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, StyleSheet, TextInput, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CountryFlag from 'react-native-country-flag';
-import { colors, typography } from '../styles';
+import { colors, typography, shadows } from '../styles';
 import { useFocus, useHover } from '../hooks';
 import { getCountriesAlphabetically, getCountryByCode, CountryData } from '../data';
 import SelectInputAdapter, { SelectOption } from './SelectInputAdapter';
@@ -290,18 +290,7 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -10 }],
   },
   countryFlagContainer: {
-    shadowColor: colors.neutral[700],
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-    // Web-specific shadow - using same color as mobile
-    ...(Platform.OS === 'web' ? {
-      boxShadow: `0 0 5px ${colors.neutral[700]}40`, // 20 = 0.1 opacity in hex
-    } : {}),
+    ...shadows.flag,
   },
 });
 

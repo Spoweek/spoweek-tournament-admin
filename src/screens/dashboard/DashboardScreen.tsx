@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ViewStyle, TextStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MainLayout from '../../layouts/MainLayout';
+import { shadows } from '../../components/common';
 
 interface MenuItem {
   title: string;
@@ -96,14 +97,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     borderLeftWidth: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    ...shadows.large,
   },
   menuContent: {
     flex: 1,
