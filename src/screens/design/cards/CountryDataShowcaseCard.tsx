@@ -73,25 +73,25 @@ const CountryDataShowcaseCard: React.FC = () => {
       </View>
 
       {/* Selected Country Info */}
-      {selectedCountryData && (
+      {selectedCountryData && selectedCountryData.name && (
         <View style={styles.inputSection}>
           <Text style={[typography.h4, styles.subsectionTitle]}>Selected Country Information</Text>
           
           <View style={styles.countryInfo}>
-            <Text style={styles.countryName}>{selectedCountryData.name}</Text>
-            <Text style={styles.countryCode}>Code: {selectedCountryData.code}</Text>
-            <Text style={styles.dialCode}>Dial Code: {selectedCountryData.dialCode}</Text>
-            <Text style={styles.phoneExample}>Example: {selectedCountryData.phoneExample}</Text>
-            <Text style={styles.pattern}>Pattern: {selectedCountryData.phonePattern}</Text>
+            <Text style={styles.countryName}>{selectedCountryData.name || ''}</Text>
+            <Text style={styles.countryCode}>Code: {selectedCountryData.code || ''}</Text>
+            <Text style={styles.dialCode}>Dial Code: {selectedCountryData.dialCode || ''}</Text>
+            <Text style={styles.phoneExample}>Example: {selectedCountryData.phoneExample || ''}</Text>
+            <Text style={styles.pattern}>Pattern: {selectedCountryData.phonePattern || ''}</Text>
             <Text style={styles.searchTerms}>
-              Search Terms: {selectedCountryData.searchTerms.join(', ')}
+              Search Terms: {selectedCountryData.searchTerms?.join(', ') || ''}
             </Text>
           </View>
         </View>
       )}
 
       {/* Search Results */}
-      {searchQuery && (
+      {searchQuery != '' && (
         <View style={styles.inputSection}>
           <Text style={[typography.h4, styles.subsectionTitle]}>
             Search Results for "{searchQuery}" ({searchResults.length} countries)
@@ -101,9 +101,9 @@ const CountryDataShowcaseCard: React.FC = () => {
             {searchResults.slice(0, 10).map((country) => (
               <View key={country.code} style={styles.searchResultItem}>
                 <Text style={styles.resultName}>
-                  {country.flagIcon} {country.name}
+                  {country.flagIcon || ''} {country.name || ''}
                 </Text>
-                <Text style={styles.resultCode}>{country.dialCode}</Text>
+                <Text style={styles.resultCode}>{country.dialCode || ''}</Text>
               </View>
             ))}
             {searchResults.length > 10 && (
@@ -121,7 +121,7 @@ const CountryDataShowcaseCard: React.FC = () => {
         
         <View style={styles.stats}>
           <Text style={styles.statItem}>Total Countries: {countryOptions.length}</Text>
-          <Text style={styles.statItem}>High Priority: {countryOptions.filter(c => c.customData?.priority <= 20).length}</Text>
+          <Text style={styles.statItem}>High Priority: {countryOptions.filter(c => c.customData?.priority && c.customData.priority <= 20).length}</Text>
           <Text style={styles.statItem}>Search Terms: {countryOptions.reduce((acc, c) => acc + c.searchTerms.length, 0)}</Text>
           <Text style={styles.statItem}>Languages: Multiple (English, Korean, Chinese, Spanish, French, etc.)</Text>
         </View>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 4,
     borderBottomWidth: 1,
-    borderBottomColor: colors.neutral[200],
+    borderBottomColor: colors.neutral[300],
   },
   resultName: {
     ...typography.body,

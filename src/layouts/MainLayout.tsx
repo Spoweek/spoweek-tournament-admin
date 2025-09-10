@@ -15,7 +15,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, title }) => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{title}</Text>
         <View style={styles.headerRight}>
-          <Text style={styles.userInfo}>Welcome, {user?.email}</Text>
+          <Text style={styles.userInfo}>Welcome, {user?.email || 'Guest'}</Text>
           <TouchableOpacity style={styles.logoutButton} onPress={logout}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>

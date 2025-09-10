@@ -131,30 +131,43 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
 
   // Custom render function for country options (flag + dial code)
   const renderCountryOption = useCallback((option: SelectOption, isSelected: boolean, isHovered: boolean) => {
+    const countryName = option.customData?.name || '';
+    const dialCode = option.label || '';
+    const isoCode = option.customData?.code || option.value as string;
+    
     return (
       <View style={styles.countryOptionContent}>
         <View style={styles.countryFlagContainer}>
-          <CountryFlag 
-            isoCode={option.customData?.code || option.value as string} 
-            size={20}
-          />
+          {isoCode && isoCode !== '' && (
+            <CountryFlag 
+              isoCode={isoCode} 
+              size={20}
+            />
+          )}
         </View>
-        <Text style={styles.countryDialCode}>{option.customData?.name} ({option.label})</Text>
+        <Text style={styles.countryDialCode}>
+          {countryName} ({dialCode})
+        </Text>
       </View>
     );
   }, []);
 
   // Custom render function for selected country option (flag + dial code)
   const renderSelectedCountryOption = useCallback((option: SelectOption) => {
+    const dialCode = option.label || '';
+    const isoCode = option.customData?.code || option.value as string;
+    
     return (
       <View style={styles.countryOptionContent}>
         <View style={styles.countryFlagContainer}>
-          <CountryFlag 
-            isoCode={option.customData?.code || option.value as string} 
-            size={20}
-          />
+          {isoCode && isoCode !== '' && (
+            <CountryFlag 
+              isoCode={isoCode} 
+              size={20}
+            />
+          )}
         </View>
-        <Text style={styles.countryDialCode}>{option.label}</Text>
+        <Text style={styles.countryDialCode}>{dialCode}</Text>
       </View>
     );
   }, []);
@@ -205,7 +218,7 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
         />
         
         {/* Validation Icon */}
-        {value.phoneNumber && (
+        {value.phoneNumber != '' && (
           <View style={styles.validationIcon}>
             <Ionicons
               name={isValidPhone ? 'checkmark-circle' : 'close-circle'}

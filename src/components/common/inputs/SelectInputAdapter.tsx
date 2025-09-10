@@ -183,7 +183,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         )}
         
         <View style={styles.iconContainer}>
-          {selectedOption && !disabled && showClearButton && (
+          {selectedOption && selectedOption.label && !disabled && showClearButton && (
             <ClearButton 
               onPress={handleClear}
               disabled={disabled}
