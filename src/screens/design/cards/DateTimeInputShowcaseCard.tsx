@@ -18,7 +18,6 @@ const DateTimeInputShowcaseCard: React.FC = () => {
 
   // Internal handler
   const handleDateTimeChange = (key: string) => (value: string) => {
-    console.log('DateTime changed:', key, value);
     setDateTimeValues(prev => ({ ...prev, [key]: value }));
   };
 
