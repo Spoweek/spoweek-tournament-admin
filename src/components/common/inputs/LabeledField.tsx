@@ -22,6 +22,7 @@ export type InputAdapterProps<T = any> = {
 
 export type LabeledFieldProps<T = any> = {
   label: string;
+  description?: string;
   inline?: boolean;
   borderRadius?: 'light' | 'full';
   required?: boolean;
@@ -55,6 +56,7 @@ const BORDER_RADIUS = {
 
 export function LabeledField<T = any>({
   label,
+  description,
   inline = false,
   borderRadius = 'light',
   required = false,
@@ -114,6 +116,10 @@ export function LabeledField<T = any>({
         ]}>{label}</Text>
         {required && <View style={styles.requiredIndicator} />}
       </View>
+
+      {description && (
+        <Text style={styles.description}>{description}</Text>
+      )}
 
       <View
         ref={inputWrapperRef}
@@ -212,6 +218,11 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: colors.error[500],
     marginLeft: 4,
+  },
+  description: {
+    fontSize: 14,
+    color: colors.text.secondary,
+    marginBottom: 8,
   },
   inputWrapper: {
     borderWidth: 1,

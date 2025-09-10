@@ -45,6 +45,7 @@ const PasswordCreationInput: React.FC<PasswordCreationInputProps> = ({
       <View style={styles.passwordField}>
         <LabeledField
           label={passwordLabel}
+          description={description}
           value={password}
           onChange={onPasswordChange}
           InputComponent={PasswordInputAdapter}
@@ -58,7 +59,6 @@ const PasswordCreationInput: React.FC<PasswordCreationInputProps> = ({
           id={`${id}-password`}
           name={`${name}-password`}
         />
-        <Text style={styles.description}>{description}</Text>
       </View>
 
       {/* Password Confirmation Field */}
@@ -92,12 +92,6 @@ const styles = StyleSheet.create({
   },
   passwordConfirmationField: {
     marginBottom: spacing.sm,
-  },
-  description: {
-    ...typography.body,
-    color: colors.text.secondary,
-    marginTop: spacing.xs,
-    marginLeft: spacing.xs,
   },
 });
 
