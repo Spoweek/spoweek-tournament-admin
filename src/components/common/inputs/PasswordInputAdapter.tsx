@@ -13,6 +13,7 @@ export type PasswordInputAdapterProps = Omit<TextInputProps, 'onChange'> & Input
   doLiveValidation?: boolean;
   showPasswordToggle?: boolean;
   validationType?: 'password' | 'none';
+  autoComplete?: 'current-password' | 'new-password';
 };
 
 const PasswordInputAdapter: React.FC<PasswordInputAdapterProps> = ({
@@ -26,6 +27,7 @@ const PasswordInputAdapter: React.FC<PasswordInputAdapterProps> = ({
   doLiveValidation = true,
   showPasswordToggle = true,
   validationType = 'none',
+  autoComplete = 'current-password',
   ...rest // <- this allows any extra TextInput props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -75,7 +77,7 @@ const PasswordInputAdapter: React.FC<PasswordInputAdapterProps> = ({
           accessibilityLabel={name}
           autoCapitalize="none"
           autoCorrect={false}
-          autoComplete="password"
+          autoComplete={autoComplete}
           {...rest} // <- pass all extra props through
         />
         {useMemo(() => (

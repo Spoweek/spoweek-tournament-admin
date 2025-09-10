@@ -54,6 +54,7 @@ const PasswordCreationInput: React.FC<PasswordCreationInputProps> = ({
             showPasswordToggle: showPasswordToggle,
             validationType: 'password',
             doLiveValidation: doLiveValidation,
+            autoComplete: 'new-password',
           }}
           disabled={disabled}
           id={`${id}-password`}

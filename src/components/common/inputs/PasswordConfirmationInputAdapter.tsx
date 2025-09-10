@@ -66,7 +66,7 @@ const PasswordConfirmationInputAdapter: React.FC<PasswordConfirmationInputAdapte
           accessibilityLabel={name}
           autoCapitalize="none"
           autoCorrect={false}
-          autoComplete="password"
+          autoComplete="new-password"
           {...rest} // <- pass all extra props through
         />
         {useMemo(() => (

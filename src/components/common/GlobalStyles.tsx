@@ -49,6 +49,20 @@ export const GlobalStyles: React.FC<GlobalStylesProps> = ({ children }) => {
           outline: none !important;
           box-shadow: none !important;
         }
+        /* Disable browser autofill highlighting/background */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active,
+        input:-internal-autofill-selected {
+          -webkit-box-shadow: 0 0 0 1000px white inset !important;
+          -webkit-text-fill-color: inherit !important;
+          background-color: transparent !important;
+          background-image: none !important;
+          transition: background-color 5000s ease-in-out 0s !important;
+          animation: none !important;
+          border-radius: 9999px !important;
+        }
         /* Fix React Native Web's default transition behavior */
         div[role="button"] {
           transition: none !important;
