@@ -60,6 +60,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             placeholder="Enter your full name"
             InputComponent={TextInputAdapter}
             required={true}
+            id="showcase-required-full-name"
+            name="showcase-required-full-name"
           />
         </View>
         
@@ -71,6 +73,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             placeholder="Enter your email"
             InputComponent={TextInputAdapter}
             required={true}
+            id="showcase-required-email"
+            name="showcase-required-email"
           />
         </View>
       </View>
@@ -89,6 +93,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
               options: roleOptions,
             }}
             required={true}
+            id="showcase-required-user-role"
+            name="showcase-required-user-role"
           />
         </View>
       </View>
@@ -104,6 +110,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             onChange={handleTextChange('birthDate')}
             InputComponent={DateInputAdapter}
             required={true}
+            id="showcase-required-birth-date"
+            name="showcase-required-birth-date"
           />
         </View>
       </View>
@@ -146,6 +154,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             InputComponent={TextInputAdapter}
             inline={true}
             required={true}
+            id="showcase-required-inline-full-name"
+            name="showcase-required-inline-full-name"
           />
         </View>
         
@@ -158,6 +168,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             InputComponent={TextInputAdapter}
             inline={true}
             required={true}
+            id="showcase-required-inline-email"
+            name="showcase-required-inline-email"
           />
         </View>
         
@@ -173,6 +185,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             }}
             inline={true}
             required={true}
+            id="showcase-required-inline-user-role"
+            name="showcase-required-inline-user-role"
           />
         </View>
       </View>

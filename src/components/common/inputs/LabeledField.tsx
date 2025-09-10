@@ -15,6 +15,8 @@ export type InputAdapterProps<T = any> = {
   inline?: boolean;
   calculatedRadius?: number;
   containerRef?: React.RefObject<any>;
+  id?: string;
+  name?: string;
 };
 
 export type LabeledFieldProps<T = any> = {
@@ -33,6 +35,10 @@ export type LabeledFieldProps<T = any> = {
   containerStyle?: ViewStyle;
   labelStyle?: TextStyle;
   inputContainerStyle?: ViewStyle;
+  
+  // HTML form attributes
+  id?: string;
+  name?: string;
   
   // Additional props to pass to InputComponent
   inputProps?: Record<string, any>;
@@ -56,6 +62,8 @@ export function LabeledField<T = any>({
   containerStyle,
   labelStyle,
   inputContainerStyle,
+  id,
+  name,
   inputProps = {},
 }: LabeledFieldProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
@@ -136,6 +144,8 @@ export function LabeledField<T = any>({
           placeholderTextColor={colors.gray[400]}
           disabled={disabled}
           style={styles.input}
+          id={id}
+          name={name}
           {...inputProps}
           inline={inline}
           onDropdownStateChange={handleDropdownStateChange}

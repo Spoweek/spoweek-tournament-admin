@@ -37,6 +37,8 @@ const InputShowcaseCard: React.FC = () => {
             onChange={setEmail}
             placeholder="Enter text here"
             InputComponent={TextInputAdapter}
+            id="showcase-standard-input"
+            name="showcase-standard-input"
           />
         </View>
         
@@ -48,6 +50,8 @@ const InputShowcaseCard: React.FC = () => {
             borderRadius="full"
             placeholder="Rounded corners"
             InputComponent={TextInputAdapter}
+            id="showcase-pill-input"
+            name="showcase-pill-input"
           />
         </View>
       </View>
@@ -64,6 +68,8 @@ const InputShowcaseCard: React.FC = () => {
             inline={true}
             placeholder="Enter text here"
             InputComponent={TextInputAdapter}
+            id="showcase-floating-input"
+            name="showcase-floating-input"
           />
         </View>
         
@@ -76,6 +82,8 @@ const InputShowcaseCard: React.FC = () => {
             borderRadius="full"
             placeholder="Rounded corners"
             InputComponent={TextInputAdapter}
+            id="showcase-pill-floating-input"
+            name="showcase-pill-floating-input"
           />
         </View>
       </View>

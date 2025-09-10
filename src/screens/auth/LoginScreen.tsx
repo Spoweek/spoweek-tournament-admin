@@ -86,13 +86,13 @@ const LoginScreen: React.FC = () => {
         >
           <Text style={[globalStyles.text, typography.h2, styles.title]}>로그인</Text>
           
-          {error && (
+          {error != '' && (
             <View style={styles.errorContainer}>
               <Text style={[typography.error, styles.errorText]}>{error}</Text>
             </View>
           )}
           
-          {success && (
+          {success != '' && (
             <View style={styles.successContainer}>
               <Text style={[typography.success, styles.successText]}>{success}</Text>
             </View>

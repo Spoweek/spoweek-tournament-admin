@@ -74,6 +74,8 @@ const SelectInputShowcaseCard: React.FC = () => {
             placeholder="Choose your country"
             InputComponent={SelectInputAdapter}
             inputProps={{ options: countryOptions }}
+            id="showcase-country-select"
+            name="showcase-country-select"
           />
         </View>
         
@@ -86,6 +88,8 @@ const SelectInputShowcaseCard: React.FC = () => {
             placeholder="Select category"
             InputComponent={SelectInputAdapter}
             inputProps={{ options: categoryOptions }}
+            id="showcase-category-select"
+            name="showcase-category-select"
           />
         </View>
       </View>
@@ -103,6 +107,8 @@ const SelectInputShowcaseCard: React.FC = () => {
             placeholder="Set priority"
             InputComponent={SelectInputAdapter}
             inputProps={{ options: priorityOptions }}
+            id="showcase-priority-select"
+            name="showcase-priority-select"
           />
         </View>
         
@@ -116,6 +122,8 @@ const SelectInputShowcaseCard: React.FC = () => {
             placeholder="Choose status"
             InputComponent={SelectInputAdapter}
             inputProps={{ options: statusOptions }}
+            id="showcase-status-select"
+            name="showcase-status-select"
           />
         </View>
       </View>
@@ -136,6 +144,8 @@ const SelectInputShowcaseCard: React.FC = () => {
               searchable: true,
               searchPlaceholder: "Type to search countries..."
             }}
+            id="showcase-searchable-country-select"
+            name="showcase-searchable-country-select"
           />
         </View>
       </View>
@@ -153,6 +163,8 @@ const SelectInputShowcaseCard: React.FC = () => {
               placeholder="Clean 200px width"
               InputComponent={SelectInputAdapter}
               inputProps={{ options: countryOptions }}
+              id="showcase-200px-width-select"
+              name="showcase-200px-width-select"
             />
           </View>
         </View>
@@ -167,6 +179,8 @@ const SelectInputShowcaseCard: React.FC = () => {
               placeholder="Clean 300px width"
               InputComponent={SelectInputAdapter}
               inputProps={{ options: categoryOptions }}
+              id="showcase-300px-width-select"
+              name="showcase-300px-width-select"
             />
           </View>
         </View>
@@ -181,6 +195,8 @@ const SelectInputShowcaseCard: React.FC = () => {
               placeholder="250px inline"
               InputComponent={SelectInputAdapter}
               inputProps={{ options: priorityOptions }}
+              id="showcase-250px-inline-select"
+              name="showcase-250px-inline-select"
             />
           </View>
         </View>

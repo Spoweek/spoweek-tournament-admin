@@ -26,6 +26,8 @@ export interface SelectInputAdapterProps extends InputAdapterProps<string | numb
   showClearButton?: boolean;
   onDropdownStateChange?: (isOpen: boolean) => void;
   containerRef?: React.RefObject<any>;
+  id?: string;
+  name?: string;
 }
 
 const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
@@ -47,6 +49,8 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   showClearButton = true,
   calculatedRadius,
   containerRef,
+  id,
+  name,
 }) => {
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
   const selectRef = useRef<any>(null);
@@ -172,6 +176,8 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         onPress={handleOpen}
         disabled={disabled}
         activeOpacity={1}
+        testID={id}
+        accessibilityLabel={name}
       >
         {selectedOption && renderSelectedOption ? (
           renderSelectedOption(selectedOption)

@@ -15,6 +15,8 @@ export interface DateTimeInputAdapterProps extends InputAdapterProps<string> {
   onDropdownStateChange?: (isOpen: boolean) => void;
   containerRef?: React.RefObject<any>;
   calculatedRadius?: number;
+  id?: string;
+  name?: string;
 }
 
 const DateTimeInputAdapter: React.FC<DateTimeInputAdapterProps> = ({
@@ -32,6 +34,8 @@ const DateTimeInputAdapter: React.FC<DateTimeInputAdapterProps> = ({
   use24Hour = true,
   calculatedRadius,
   containerRef,
+  id,
+  name,
 }) => {
   const [dateValue, setDateValue] = useState('');
   const [timeValue, setTimeValue] = useState('');
@@ -115,6 +119,8 @@ const DateTimeInputAdapter: React.FC<DateTimeInputAdapterProps> = ({
           onFocus={handleTimeFocus}
           onBlur={handleTimeBlur}
           style={styles.timeInput}
+          id={`${id}-time`}
+          name={`${name}-time`}
         />
       </View>
       
@@ -131,6 +137,8 @@ const DateTimeInputAdapter: React.FC<DateTimeInputAdapterProps> = ({
           calculatedRadius={calculatedRadius}
           containerRef={containerRef}
           style={styles.dateInput}
+          id={`${id}-date`}
+          name={`${name}-date`}
         />
       </View>
     </View>

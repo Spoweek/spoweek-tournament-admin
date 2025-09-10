@@ -46,6 +46,8 @@ const CountryDataShowcaseCard: React.FC = () => {
               searchable: true,
               searchPlaceholder: "Type country name, code, or dial code..."
             }}
+            id="showcase-country-selection"
+            name="showcase-country-selection"
           />
         </View>
         

@@ -12,6 +12,8 @@ export interface TimeInputAdapterProps extends InputAdapterProps<string> {
   placeholder?: string;
   borderRadius?: 'light' | 'full';
   inline?: boolean;
+  id?: string;
+  name?: string;
 }
 
 const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
@@ -26,6 +28,8 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
   onFocus,
   onBlur,
   inline = false,
+  id,
+  name,
 }) => {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
@@ -274,6 +278,8 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             maxLength={2}
             editable={!disabled}
             textAlign="center"
+            nativeID={`${id}-hour`}
+            accessibilityLabel={`${name}-hour`}
           />
         </View>
 
@@ -292,6 +298,8 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
             maxLength={2}
             editable={!disabled}
             textAlign="center"
+            nativeID={`${id}-minute`}
+            accessibilityLabel={`${name}-minute`}
           />
         </View>
 
@@ -311,6 +319,8 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
                 maxLength={2}
                 editable={!disabled}
                 textAlign="center"
+                nativeID={`${id}-second`}
+                accessibilityLabel={`${name}-second`}
               />
             </View>
           </>

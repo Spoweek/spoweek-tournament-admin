@@ -4,7 +4,10 @@ import { TextInput, TextInputProps } from 'react-native';
 import type { InputAdapterProps } from './LabeledField';
 
 // Create a type that omits the conflicting onChange from TextInputProps
-type TextInputAdapterProps = Omit<TextInputProps, 'onChange'> & InputAdapterProps<string>;
+type TextInputAdapterProps = Omit<TextInputProps, 'onChange'> & InputAdapterProps<string> & {
+  id?: string;
+  name?: string;
+};
 
 const TextInputAdapter: React.FC<TextInputAdapterProps> = ({
   value,
@@ -12,6 +15,8 @@ const TextInputAdapter: React.FC<TextInputAdapterProps> = ({
   placeholder,
   disabled,
   style,
+  id,
+  name,
   ...rest // <- this allows any extra TextInput props
 }) => {
   return (
@@ -21,6 +26,8 @@ const TextInputAdapter: React.FC<TextInputAdapterProps> = ({
       placeholder={placeholder}
       editable={!disabled}
       style={style}
+      nativeID={id}
+      accessibilityLabel={name}
       {...rest} // <- pass all extra props through
     />
   );

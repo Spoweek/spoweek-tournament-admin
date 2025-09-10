@@ -19,6 +19,8 @@ export interface PhoneInputAdapterProps extends InputAdapterProps<PhoneValue> {
   onDropdownStateChange?: (isOpen: boolean) => void;
   containerRef?: React.RefObject<any>;
   calculatedRadius?: number;
+  id?: string;
+  name?: string;
 }
 
 const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
@@ -32,6 +34,8 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
   containerRef,
   calculatedRadius,
   style,
+  id,
+  name,
 }) => {
   // Use shared hooks
   const { isFocused: isPhoneFocused, handleFocus: handlePhoneFocus, handleBlur: handlePhoneBlur } = useFocus();
@@ -213,6 +217,8 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
           placeholder={dynamicPlaceholder}
           placeholderTextColor={colors.text.tertiary}
           editable={!disabled}
+          nativeID={id}
+          accessibilityLabel={name}
           keyboardType="phone-pad"
           autoComplete="tel"
         />
@@ -285,7 +291,7 @@ const styles = StyleSheet.create({
   },
   validationIcon: {
     position: 'absolute',
-    right: 12,
+    right: 0,
     top: '50%',
     transform: [{ translateY: -10 }],
   },

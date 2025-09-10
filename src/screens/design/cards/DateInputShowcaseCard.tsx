@@ -33,6 +33,8 @@ const DateInputShowcaseCard: React.FC = () => {
             value={dateValues.standard}
             onChange={handleDateChange('standard')}
             InputComponent={DateInputAdapter}
+            id="showcase-standard-date"
+            name="showcase-standard-date"
           />
         </View>
         
@@ -43,6 +45,8 @@ const DateInputShowcaseCard: React.FC = () => {
             onChange={handleDateChange('pill')}
             borderRadius="full"
             InputComponent={DateInputAdapter}
+            id="showcase-pill-date"
+            name="showcase-pill-date"
           />
         </View>
       </View>
@@ -58,6 +62,8 @@ const DateInputShowcaseCard: React.FC = () => {
             onChange={handleDateChange('floating')}
             inline={true}
             InputComponent={DateInputAdapter}
+            id="showcase-floating-date"
+            name="showcase-floating-date"
           />
         </View>
         
@@ -69,6 +75,8 @@ const DateInputShowcaseCard: React.FC = () => {
             inline={true}
             borderRadius="full"
             InputComponent={DateInputAdapter}
+            id="showcase-pill-floating-date"
+            name="showcase-pill-floating-date"
           />
         </View>
       </View>
@@ -84,6 +92,8 @@ const DateInputShowcaseCard: React.FC = () => {
               value={dateValues.standard}
               onChange={handleDateChange('standard')}
               InputComponent={DateInputAdapter}
+              id="showcase-200px-width-date"
+              name="showcase-200px-width-date"
             />
           </View>
         </View>
@@ -96,6 +106,8 @@ const DateInputShowcaseCard: React.FC = () => {
               onChange={handleDateChange('pill')}
               borderRadius="full"
               InputComponent={DateInputAdapter}
+              id="showcase-300px-width-date"
+              name="showcase-300px-width-date"
             />
           </View>
         </View>

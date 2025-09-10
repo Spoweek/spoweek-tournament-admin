@@ -59,6 +59,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
           <CheckboxInput
             value={checkboxValues.basic}
             onChange={handleCheckboxChange('basic')}
+            id="showcase-basic-checkbox"
+            name="showcase-basic-checkbox"
           />
         </View>
         
@@ -67,6 +69,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.withText}
             onChange={handleCheckboxChange('withText')}
             text="I agree to the terms and conditions"
+            id="showcase-with-text-checkbox"
+            name="showcase-with-text-checkbox"
           />
         </View>
         
@@ -76,6 +80,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             onChange={handleCheckboxChange('withLabel')}
             label="Preferences"
             text="Enable dark mode"
+            id="showcase-with-label-checkbox"
+            name="showcase-with-label-checkbox"
           />
         </View>
       </View>
@@ -90,6 +96,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             onChange={handleCheckboxChange('disabled')}
             text="This checkbox is disabled"
             disabled={true}
+            id="showcase-disabled-checkbox"
+            name="showcase-disabled-checkbox"
           />
         </View>
         
@@ -99,6 +107,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             onChange={handleCheckboxChange('disabledChecked')}
             text="This checkbox is disabled and checked"
             disabled={true}
+            id="showcase-disabled-checked-checkbox"
+            name="showcase-disabled-checked-checkbox"
           />
         </View>
       </View>
@@ -112,6 +122,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.multiple.option1}
             onChange={handleMultipleChange('option1')}
             text="Option 1"
+            id="showcase-multiple-option1-checkbox"
+            name="showcase-multiple-option1-checkbox"
           />
         </View>
         
@@ -120,6 +132,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.multiple.option2}
             onChange={handleMultipleChange('option2')}
             text="Option 2 (pre-selected)"
+            id="showcase-multiple-option2-checkbox"
+            name="showcase-multiple-option2-checkbox"
           />
         </View>
         
@@ -128,6 +142,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.multiple.option3}
             onChange={handleMultipleChange('option3')}
             text="Option 3"
+            id="showcase-multiple-option3-checkbox"
+            name="showcase-multiple-option3-checkbox"
           />
         </View>
       </View>
@@ -141,6 +157,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.terms}
             onChange={handleCheckboxChange('terms')}
             text="I have read and agree to the Terms of Service and Privacy Policy"
+            id="showcase-terms-checkbox"
+            name="showcase-terms-checkbox"
           />
         </View>
         
@@ -149,6 +167,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.newsletter}
             onChange={handleCheckboxChange('newsletter')}
             text="Subscribe to our newsletter for updates"
+            id="showcase-newsletter-checkbox"
+            name="showcase-newsletter-checkbox"
           />
         </View>
         
@@ -157,6 +177,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.notifications}
             onChange={handleCheckboxChange('notifications')}
             text="Enable push notifications"
+            id="showcase-notifications-checkbox"
+            name="showcase-notifications-checkbox"
           />
         </View>
       </View>
@@ -172,6 +194,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             onChange={handleRequiredChange('terms')}
             text="I agree to the terms and conditions"
             required={true}
+            id="showcase-required-terms-checkbox"
+            name="showcase-required-terms-checkbox"
           />
         </View>
         
@@ -182,6 +206,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             onChange={handleRequiredChange('privacy')}
             text="I have read and understood the privacy policy"
             required={true}
+            id="showcase-required-privacy-checkbox"
+            name="showcase-required-privacy-checkbox"
           />
         </View>
         
@@ -192,6 +218,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             onChange={handleRequiredChange('marketing')}
             text="I consent to receive marketing communications"
             required={false}
+            id="showcase-required-marketing-checkbox"
+            name="showcase-required-marketing-checkbox"
           />
         </View>
       </View>
@@ -206,6 +234,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.multiple.option1}
             onChange={handleMultipleChange('option1')}
             text="Allow late registrations"
+            id="showcase-tournament-settings-checkbox"
+            name="showcase-tournament-settings-checkbox"
           />
         </View>
         
@@ -215,6 +245,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.multiple.option2}
             onChange={handleMultipleChange('option2')}
             text="Make my profile public"
+            id="showcase-privacy-settings-checkbox"
+            name="showcase-privacy-settings-checkbox"
           />
         </View>
         
@@ -224,6 +256,8 @@ const CheckboxInputShowcaseCard: React.FC = () => {
             value={checkboxValues.multiple.option3}
             onChange={handleMultipleChange('option3')}
             text="Send me email reminders"
+            id="showcase-communication-checkbox"
+            name="showcase-communication-checkbox"
           />
         </View>
       </View>

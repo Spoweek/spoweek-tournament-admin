@@ -73,6 +73,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             placeholder="Enter phone number"
             InputComponent={InternationalPhoneInput}
             required={true}
+            id="showcase-international-phone-kr"
+            name="showcase-international-phone-kr"
           />
         </View>
         
@@ -84,6 +86,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             placeholder="Enter phone number"
             InputComponent={InternationalPhoneInput}
             required={true}
+            id="showcase-international-phone-us"
+            name="showcase-international-phone-us"
           />
         </View>
       </View>
@@ -100,6 +104,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             placeholder="Enter Korean phone number"
             InputComponent={LocalKoreanPhoneInput}
             required={true}
+            id="showcase-korean-phone"
+            name="showcase-korean-phone"
           />
         </View>
         
@@ -111,6 +117,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             placeholder="Enter US phone number"
             InputComponent={LocalUSPhoneInput}
             required={true}
+            id="showcase-us-phone"
+            name="showcase-us-phone"
           />
         </View>
       </View>
@@ -126,6 +134,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             onChange={() => {}}
             InputComponent={LocalKoreanPhoneInput}
             disabled={true}
+            id="showcase-valid-korean-phone"
+            name="showcase-valid-korean-phone"
           />
         </View>
         
@@ -136,6 +146,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             onChange={() => {}}
             InputComponent={LocalKoreanPhoneInput}
             disabled={true}
+            id="showcase-invalid-korean-phone"
+            name="showcase-invalid-korean-phone"
           />
         </View>
       </View>
@@ -188,6 +200,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             InputComponent={InternationalPhoneInput}
             inline={true}
             required={true}
+            id="showcase-international-phone-inline"
+            name="showcase-international-phone-inline"
           />
         </View>
         
@@ -200,6 +214,8 @@ const PhoneInputShowcaseCard: React.FC = () => {
             InputComponent={LocalKoreanPhoneInput}
             inline={true}
             required={true}
+            id="showcase-korean-phone-inline"
+            name="showcase-korean-phone-inline"
           />
         </View>
       </View>

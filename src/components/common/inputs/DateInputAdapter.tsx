@@ -19,6 +19,8 @@ export interface DateInputAdapterProps extends InputAdapterProps<string> {
   onDropdownStateChange?: (isOpen: boolean) => void;
   containerRef?: React.RefObject<any>;
   calculatedRadius?: number;
+  id?: string;
+  name?: string;
 }
 
 const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
@@ -34,6 +36,8 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   inline = false,
   calculatedRadius,
   containerRef,
+  id,
+  name,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [displayDate, setDisplayDate] = useState<string>(value || '');
@@ -238,6 +242,8 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
         onPress={handleOpen}
         disabled={disabled}
         activeOpacity={1}
+        testID={id}
+        accessibilityLabel={name}
       >
         <InputIcon name="calendar-outline" />
         <Text style={[

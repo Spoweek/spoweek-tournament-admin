@@ -40,6 +40,8 @@ export interface FileInputAdapterProps extends InputAdapterProps<any[] | null> {
   allowMultiple?: boolean;
   accept?: string[] | FileTypePreset; // MIME types to accept or preset name
   maxFiles?: number; // Maximum number of files when allowMultiple is true
+  id?: string;
+  name?: string;
 }
 
 const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
@@ -55,6 +57,8 @@ const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
   allowMultiple = false,
   accept = 'all',
   maxFiles = 10,
+  id,
+  name,
 }) => {
   // Use shared hooks
   const { isFocused, handleFocus, handleBlur } = useFocus({ onFocus, onBlur });
@@ -146,6 +150,8 @@ const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
         onPress={handleFilePick}
         disabled={disabled}
         activeOpacity={0.7}
+        testID={id}
+        accessibilityLabel={name}
       >
         <InputIcon name="document-outline" />
         <Text style={[

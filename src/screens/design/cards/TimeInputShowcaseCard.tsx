@@ -35,6 +35,8 @@ const TimeInputShowcaseCard: React.FC = () => {
             placeholder="Select time (24h)"
             InputComponent={TimeInputAdapter}
             inputProps={{ use24Hour: true }}
+            id="showcase-24hour-time"
+            name="showcase-24hour-time"
           />
         </View>
         
@@ -46,6 +48,8 @@ const TimeInputShowcaseCard: React.FC = () => {
             placeholder="Select time with seconds"
             InputComponent={TimeInputAdapter}
             inputProps={{ use24Hour: true, showSeconds: true }}
+            id="showcase-24hour-seconds-time"
+            name="showcase-24hour-seconds-time"
           />
         </View>
       </View>
@@ -62,6 +66,8 @@ const TimeInputShowcaseCard: React.FC = () => {
             placeholder="Select time (12h)"
             InputComponent={TimeInputAdapter}
             inputProps={{ use24Hour: false }}
+            id="showcase-12hour-time"
+            name="showcase-12hour-time"
           />
         </View>
         
@@ -74,6 +80,8 @@ const TimeInputShowcaseCard: React.FC = () => {
             placeholder="Select time with seconds"
             InputComponent={TimeInputAdapter}
             inputProps={{ use24Hour: false, showSeconds: true }}
+            id="showcase-12hour-seconds-pill-time"
+            name="showcase-12hour-seconds-pill-time"
           />
         </View>
       </View>
@@ -104,6 +112,8 @@ const TimeInputShowcaseCard: React.FC = () => {
             placeholder="Select time"
             InputComponent={TimeInputAdapter}
             inputProps={{ use24Hour: false }}
+            id="showcase-floating-12h-pill-time"
+            name="showcase-floating-12h-pill-time"
           />
         </View>
       </View>

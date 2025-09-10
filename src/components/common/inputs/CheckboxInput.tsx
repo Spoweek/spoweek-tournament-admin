@@ -20,6 +20,8 @@ export interface CheckboxInputProps {
   style?: any;
   onFocus?: () => void;
   onBlur?: () => void;
+  id?: string;
+  name?: string;
 }
 
 const CheckboxInput: React.FC<CheckboxInputProps> = ({
@@ -32,6 +34,8 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
   style,
   onFocus,
   onBlur,
+  id,
+  name,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -76,6 +80,8 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
         onPress={handlePress}
         disabled={disabled}
         activeOpacity={1}
+        testID={id}
+        accessibilityLabel={name}
         {...(Platform.OS === 'web' ? {
           onMouseEnter: () => setIsHovered(true),
           onMouseLeave: () => setIsHovered(false)

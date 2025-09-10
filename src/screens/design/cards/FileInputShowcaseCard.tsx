@@ -36,6 +36,8 @@ const FileInputShowcaseCard: React.FC = () => {
             value={fileValues.singleFile}
             onChange={handleFileChange('singleFile')}
             InputComponent={FileInputAdapter}
+            id="showcase-single-file"
+            name="showcase-single-file"
           />
         </View>
         
@@ -46,6 +48,8 @@ const FileInputShowcaseCard: React.FC = () => {
             onChange={handleFileChange('singleFile')}
             InputComponent={FileInputAdapter}
             inputProps={{ placeholder: 'Please choose an image' }}
+            id="showcase-custom-placeholder-file"
+            name="showcase-custom-placeholder-file"
           />
         </View>
       </View>
@@ -61,6 +65,8 @@ const FileInputShowcaseCard: React.FC = () => {
             onChange={handleFileChange('multipleFiles')}
             InputComponent={FileInputAdapter}
             inputProps={{ allowMultiple: true }}
+            id="showcase-multiple-files"
+            name="showcase-multiple-files"
           />
         </View>
         
@@ -75,6 +81,8 @@ const FileInputShowcaseCard: React.FC = () => {
               maxFiles: 3,
               placeholder: 'Choose up to 3 files'
             }}
+            id="showcase-multiple-files-max3"
+            name="showcase-multiple-files-max3"
           />
         </View>
       </View>
@@ -93,6 +101,8 @@ const FileInputShowcaseCard: React.FC = () => {
               accept: 'images',
               placeholder: 'Please choose an image'
             }}
+            id="showcase-images-only-file"
+            name="showcase-images-only-file"
           />
         </View>
         
@@ -106,6 +116,8 @@ const FileInputShowcaseCard: React.FC = () => {
               accept: 'documents',
               placeholder: 'Please choose a document'
             }}
+            id="showcase-documents-only-file"
+            name="showcase-documents-only-file"
           />
         </View>
         
@@ -119,6 +131,8 @@ const FileInputShowcaseCard: React.FC = () => {
               accept: 'excel',
               placeholder: 'Please choose an Excel file'
             }}
+            id="showcase-excel-files"
+            name="showcase-excel-files"
           />
         </View>
         
@@ -132,6 +146,8 @@ const FileInputShowcaseCard: React.FC = () => {
               accept: 'zip',
               placeholder: 'Please choose a ZIP file'
             }}
+            id="showcase-zip-files"
+            name="showcase-zip-files"
           />
         </View>
         
@@ -145,6 +161,8 @@ const FileInputShowcaseCard: React.FC = () => {
               accept: 'text',
               placeholder: 'Please choose a text file'
             }}
+            id="showcase-text-files"
+            name="showcase-text-files"
           />
         </View>
         
@@ -158,6 +176,8 @@ const FileInputShowcaseCard: React.FC = () => {
               accept: ['application/json', 'application/xml'],
               placeholder: 'Please choose a JSON or XML file'
             }}
+            id="showcase-custom-mime-files"
+            name="showcase-custom-mime-files"
           />
         </View>
       </View>
@@ -173,6 +193,8 @@ const FileInputShowcaseCard: React.FC = () => {
             onChange={handleFileChange('floating')}
             inline={true}
             InputComponent={FileInputAdapter}
+            id="showcase-floating-file-input"
+            name="showcase-floating-file-input"
           />
         </View>
         
@@ -184,6 +206,8 @@ const FileInputShowcaseCard: React.FC = () => {
             borderRadius="full"
             InputComponent={FileInputAdapter}
             inputProps={{ placeholder: 'Choose files' }}
+            id="showcase-pill-file-input"
+            name="showcase-pill-file-input"
           />
         </View>
       </View>
@@ -199,6 +223,8 @@ const FileInputShowcaseCard: React.FC = () => {
               value={fileValues.singleFile}
               onChange={handleFileChange('singleFile')}
               InputComponent={FileInputAdapter}
+              id="showcase-300px-width-file"
+              name="showcase-300px-width-file"
             />
           </View>
         </View>
@@ -211,6 +237,8 @@ const FileInputShowcaseCard: React.FC = () => {
               onChange={handleFileChange('pill')}
               borderRadius="full"
               InputComponent={FileInputAdapter}
+              id="showcase-400px-width-pill-file"
+              name="showcase-400px-width-pill-file"
             />
           </View>
         </View>
