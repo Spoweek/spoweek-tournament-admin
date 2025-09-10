@@ -6,3 +6,5 @@ export * from './ClearButton';
 export * from './InputIcon';
 export * from './ChevronIcon';
 export * from './ValidationIndicator';
+export * from './ToggleVisibility';
+export * from './IconContainer';

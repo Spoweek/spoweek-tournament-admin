@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        fontSize: 14,
     },
     inputWithValidation: {
         paddingRight: 30, // Make room for validation icon

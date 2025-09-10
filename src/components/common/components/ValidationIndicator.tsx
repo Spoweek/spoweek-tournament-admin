@@ -8,6 +8,7 @@ export interface ValidationIndicatorProps {
   show: boolean;
   size?: number;
   style?: any;
+  absolute?: boolean; // Whether to use absolute positioning
 }
 
 const ValidationIndicator: React.FC<ValidationIndicatorProps> = ({
@@ -15,13 +16,14 @@ const ValidationIndicator: React.FC<ValidationIndicatorProps> = ({
   show,
   size = 20,
   style,
+  absolute = true,
 }) => {
   if (!show) {
     return null;
   }
 
   return (
-    <View style={[styles.validationIcon, style]}>
+    <View style={[absolute ? styles.validationIcon : styles.validationIconInline, style]}>
       <Ionicons
         name={isValid ? 'checkmark-circle' : 'close-circle'}
         size={size}
@@ -36,7 +38,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: '50%',
-    transform: [{ translateY: -10 }],
+    transform: [{ translateY: '-50%' }],
+  },
+  validationIconInline: {
+    // No positioning - just inline in flex container
   },
 });
 

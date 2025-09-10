@@ -49,6 +49,16 @@ export const GlobalStyles: React.FC<GlobalStylesProps> = ({ children }) => {
           outline: none !important;
           box-shadow: none !important;
         }
+        /* Fix React Native Web's default transition behavior */
+        div[role="button"] {
+          transition: none !important;
+          transition-duration: 0s !important;
+        }
+        /* Target Pressable elements specifically */
+        div[style*="position: absolute"] {
+          transition: none !important;
+          transition-duration: 0s !important;
+        }
       `;
       document.head.appendChild(style);
       
