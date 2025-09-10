@@ -5,3 +5,4 @@ export * from './SearchInput';
 export * from './ClearButton';
 export * from './InputIcon';
 export * from './ChevronIcon';
+export * from './ValidationIndicator';

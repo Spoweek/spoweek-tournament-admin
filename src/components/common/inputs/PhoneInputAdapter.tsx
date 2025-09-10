@@ -6,6 +6,7 @@ import { colors, typography, shadows } from '../styles';
 import { useFocus, useHover } from '../hooks';
 import { getCountriesAlphabetically, getCountryByCode, CountryData } from '../data';
 import SelectInputAdapter, { SelectOption } from './SelectInputAdapter';
+import ValidationIndicator from '../components/ValidationIndicator';
 import type { InputAdapterProps } from './LabeledField';
 
 export interface PhoneValue {
@@ -21,6 +22,7 @@ export interface PhoneInputAdapterProps extends InputAdapterProps<PhoneValue> {
   calculatedRadius?: number;
   id?: string;
   name?: string;
+  doLiveValidation?: boolean;
 }
 
 const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
@@ -36,6 +38,7 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
   style,
   id,
   name,
+  doLiveValidation = true,
 }) => {
   // Use shared hooks
   const { isFocused: isPhoneFocused, handleFocus: handlePhoneFocus, handleBlur: handlePhoneBlur } = useFocus();
@@ -224,15 +227,10 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
         />
         
         {/* Validation Icon */}
-        {value.phoneNumber != '' && (
-          <View style={styles.validationIcon}>
-            <Ionicons
-              name={isValidPhone ? 'checkmark-circle' : 'close-circle'}
-              size={20}
-              color={isValidPhone ? colors.success[500] : colors.error[500]}
-            />
-          </View>
-        )}
+        <ValidationIndicator
+          isValid={isValidPhone}
+          show={doLiveValidation && value.phoneNumber != ''}
+        />
       </View>
     </View>
   );
@@ -288,12 +286,6 @@ const styles = StyleSheet.create({
   },
   phoneInputInvalid: {
     // Validation styling handled by parent
-  },
-  validationIcon: {
-    position: 'absolute',
-    right: 0,
-    top: '50%',
-    transform: [{ translateY: -10 }],
   },
   countryFlagContainer: {
     ...shadows.flag,

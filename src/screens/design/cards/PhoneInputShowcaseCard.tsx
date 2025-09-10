@@ -218,6 +218,19 @@ const PhoneInputShowcaseCard: React.FC = () => {
             name="showcase-korean-phone-inline"
           />
         </View>
+        
+        <View style={styles.inputField}>
+          <LabeledField
+            label="Phone without Live Validation"
+            value={phoneValues.international}
+            onChange={handlePhoneChange('international')}
+            placeholder="Enter phone number"
+            InputComponent={InternationalPhoneInput}
+            doLiveValidation={false}
+            id="showcase-phone-no-validation"
+            name="showcase-phone-no-validation"
+          />
+        </View>
       </View>
 
       {/* Features List */}

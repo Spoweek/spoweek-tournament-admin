@@ -44,6 +44,33 @@ const InputShowcaseCard: React.FC = () => {
         
         <View style={styles.inputField}>
           <LabeledField
+            label="Email with Validation"
+            value={email}
+            onChange={setEmail}
+            placeholder="Enter email address"
+            InputComponent={TextInputAdapter}
+            inputProps={{ validationType: 'email' }}
+            id="showcase-email-validation"
+            name="showcase-email-validation"
+          />
+        </View>
+        
+        <View style={styles.inputField}>
+          <LabeledField
+            label="Email without Live Validation"
+            value={email}
+            onChange={setEmail}
+            placeholder="Enter email address"
+            InputComponent={TextInputAdapter}
+            inputProps={{ validationType: 'email' }}
+            doLiveValidation={false}
+            id="showcase-email-no-validation"
+            name="showcase-email-no-validation"
+          />
+        </View>
+        
+        <View style={styles.inputField}>
+          <LabeledField
             label="Pill Input"
             value={inputValues.pill}
             onChange={(value) => setInputValues(prev => ({ ...prev, pill: value }))}

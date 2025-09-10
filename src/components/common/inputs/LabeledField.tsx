@@ -17,6 +17,7 @@ export type InputAdapterProps<T = any> = {
   containerRef?: React.RefObject<any>;
   id?: string;
   name?: string;
+  doLiveValidation?: boolean;
 };
 
 export type LabeledFieldProps<T = any> = {
@@ -39,6 +40,9 @@ export type LabeledFieldProps<T = any> = {
   // HTML form attributes
   id?: string;
   name?: string;
+  
+  // Validation
+  doLiveValidation?: boolean;
   
   // Additional props to pass to InputComponent
   inputProps?: Record<string, any>;
@@ -64,6 +68,7 @@ export function LabeledField<T = any>({
   inputContainerStyle,
   id,
   name,
+  doLiveValidation = true,
   inputProps = {},
 }: LabeledFieldProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
@@ -146,6 +151,7 @@ export function LabeledField<T = any>({
           style={styles.input}
           id={id}
           name={name}
+          doLiveValidation={doLiveValidation}
           {...inputProps}
           inline={inline}
           onDropdownStateChange={handleDropdownStateChange}
