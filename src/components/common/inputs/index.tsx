@@ -7,3 +7,14 @@ export { default as DateTimeInputAdapter } from './DateTimeInputAdapter';
 export { default as FileInputAdapter } from './FileInputAdapter';
 export { default as PhoneInputAdapter } from './PhoneInputAdapter';
 export { default as CheckboxInput } from './CheckboxInput';
+
+// Export types
+export type { InputAdapterProps } from './LabeledField';
+export type { SelectOption } from './SelectInputAdapter';
+export type { PhoneValue } from './PhoneInputAdapter';
+export type { DateInputAdapterProps } from './DateInputAdapter';
+export type { DateTimeInputAdapterProps } from './DateTimeInputAdapter';
+export type { TimeInputAdapterProps } from './TimeInputAdapter';
+export type { PhoneInputAdapterProps } from './PhoneInputAdapter';
+export type { FileInputAdapterProps, FileTypePreset } from './FileInputAdapter';
+export type { CheckboxInputProps } from './CheckboxInput';

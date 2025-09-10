@@ -7,8 +7,8 @@ import {
   Platform,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
+import { colors } from '../styles';
+import { typography } from '../styles';
 
 export interface CheckboxInputProps {
   value: boolean;

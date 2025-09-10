@@ -8,9 +8,7 @@ import {
   DateInputAdapter, 
   CheckboxInput 
 } from '../../../components/common/inputs';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { createSpacingStyles } from '../../../styles/spacing';
+import { colors, typography, spacing } from '../../../components/common';
 
 const RequiredFieldsShowcaseCard: React.FC = () => {
   // Internal state management
@@ -182,29 +180,27 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
   );
 };
 
-const spacingStyles = createSpacingStyles();
-
 const styles = StyleSheet.create({
   showcaseCard: {
-    ...spacingStyles.cardSpacing,
+    marginBottom: spacing.md,
   },
   cardTitle: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.primary,
   },
   description: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.secondary,
   },
   inputSection: {
     marginBottom: 16,
   },
   subsectionTitle: {
-    ...spacingStyles.subsectionSpacing,
+    marginBottom: spacing.sm,
     color: colors.text.secondary,
   },
   inputField: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
   },
 });
 

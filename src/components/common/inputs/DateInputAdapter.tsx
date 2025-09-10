@@ -4,13 +4,12 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Modal,
   Platform,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { uiLayers } from '../../../styles/zIndex';
+import { colors, typography, uiLayers } from '../styles';
+import { useDropdown, useHover } from '../hooks';
+import { ModalOverlay, DropdownContainer, InputIcon, ChevronIcon } from '../components';
 import type { InputAdapterProps } from './LabeledField';
 
 export interface DateInputAdapterProps extends InputAdapterProps<string> {
@@ -36,18 +35,23 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   calculatedRadius,
   containerRef,
 }) => {
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [displayDate, setDisplayDate] = useState<string>(value || '');
   const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
-  const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [calculatedHeight, setCalculatedHeight] = useState(400);
   const [contentHeight, setContentHeight] = useState(0);
   const [hoveredDay, setHoveredDay] = useState<number | null>(null);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const dateRef = useRef<any>(null);
   const calendarContentRef = useRef<any>(null);
+
+  // Use shared hooks
+  const { isOpen: isCalendarOpen, dropdownLayout, openDropdown, closeDropdown } = useDropdown({
+    onDropdownStateChange,
+    containerRef,
+    borderRadius,
+  });
 
   // Use the calculated radius from LabeledField for perfect matching
   const getDropdownRadius = () => {
@@ -109,8 +113,7 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
   const handleDateSelect = (day: number) => {
     const newDate = new Date(currentYear, currentMonth, day);
     setSelectedDate(newDate);
-    setIsCalendarOpen(false);
-    onDropdownStateChange?.(false);
+    closeDropdown();
     onBlur?.();
     
     const year = newDate.getFullYear();
@@ -123,43 +126,12 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
 
   const handleOpen = () => {
     if (!disabled) {
-      // Use container ref if available for more precise measurements
-      const elementToMeasure = containerRef?.current || dateRef.current;
-      
-      elementToMeasure?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
-        let adjustedX, adjustedWidth, adjustedY;
-        
-        if (containerRef?.current) {
-          // If we have container ref, we're measuring the bordered container directly
-          // Round to avoid sub-pixel issues
-          adjustedX = Math.round(pageX);
-          adjustedWidth = Math.round(width);
-          adjustedY = Math.round(pageY + height - 1); // Overlap by 1px for seamless connection
-        } else {
-          // Fallback to measuring DateInputAdapter with border adjustments
-          const borderWidth = 1;
-          adjustedX = Math.round(pageX - borderWidth);
-          adjustedWidth = Math.round(width + (borderWidth * 2));
-          adjustedY = Math.round(pageY + height - 1);
-        }
-        
-        setDropdownLayout({ 
-          x: adjustedX, 
-          y: adjustedY - 1, 
-          width: adjustedWidth, 
-          height 
-        });
-        
-        setIsCalendarOpen(true);
-        onDropdownStateChange?.(true);
-        // Don't call onFocus to prevent blinking from focus state changes
-      });
+      openDropdown();
     }
   };
 
   const handleClose = () => {
-    setIsCalendarOpen(false);
-    onDropdownStateChange?.(false);
+    closeDropdown();
     onBlur?.();
   };
 
@@ -267,7 +239,7 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
         disabled={disabled}
         activeOpacity={1}
       >
-        <Ionicons name="calendar-outline" size={16} color={colors.text.primary} style={styles.icon} />
+        <InputIcon name="calendar-outline" />
         <Text style={[
           styles.inputText,
           (!displayDate || displayDate === '') && styles.placeholderText,
@@ -275,44 +247,28 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
         ]}>
           {displayDate || placeholder}
         </Text>
-        <Ionicons 
-          name={isCalendarOpen ? "chevron-up" : "chevron-down"} 
-          size={16} 
-          color={disabled ? colors.neutral[300] : colors.neutral[500]} 
+        <ChevronIcon 
+          isOpen={isCalendarOpen}
+          disabled={disabled}
         />
       </TouchableOpacity>
 
-      <Modal
+      <ModalOverlay
         visible={isCalendarOpen}
-        transparent={true}
-        animationType="none"
-        onRequestClose={handleClose}
-        presentationStyle="overFullScreen"
+        onClose={handleClose}
       >
-        <TouchableOpacity 
-          style={styles.modalOverlay} 
-          activeOpacity={1} 
-          onPress={handleClose}
+        <DropdownContainer
+          layout={dropdownLayout}
+          borderRadius={getDropdownRadius()}
+          contentHeight={contentHeight > 0 ? contentHeight : calculatedHeight}
+          dynamicHeight={true}
+          maxHeight={400}
         >
-          <View style={[
-              styles.dropdown,
-              { 
-                position: 'absolute',
-                left: dropdownLayout.x,
-                top: dropdownLayout.y,
-                width: dropdownLayout.width,
-                height: contentHeight > 0 ? contentHeight : calculatedHeight,
-                borderBottomLeftRadius: getDropdownRadius(),
-                borderBottomRightRadius: getDropdownRadius(),
-                // Ensure pixel-perfect rendering
-                transform: [{ translateX: 0 }, { translateY: 0 }],
-              }
-            ]}>
-            <View 
-              ref={calendarContentRef}
-              style={styles.calendarContainer}
-              onLayout={handleContentLayout}
-            >
+          <View 
+            ref={calendarContentRef}
+            style={styles.calendarContainer}
+            onLayout={handleContentLayout}
+          >
               <View style={styles.calendarHeader}>
                 <TouchableOpacity
                   style={[
@@ -388,9 +344,8 @@ const DateInputAdapter: React.FC<DateInputAdapterProps> = ({
                 </View>
               </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+        </DropdownContainer>
+      </ModalOverlay>
     </View>
   );
 };
@@ -410,9 +365,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral[100],
     opacity: 0.6,
   },
-  icon: {
-    marginRight: 8,
-  },
   inputText: {
     ...typography.body,
     fontSize: 14,
@@ -426,22 +378,6 @@ const styles = StyleSheet.create({
   disabledText: {
     color: colors.neutral[500],
     fontSize: 14,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  dropdown: {
-    backgroundColor: colors.background.primary,
-    borderWidth: 1,
-    borderColor: colors.primary[500],
-    borderTopWidth: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    zIndex: uiLayers.selectDropdown,
-    overflow: 'hidden', // Clip scrollbar to dropdown bounds
   },
   calendarContainer: {
     padding: 10,

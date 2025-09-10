@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { GlobalStyles } from './src/components/common/GlobalStyles';
-import { useAppFonts } from './src/utils/fonts';
+import { useAppFonts } from './src/components/common';
 import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {

@@ -11,8 +11,7 @@ import {
   TextStyle,
   Animated,
 } from 'react-native';
-import { colors, type Colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography'; 
+import { colors, typography, type Colors } from '../styles'; 
 
 export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error';
 export type ButtonSize = 'small' | 'medium' | 'large';

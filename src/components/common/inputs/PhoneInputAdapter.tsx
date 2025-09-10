@@ -2,11 +2,10 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, StyleSheet, TextInput, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CountryFlag from 'react-native-country-flag';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import SelectInputAdapter from './SelectInputAdapter';
-import { SelectOption } from './SelectInputAdapter';
-import { getCountriesAlphabetically, getCountryByCode, CountryData } from '../../../data/countries';
+import { colors, typography } from '../styles';
+import { useFocus, useHover } from '../hooks';
+import { getCountriesAlphabetically, getCountryByCode, CountryData } from '../data';
+import SelectInputAdapter, { SelectOption } from './SelectInputAdapter';
 import type { InputAdapterProps } from './LabeledField';
 
 export interface PhoneValue {
@@ -34,7 +33,8 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
   calculatedRadius,
   style,
 }) => {
-  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
+  // Use shared hooks
+  const { isFocused: isPhoneFocused, handleFocus: handlePhoneFocus, handleBlur: handlePhoneBlur } = useFocus();
 
   // Get country options based on mode
   const countryOptions: CountryData[] = useMemo(() => {
@@ -128,13 +128,6 @@ const PhoneInputAdapter: React.FC<PhoneInputAdapterProps> = ({
     });
   }, [onChange, value.countryCode, formatPhoneNumber]);
 
-  const handlePhoneFocus = useCallback(() => {
-    setIsPhoneFocused(true);
-  }, []);
-
-  const handlePhoneBlur = useCallback(() => {
-    setIsPhoneFocused(false);
-  }, []);
 
   // Custom render function for country options (flag + dial code)
   const renderCountryOption = useCallback((option: SelectOption, isSelected: boolean, isHovered: boolean) => {

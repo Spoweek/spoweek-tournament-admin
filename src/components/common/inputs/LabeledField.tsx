@@ -1,7 +1,7 @@
 // components/LabeledField.tsx
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
-import { colors } from '../../../styles/colors';
+import { colors } from '../styles';
 export type InputAdapterProps<T = any> = {
   value: T;
   onChange: (val: T) => void;

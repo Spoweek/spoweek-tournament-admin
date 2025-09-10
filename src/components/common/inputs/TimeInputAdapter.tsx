@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
+import { colors, typography } from '../styles';
+import { useFocus } from '../hooks';
+import { InputIcon } from '../components';
 import type { InputAdapterProps } from './LabeledField';
 
 export interface TimeInputAdapterProps extends InputAdapterProps<string> {
@@ -258,9 +259,7 @@ const TimeInputAdapter: React.FC<TimeInputAdapterProps> = ({
     <View style={[styles.container, style]}>
       <View style={styles.timeInputsContainer}>
         {/* Clock icon */}
-        <View style={styles.clockIconContainer}>
-          <Ionicons name="time-outline" size={16} color={colors.text.primary} />
-        </View>
+        <InputIcon name="time-outline" />
         
         {/* Hour input */}
         <View style={styles.timeUnit}>
@@ -355,11 +354,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-  },
-  clockIconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 0,
   },
   timeUnit: {
     width: 28,

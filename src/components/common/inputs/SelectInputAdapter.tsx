@@ -1,9 +1,9 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Platform, Dimensions, Modal, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Platform } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { uiLayers } from '../../../styles/zIndex';
+import { colors, typography, uiLayers } from '../styles';
+import { useDropdown, useSearch, useHover } from '../hooks';
+import { ModalOverlay, DropdownContainer, SearchInput, ClearButton, ChevronIcon } from '../components';
 import type { InputAdapterProps } from './LabeledField';
 
 export interface SelectOption {
@@ -48,37 +48,21 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
   calculatedRadius,
   containerRef,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | number | null>(null);
-  const [isClearHovered, setIsClearHovered] = useState(false);
-  const [dropdownLayout, setDropdownLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
-  const [searchQuery, setSearchQuery] = useState('');
   const selectRef = useRef<any>(null);
-  const searchInputRef = useRef<TextInput>(null);
+  const searchInputRef = useRef<any>(null);
 
-  // Filter options based on search query
-  const filteredOptions = useMemo(() => {
-    if (!searchable || !searchQuery.trim()) {
-      return options;
-    }
-    
-    const query = searchQuery.toLowerCase().trim();
-    return options.filter(option => {
-      // Search in label
-      if (option.label.toLowerCase().includes(query)) {
-        return true;
-      }
-      
-      // Search in additional search terms
-      if (option.searchTerms) {
-        return option.searchTerms.some(term => 
-          term.toLowerCase().includes(query)
-        );
-      }
-      
-      return false;
-    });
-  }, [options, searchQuery, searchable]);
+  // Use shared hooks
+  const { isOpen, dropdownLayout, openDropdown, closeDropdown } = useDropdown({
+    onDropdownStateChange,
+    containerRef,
+    borderRadius,
+  });
+
+  const { searchQuery, setSearchQuery, filteredItems: filteredOptions, clearSearch } = useSearch({
+    items: options,
+    searchKeys: ['label'],
+  });
 
   // Use the calculated radius from LabeledField for perfect matching
   const getDropdownRadius = () => {
@@ -97,59 +81,21 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
 
   const handleSelect = (selectedValue: string | number) => {
     onChange(selectedValue);
-    setIsOpen(false);
-    onDropdownStateChange?.(false);
+    closeDropdown();
     onBlur?.();
   };
 
   const handleOpen = () => {
     if (!disabled) {
-      // Clear search when opening
-      setSearchQuery('');
-      
-      // Use container ref if available for more precise measurements
-      const elementToMeasure = containerRef?.current || selectRef.current;
-      
-      elementToMeasure?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
-        let adjustedX, adjustedWidth, adjustedY;
-        
-        if (containerRef?.current) {
-          // If we have container ref, we're measuring the bordered container directly
-          // Round to avoid sub-pixel issues
-          adjustedX = Math.round(pageX);
-          adjustedWidth = Math.round(width);
-          adjustedY = Math.round(pageY + height - 1); // Overlap by 1px for seamless connection
-        } else {
-          // Fallback to measuring SelectInputAdapter with border adjustments
-          const borderWidth = 1;
-          adjustedX = Math.round(pageX - borderWidth);
-          adjustedWidth = Math.round(width + (borderWidth * 2));
-          adjustedY = Math.round(pageY + height - 1);
-        }
-        
-        setDropdownLayout({ 
-          x: adjustedX, 
-          y: adjustedY - 1, 
-          width: adjustedWidth, 
-          height 
-        });
-        
-        setIsOpen(true);
-        onDropdownStateChange?.(true);
-        // Don't call onFocus to prevent blinking from focus state changes
-      });
+      clearSearch();
+      openDropdown();
     }
   };
 
   const handleClose = () => {
-    setIsOpen(false);
-    setSearchQuery(''); // Clear search when closing
-    onDropdownStateChange?.(false);
+    closeDropdown();
+    clearSearch();
     onBlur?.();
-  };
-
-  const handleSearchChange = (text: string) => {
-    setSearchQuery(text);
   };
 
   const handleClear = () => {
@@ -238,87 +184,50 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         
         <View style={styles.iconContainer}>
           {selectedOption && !disabled && showClearButton && (
-            <TouchableOpacity 
+            <ClearButton 
               onPress={handleClear}
-              style={[
-                styles.clearButton,
-                isClearHovered && styles.clearButtonHovered
-              ]}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              {...(Platform.OS === 'web' ? {
-                onMouseEnter: () => setIsClearHovered(true),
-                onMouseLeave: () => setIsClearHovered(false)
-              } : {})}
-            >
-              <Ionicons 
-                name="close" 
-                size={14} 
-                color={isClearHovered ? 'white' : (disabled ? colors.neutral[300] : colors.neutral[500])} 
-              />
-            </TouchableOpacity>
+              disabled={disabled}
+            />
           )}
           
-          <Ionicons 
-            name={isOpen ? "chevron-up" : "chevron-down"} 
-            size={16} 
-            color={disabled ? colors.neutral[300] : colors.neutral[500]} 
+          <ChevronIcon 
+            isOpen={isOpen}
+            disabled={disabled}
           />
         </View>
       </TouchableOpacity>
 
-      <Modal
+      <ModalOverlay
         visible={isOpen}
-        transparent={true}
-        animationType="none"
-        onRequestClose={handleClose}
-        presentationStyle="overFullScreen"
+        onClose={handleClose}
       >
-        <TouchableOpacity 
-          style={styles.modalOverlay} 
-          activeOpacity={1} 
-          onPress={handleClose}
+        <DropdownContainer
+          layout={dropdownLayout}
+          borderRadius={getDropdownRadius()}
+          maxHeight={200}
         >
-          <View style={[
-              styles.dropdown,
-              { 
-                position: 'absolute',
-                left: dropdownLayout.x,
-                top: dropdownLayout.y,
-                width: dropdownLayout.width,
-                borderBottomLeftRadius: getDropdownRadius(),
-                borderBottomRightRadius: getDropdownRadius(),
-                // Ensure pixel-perfect rendering
-                transform: [{ translateX: 0 }, { translateY: 0 }],
-              }
-            ]}>
-            {searchable && (
-              <View style={styles.searchContainer}>
-                <TextInput
-                  ref={searchInputRef}
-                  style={styles.searchInput}
-                  placeholder={searchPlaceholder}
-                  placeholderTextColor={colors.neutral[500]}
-                  value={searchQuery}
-                  onChangeText={handleSearchChange}
-                  autoFocus={true}
-                />
-                <Ionicons name="search" size={16} color={colors.neutral[500]} style={styles.searchIcon} />
-              </View>
-            )}
-            <FlatList
-              data={filteredOptions}
-              renderItem={renderOptionItem}
-              keyExtractor={(item) => item.value.toString()}
-              style={styles.optionsList}
-              showsVerticalScrollIndicator={true}
-              indicatorStyle="default"
-              scrollIndicatorInsets={{ right: 2, top: 0, bottom: 0 }}
-              nestedScrollEnabled={true}
-              contentContainerStyle={{ paddingRight: Platform.OS === 'web' ? 0 : 4 }}
+          {searchable && (
+            <SearchInput
+              ref={searchInputRef}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              placeholder={searchPlaceholder}
+              autoFocus={true}
             />
-          </View>
-        </TouchableOpacity>
-      </Modal>
+          )}
+          <FlatList
+            data={filteredOptions}
+            renderItem={renderOptionItem}
+            keyExtractor={(item) => item.value.toString()}
+            style={styles.optionsList}
+            showsVerticalScrollIndicator={true}
+            indicatorStyle="default"
+            scrollIndicatorInsets={{ right: 2, top: 0, bottom: 0 }}
+            nestedScrollEnabled={true}
+            contentContainerStyle={{ paddingRight: Platform.OS === 'web' ? 0 : 4 }}
+          />
+        </DropdownContainer>
+      </ModalOverlay>
     </View>
   );
 };
@@ -355,41 +264,6 @@ const styles = StyleSheet.create({
   disabledText: {
     color: colors.neutral[500],
     fontSize: 14,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  dropdown: {
-    backgroundColor: colors.background.primary,
-    borderWidth: 1,
-    borderColor: colors.primary[500],
-    borderTopWidth: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    maxHeight: 200,
-    zIndex: uiLayers.selectDropdown,
-    overflow: 'hidden', // Clip scrollbar to dropdown bounds
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.neutral[300],
-    backgroundColor: colors.background.primary,
-  },
-  searchInput: {
-    flex: 1,
-    ...typography.body,
-    fontSize: 14,
-    color: colors.text.primary,
-    minHeight: 40,
-    paddingHorizontal: 16,
-  },
-  searchIcon: {
-    marginLeft: 8,
   },
   optionsList: {
     maxHeight: 200,
@@ -428,13 +302,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-  },
-  clearButton: {
-    borderRadius: 10,
-    backgroundColor: 'transparent',
-  },
-  clearButtonHovered: {
-    backgroundColor: colors.primary[300],
   },
 });
 

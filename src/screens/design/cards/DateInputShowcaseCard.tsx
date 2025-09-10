@@ -3,9 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Card from '../../../components/common/Card';
 import { LabeledField } from '../../../components/common/inputs';
 import DateInputAdapter from '../../../components/common/inputs/DateInputAdapter';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { cardSpacing, createSpacingStyles } from '../../../styles/spacing';
+import { colors, typography, spacing } from '../../../components/common';
 
 const DateInputShowcaseCard: React.FC = () => {
   // Internal state management
@@ -106,25 +104,23 @@ const DateInputShowcaseCard: React.FC = () => {
   );
 };
 
-const spacingStyles = createSpacingStyles();
-
 const styles = StyleSheet.create({
   showcaseCard: {
-    ...spacingStyles.cardSpacing,
+    marginBottom: spacing.md,
   },
   cardTitle: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.primary,
   },
   inputSection: {
-    ...spacingStyles.sectionSpacing,
+    marginBottom: spacing.lg,
   },
   subsectionTitle: {
-    ...spacingStyles.subsectionSpacing,
+    marginBottom: spacing.sm,
     color: colors.text.secondary,
   },
   inputField: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
   },
 });
 

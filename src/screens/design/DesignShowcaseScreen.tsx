@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
-import { colors } from '../../styles/colors';
-import { typography } from '../../styles/typography';
+import { colors, typography } from '../../components/common';
 import { globalStyles } from '../../components/common/GlobalStyles';
 import { ColorPaletteCard, ButtonShowcaseCard, InputShowcaseCard, SelectInputShowcaseCard, TimeInputShowcaseCard, DateInputShowcaseCard, DateTimeInputShowcaseCard, FileInputShowcaseCard, CheckboxInputShowcaseCard, RequiredFieldsShowcaseCard, CountryDataShowcaseCard, PhoneInputShowcaseCard } from './cards';
 

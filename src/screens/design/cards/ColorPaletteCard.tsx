@@ -1,9 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Card from '../../../components/common/Card';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { cardSpacing, createSpacingStyles } from '../../../styles/spacing';
+import { colors, typography, spacing } from '../../../components/common';
 
 const ColorPaletteCard: React.FC = () => {
   return (
@@ -139,32 +137,30 @@ const ColorPaletteCard: React.FC = () => {
   );
 };
 
-const spacingStyles = createSpacingStyles();
-
 const styles = StyleSheet.create({
   showcaseCard: {
-    ...spacingStyles.cardSpacing,
+    marginBottom: spacing.md,
   },
   cardTitle: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.primary,
   },
   colorSection: {
-    ...spacingStyles.sectionSpacing,
+    marginBottom: spacing.lg,
   },
   subsectionTitle: {
-    ...spacingStyles.subsectionSpacing,
+    marginBottom: spacing.sm,
     color: colors.text.secondary,
   },
   colorRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: cardSpacing.sm,
+    gap: spacing.sm,
   },
   colorSwatch: {
     width: 60,
     height: 60,
-    borderRadius: cardSpacing.sm,
+    borderRadius: spacing.sm,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,

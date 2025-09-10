@@ -13,8 +13,7 @@ import AuthLayout from '../../layouts/AuthLayout';
 import Logo from '../../components/common/Logo';
 import Card from '../../components/common/Card';
 import { globalStyles } from '../../components/common/GlobalStyles';
-import { colors } from '../../styles/colors';
-import { typography } from '../../styles/typography';
+import { colors, typography } from '../../components/common';
 import { 
   PrimaryButton, 
   SecondaryButton, 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
+import { colors } from '../styles';
+import { typography } from '../styles';
 import type { InputAdapterProps } from './LabeledField';
 import TimeInputAdapter from './TimeInputAdapter';
 import DateInputAdapter from './DateInputAdapter';

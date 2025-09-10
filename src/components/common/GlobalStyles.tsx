@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from 'react';
 import { StyleSheet, Platform } from 'react-native';
-import { globalStyles as typographyGlobalStyles } from '../../styles/typography';
+import { globalStyles as typographyGlobalStyles } from './styles';
 
 // Global styles that apply to all text elements
 export const globalStyles = StyleSheet.create({

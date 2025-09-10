@@ -3,10 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Card from '../../../components/common/Card';
 import { LabeledField } from '../../../components/common/inputs';
 import SelectInputAdapter from '../../../components/common/inputs/SelectInputAdapter';
-import { getCountrySelectOptions, searchCountries, getCountryByCode, getCountriesAlphabetically, getCountriesByPriority } from '../../../data/countries';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { createSpacingStyles } from '../../../styles/spacing';
+import { getCountrySelectOptions, searchCountries, getCountryByCode, getCountriesAlphabetically, getCountriesByPriority } from '../../../components/common';
+import { colors, typography, spacing } from '../../../components/common';
 
 const CountryDataShowcaseCard: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
@@ -132,18 +130,16 @@ const CountryDataShowcaseCard: React.FC = () => {
   );
 };
 
-const spacingStyles = createSpacingStyles();
-
 const styles = StyleSheet.create({
   showcaseCard: {
-    ...spacingStyles.cardSpacing,
+    marginBottom: spacing.md,
   },
   cardTitle: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.primary,
   },
   description: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.secondary,
     lineHeight: 20,
   },
@@ -151,11 +147,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   subsectionTitle: {
-    ...spacingStyles.subsectionSpacing,
+    marginBottom: spacing.sm,
     color: colors.text.secondary,
   },
   inputField: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
   },
   countryInfo: {
     backgroundColor: colors.neutral[100],

@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Card from '../../../components/common/Card';
 import { LabeledField, PhoneInputAdapter } from '../../../components/common/inputs';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { createSpacingStyles } from '../../../styles/spacing';
+import { colors, typography, spacing } from '../../../components/common';
 import { PhoneValue } from '../../../components/common/inputs/PhoneInputAdapter';
 
 // Wrapper components for different phone input modes
@@ -225,18 +223,16 @@ const PhoneInputShowcaseCard: React.FC = () => {
   );
 };
 
-const spacingStyles = createSpacingStyles();
-
 const styles = StyleSheet.create({
   showcaseCard: {
-    ...spacingStyles.cardSpacing,
+    marginBottom: spacing.md,
   },
   cardTitle: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.primary,
   },
   description: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.secondary,
     lineHeight: 20,
   },
@@ -244,11 +240,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   subsectionTitle: {
-    ...spacingStyles.subsectionSpacing,
+    marginBottom: spacing.sm,
     color: colors.text.secondary,
   },
   inputField: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
   },
   valuesContainer: {
     backgroundColor: colors.neutral[100],

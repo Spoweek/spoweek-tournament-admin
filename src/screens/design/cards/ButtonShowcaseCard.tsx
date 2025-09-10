@@ -3,9 +3,7 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Card from '../../../components/common/Card';
 import { PrimaryButton, SecondaryButton, SuccessButton, WarningButton, DangerButton } from '../../../components/common/buttons';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
-import { cardSpacing, createSpacingStyles } from '../../../styles/spacing';
+import { colors, typography, spacing } from '../../../components/common';
 
 const ButtonShowcaseCard: React.FC = () => {
   return (
@@ -151,27 +149,25 @@ const ButtonShowcaseCard: React.FC = () => {
   );
 };
 
-const spacingStyles = createSpacingStyles();
-
 const styles = StyleSheet.create({
   showcaseCard: {
-    ...spacingStyles.cardSpacing,
+    marginBottom: spacing.md,
   },
   cardTitle: {
-    ...spacingStyles.elementSpacing,
+    marginBottom: spacing.md,
     color: colors.text.primary,
   },
   buttonSection: {
-    ...spacingStyles.sectionSpacing,
+    marginBottom: spacing.lg,
   },
   subsectionTitle: {
-    ...spacingStyles.subsectionSpacing,
+    marginBottom: spacing.sm,
     color: colors.text.secondary,
   },
   buttonRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: cardSpacing.sm,
+    gap: spacing.sm,
   },
 });
 

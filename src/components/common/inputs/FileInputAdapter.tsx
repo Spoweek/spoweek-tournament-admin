@@ -16,8 +16,9 @@ try {
   console.warn('expo-document-picker not available:', error);
 }
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { colors } from '../../../styles/colors';
-import { typography } from '../../../styles/typography';
+import { colors, typography } from '../styles';
+import { useFocus, useHover } from '../hooks';
+import { InputIcon, ClearButton } from '../components';
 import type { InputAdapterProps } from './LabeledField';
 
 // File type presets for common use cases
@@ -55,8 +56,9 @@ const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
   accept = 'all',
   maxFiles = 10,
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  // Use shared hooks
+  const { isFocused, handleFocus, handleBlur } = useFocus({ onFocus, onBlur });
+  const { isHovered, hoverProps } = useHover();
 
   // Resolve accept types - either use preset or custom array
   const getAcceptTypes = useCallback(() => {
@@ -75,8 +77,7 @@ const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
     }
 
     try {
-      onFocus?.();
-      setIsFocused(true);
+      handleFocus();
 
       const acceptTypes = getAcceptTypes();
       const result = await DocumentPicker.getDocumentAsync({
@@ -111,8 +112,7 @@ const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
       console.error('Error picking file:', error);
       Alert.alert('Error', 'Failed to pick file. Please try again.');
     } finally {
-      setIsFocused(false);
-      onBlur?.();
+      handleBlur();
     }
   }, [disabled, onFocus, onBlur, onChange, getAcceptTypes, allowMultiple, maxFiles]);
 
@@ -147,12 +147,7 @@ const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
         disabled={disabled}
         activeOpacity={0.7}
       >
-        <Ionicons 
-          name="document-outline" 
-          size={16} 
-          color={colors.text.primary} 
-          style={styles.icon} 
-        />
+        <InputIcon name="document-outline" />
         <Text style={[
           styles.inputText,
           !hasFiles && styles.placeholderText,
@@ -161,25 +156,11 @@ const FileInputAdapter: React.FC<FileInputAdapterProps> = ({
           {getDisplayText()}
         </Text>
         {hasFiles && (
-          <TouchableOpacity
-            style={[
-              styles.clearButton,
-              isHovered && styles.hoveredClearButton
-            ]}
+          <ClearButton
             onPress={handleClear}
             disabled={disabled}
-            activeOpacity={0.7}
-            {...(Platform.OS === 'web' ? {
-              onMouseEnter: () => setIsHovered(true),
-              onMouseLeave: () => setIsHovered(false)
-            } : {})}
-          >
-            <Ionicons 
-              name="close" 
-              size={16} 
-              color={disabled ? colors.neutral[300] : colors.text.secondary} 
-            />
-          </TouchableOpacity>
+            {...hoverProps}
+          />
         )}
       </TouchableOpacity>
     </View>
@@ -204,9 +185,6 @@ const styles = StyleSheet.create({
   focusedInput: {
     // Focus styles will be handled by parent LabeledField
   },
-  icon: {
-    marginRight: 8,
-  },
   inputText: {
     ...typography.body,
     fontSize: 14,
@@ -220,13 +198,6 @@ const styles = StyleSheet.create({
   disabledText: {
     color: colors.neutral[500],
     fontSize: 14,
-  },
-  clearButton: {
-    borderRadius: 10,
-    backgroundColor: 'transparent',
-  },
-  hoveredClearButton: {
-    backgroundColor: colors.primary[100],
   },
 });
 
