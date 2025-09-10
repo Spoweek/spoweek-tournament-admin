@@ -4,6 +4,7 @@ import Card from '../../../components/common/Card';
 import { 
   LabeledField, 
   TextInputAdapter, 
+  EmailInputAdapter,
   SelectInputAdapter, 
   DateInputAdapter, 
   CheckboxInput 
@@ -71,7 +72,7 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             value={formValues.email}
             onChange={handleTextChange('email')}
             placeholder="Enter your email"
-            InputComponent={TextInputAdapter}
+            InputComponent={EmailInputAdapter}
             required={true}
             id="showcase-required-email"
             name="showcase-required-email"
@@ -165,7 +166,7 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
             value={formValues.inlineEmail}
             onChange={handleTextChange('inlineEmail')}
             placeholder="Enter your email"
-            InputComponent={TextInputAdapter}
+            InputComponent={EmailInputAdapter}
             inline={true}
             required={true}
             id="showcase-required-inline-email"

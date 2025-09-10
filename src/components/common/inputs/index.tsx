@@ -1,5 +1,6 @@
 export { default as LabeledField } from './LabeledField';
 export { default as TextInputAdapter } from './TextInputAdapter';
+export { default as EmailInputAdapter } from './EmailInputAdapter';
 export { default as SelectInputAdapter } from './SelectInputAdapter';
 export { default as TimeInputAdapter } from './TimeInputAdapter';
 export { default as DateInputAdapter } from './DateInputAdapter';
@@ -18,3 +19,4 @@ export type { TimeInputAdapterProps } from './TimeInputAdapter';
 export type { PhoneInputAdapterProps } from './PhoneInputAdapter';
 export type { FileInputAdapterProps, FileTypePreset } from './FileInputAdapter';
 export type { CheckboxInputProps } from './CheckboxInput';
+export type { EmailInputAdapterProps } from './EmailInputAdapter';
