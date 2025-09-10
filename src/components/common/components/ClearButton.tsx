@@ -29,6 +29,7 @@ export const ClearButton: React.FC<ClearButtonProps> = ({
       style={[
         styles.button,
         isHovered && styles.buttonHovered,
+        { pointerEvents: 'auto' },
         style,
       ]}
       hitSlop={hitSlop}

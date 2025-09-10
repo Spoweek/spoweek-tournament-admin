@@ -28,7 +28,7 @@ export const ModalOverlay: React.FC<ModalOverlayProps> = ({
       presentationStyle={presentationStyle}
     >
       <TouchableOpacity 
-        style={[styles.overlay, style]} 
+        style={[styles.overlay, { pointerEvents: 'auto' }, style]} 
         activeOpacity={1} 
         onPress={onClose}
       >

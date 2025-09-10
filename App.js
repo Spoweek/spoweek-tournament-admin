@@ -5,6 +5,10 @@ import { ThemeProvider } from './src/context/ThemeContext';
 import { GlobalStyles } from './src/components/common/GlobalStyles';
 import { useAppFonts } from './src/components/common';
 import AppNavigator from './src/navigation/AppNavigator';
+import { suppressSpecificWarnings } from './src/components/common';
+
+// Suppress specific React Native Web warnings
+suppressSpecificWarnings();
 
 export default function App() {
   const fontsLoaded = useAppFonts();

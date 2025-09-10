@@ -115,7 +115,8 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
             styles.option,
             isSelected && styles.selectedOption,
             isHovered && styles.hoveredOption,
-            index === filteredOptions.length - 1 && styles.lastOption
+            index === filteredOptions.length - 1 && styles.lastOption,
+            { pointerEvents: 'auto' }
           ]}
           onPress={() => handleSelect(item.value)}
           {...(Platform.OS === 'web' ? {
@@ -135,7 +136,8 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
           styles.option,
           isSelected && styles.selectedOption,
           isHovered && styles.hoveredOption,
-          index === filteredOptions.length - 1 && styles.lastOption
+          index === filteredOptions.length - 1 && styles.lastOption,
+          { pointerEvents: 'auto' }
         ]}
         onPress={() => handleSelect(item.value)}
         {...(Platform.OS === 'web' ? {
@@ -164,6 +166,7 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
           styles.selectContainer,
           disabled && styles.disabledContainer,
           isOpen && styles.dropdownOpenContainer,
+          { pointerEvents: 'auto' },
           style
         ]}
         onPress={handleOpen}

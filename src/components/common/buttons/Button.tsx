@@ -17,7 +17,7 @@ export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'e
 export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonBorderRadius = 'light' | 'full';
 
-export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
+export interface ButtonProps extends Omit<TouchableOpacityProps, 'style' | 'pointerEvents'> {
   children?: ReactNode;
   onPress?: () => void;
   disabled?: boolean;
@@ -47,6 +47,7 @@ const Button: React.FC<ButtonProps> = ({
   rightIcon,
   ...props
 }) => {
+  
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const fillAnimation = useRef(new Animated.Value(0)).current;
 
@@ -293,6 +294,7 @@ const Button: React.FC<ButtonProps> = ({
       <View
         style={[
           ...getButtonStyles(),
+          { pointerEvents: 'auto' },
           style,
         ]}
       >
