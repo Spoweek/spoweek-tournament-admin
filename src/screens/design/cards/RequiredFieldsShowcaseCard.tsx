@@ -7,7 +7,7 @@ import {
   EmailInputAdapter,
   SelectInputAdapter, 
   DateInputAdapter, 
-  CheckboxInput 
+  RadioInput 
 } from '../../../components/common/inputs';
 import { colors, typography, spacing } from '../../../components/common';
 
@@ -18,8 +18,8 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
     email: '',
     role: '',
     birthDate: '',
-    terms: false,
-    privacy: false,
+    terms: [],
+    privacy: [],
     // Inline examples
     inlineName: '',
     inlineEmail: '',
@@ -31,7 +31,7 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
     setFormValues(prev => ({ ...prev, [key]: String(value) }));
   };
 
-  const handleCheckboxChange = (key: string) => (value: boolean) => {
+  const handleRadioChange = (key: string) => (value: string | number | (string | number)[]) => {
     setFormValues(prev => ({ ...prev, [key]: value }));
   };
 
@@ -122,21 +122,23 @@ const RequiredFieldsShowcaseCard: React.FC = () => {
         <Text style={[typography.h4, styles.subsectionTitle]}>Checkbox Inputs</Text>
         
         <View style={styles.inputField}>
-          <CheckboxInput
+          <RadioInput
             label="Terms & Conditions"
+            options={[{ value: 'terms', label: 'I agree to the terms and conditions' }]}
             value={formValues.terms}
-            onChange={handleCheckboxChange('terms')}
-            text="I agree to the terms and conditions"
+            onChange={handleRadioChange('terms')}
+            allowMultiple={true}
             required={true}
           />
         </View>
         
         <View style={styles.inputField}>
-          <CheckboxInput
+          <RadioInput
             label="Privacy Policy"
+            options={[{ value: 'privacy', label: 'I have read and understood the privacy policy' }]}
             value={formValues.privacy}
-            onChange={handleCheckboxChange('privacy')}
-            text="I have read and understood the privacy policy"
+            onChange={handleRadioChange('privacy')}
+            allowMultiple={true}
             required={true}
           />
         </View>

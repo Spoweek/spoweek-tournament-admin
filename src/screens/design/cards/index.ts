@@ -7,7 +7,7 @@ export { default as TimeInputShowcaseCard } from './TimeInputShowcaseCard';
 export { default as DateInputShowcaseCard } from './DateInputShowcaseCard';
 export { default as DateTimeInputShowcaseCard } from './DateTimeInputShowcaseCard';
 export { default as FileInputShowcaseCard } from './FileInputShowcaseCard';
-export { default as CheckboxInputShowcaseCard } from './CheckboxInputShowcaseCard';
+export { default as RadioInputShowcaseCard } from './RadioInputShowcaseCard';
 export { default as RequiredFieldsShowcaseCard } from './RequiredFieldsShowcaseCard';
 export { default as CountryDataShowcaseCard } from './CountryDataShowcaseCard';
 export { default as PhoneInputShowcaseCard } from './PhoneInputShowcaseCard';

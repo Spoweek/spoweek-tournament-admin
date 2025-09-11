@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { colors, typography } from '../../components/common';
 import { globalStyles } from '../../components/common/GlobalStyles';
-import { ColorPaletteCard, ButtonShowcaseCard, InputShowcaseCard, PasswordInputShowcaseCard, SelectInputShowcaseCard, TimeInputShowcaseCard, DateInputShowcaseCard, DateTimeInputShowcaseCard, FileInputShowcaseCard, CheckboxInputShowcaseCard, RequiredFieldsShowcaseCard, CountryDataShowcaseCard, PhoneInputShowcaseCard } from './cards';
+import { ColorPaletteCard, ButtonShowcaseCard, InputShowcaseCard, PasswordInputShowcaseCard, SelectInputShowcaseCard, TimeInputShowcaseCard, DateInputShowcaseCard, DateTimeInputShowcaseCard, FileInputShowcaseCard, RadioInputShowcaseCard, RequiredFieldsShowcaseCard, CountryDataShowcaseCard, PhoneInputShowcaseCard } from './cards';
 
 
 const DesignShowcaseScreen: React.FC = () => {
@@ -113,7 +113,7 @@ const DesignShowcaseScreen: React.FC = () => {
           paddingHorizontal: 6,
           paddingBottom: 16
         }]}>
-          <CheckboxInputShowcaseCard />
+          <RadioInputShowcaseCard />
         </View>
         
         <View style={[styles.gridItem, { 
