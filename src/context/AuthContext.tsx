@@ -36,7 +36,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const checkAuthStatus = async (): Promise<void> => {
     try {
-      const token = localStorage.getItem('auth_token');
+      // Check if we're on web platform
+      const token = typeof window !== 'undefined' && window.localStorage 
+        ? window.localStorage.getItem('auth_token')
+        : null;
+      
       if (token) {
         // You can add a token validation API call here
         // const userData = await authService.getCurrentUser();
@@ -45,7 +49,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      localStorage.removeItem('auth_token');
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem('auth_token');
+      }
     } finally {
       setLoading(false);
     }
@@ -67,8 +73,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (response.ok) {
         setUser(data.user || { email });
         setIsAuthenticated(true);
-        if (data.token) {
-          localStorage.setItem('auth_token', data.token);
+        if (data.token && typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem('auth_token', data.token);
         }
         return { success: true, data };
       } else {
@@ -83,7 +89,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = (): void => {
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('auth_token');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem('auth_token');
+    }
   };
 
   const value: AuthContextValue = {

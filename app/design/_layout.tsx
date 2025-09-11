@@ -1,19 +1,15 @@
-import React, { ReactNode } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ViewStyle, TextStyle } from 'react-native';
-import { useAuth } from '../context/AuthContext';
+import React from 'react';
+import { Stack } from 'expo-router';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useAuth } from '../../src/context/AuthContext';
 
-export interface MainLayoutProps {
-  children: ReactNode;
-  title: string;
-}
-
-const MainLayout: React.FC<MainLayoutProps> = ({ children, title }) => {
+export default function DesignLayout() {
   const { user, logout } = useAuth();
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>{title}</Text>
+        <Text style={styles.headerTitle}>Design System</Text>
         <View style={styles.headerRight}>
           <Text style={styles.userInfo}>Welcome, {user?.email || 'Guest'}</Text>
           <TouchableOpacity style={styles.logoutButton} onPress={logout}>
@@ -22,11 +18,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, title }) => {
         </View>
       </View>
       <View style={styles.content}>
-        {children}
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+        </Stack>
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -73,5 +71,3 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
-
-export default MainLayout;

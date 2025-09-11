@@ -1,62 +1,53 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ViewStyle, TextStyle } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import MainLayout from '../../layouts/MainLayout';
-import { shadows } from '../../components/common';
+import { Link } from 'expo-router';
+import { shadows } from '../../src/components/common';
 
 interface MenuItem {
   title: string;
   description: string;
-  screen: string;
+  href: string;
   color: string;
 }
 
-const DashboardScreen: React.FC = () => {
-  const navigation = useNavigation();
-
+export default function DashboardScreen() {
   const menuItems: MenuItem[] = [
     {
       title: 'Manage Users',
       description: 'View, add, and manage user accounts',
-      screen: 'Users',
+      href: '/users',
       color: '#4CAF50',
     },
     {
       title: 'Manage Tournaments',
       description: 'Create and manage tournaments',
-      screen: 'Tournaments',
+      href: '/tournaments',
       color: '#2196F3',
     },
     {
       title: 'Reports',
       description: 'View analytics and reports',
-      screen: 'Reports',
+      href: '/reports',
       color: '#FF9800',
     },
     {
-      title: 'Settings',
-      description: 'Configure application settings',
-      screen: 'Settings',
+      title: 'Design System',
+      description: 'View and test UI components',
+      href: '/design',
       color: '#9C27B0',
     },
   ];
 
-  const handleNavigate = (screen: string): void => {
-    navigation.navigate(screen as never);
-  };
-
   return (
-    <MainLayout title="Dashboard">
-      <ScrollView style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome to Tournament Admin</Text>
-        <Text style={styles.subtitle}>Choose an option below to get started</Text>
-        
-        <View style={styles.menuGrid}>
-          {menuItems.map((item, index) => (
+    <ScrollView style={styles.container}>
+      <Text style={styles.welcomeText}>Welcome to Tournament Admin</Text>
+      <Text style={styles.subtitle}>Choose an option below to get started</Text>
+      
+      <View style={styles.menuGrid}>
+        {menuItems.map((item, index) => (
+          <Link key={index} href={item.href} asChild>
             <TouchableOpacity
-              key={index}
               style={[styles.menuItem, { borderLeftColor: item.color }]}
-              onPress={() => handleNavigate(item.screen)}
             >
               <View style={styles.menuContent}>
                 <Text style={styles.menuTitle}>{item.title}</Text>
@@ -66,12 +57,12 @@ const DashboardScreen: React.FC = () => {
                 <Text style={styles.menuIconText}>{item.title.charAt(0)}</Text>
               </View>
             </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    </MainLayout>
+          </Link>
+        ))}
+      </View>
+    </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -126,5 +117,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default DashboardScreen;

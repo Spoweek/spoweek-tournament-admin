@@ -19,7 +19,7 @@ The SPOWEEK Tournament Admin is a comprehensive administrative dashboard designe
 ### Technology Stack
 
 - **Frontend**: React Native with Expo
-- **Navigation**: React Navigation v7
+- **Navigation**: Expo Router (file-based routing)
 - **State Management**: React Context API
 - **Styling**: React Native StyleSheet
 - **Backend Integration**: Laravel API
@@ -29,26 +29,29 @@ The SPOWEEK Tournament Admin is a comprehensive administrative dashboard designe
 
 ```
 spoweek-tournament-admin/
+├── app/                   # Expo Router file-based routing
+│   ├── _layout.tsx        # Root layout
+│   ├── index.tsx          # Home page (auth redirect)
+│   ├── login/             # Login screens
+│   │   └── index.tsx      # Login page
+│   ├── dashboard/         # Dashboard screens
+│   │   └── index.tsx      # Dashboard page
+│   └── design/            # Design system screens
+│       └── index.tsx      # Design showcase page
 ├── src/
-│   ├── components/          # Reusable UI components
-│   │   ├── common/         # Generic components
-│   │   ├── forms/          # Form-specific components
-│   │   └── layout/         # Layout components
-│   ├── screens/            # Page components
-│   │   ├── auth/          # Authentication screens
-│   │   ├── dashboard/     # Dashboard screens
-│   │   ├── users/         # User management screens
-│   │   └── tournaments/   # Tournament screens
-│   ├── navigation/         # Navigation configuration
-│   ├── layouts/           # Layout components
-│   ├── context/           # React Context for state
-│   ├── services/          # API and business logic
-│   └── utils/             # Utility functions
-├── config.js              # Environment configuration
-├── App.js                 # Main application entry point
-├── package.json           # Dependencies and scripts
-├── Dockerfile            # Container configuration
-└── docker-compose.yml    # Multi-container setup
+│   ├── components/        # Reusable UI components
+│   │   ├── common/       # Generic components
+│   │   ├── design/       # Design system components
+│   │   └── forms/        # Form-specific components
+│   ├── layouts/          # Layout components
+│   ├── context/          # React Context for state
+│   ├── services/         # API and business logic
+│   └── utils/            # Utility functions
+├── config.js             # Environment configuration
+├── App.js                # Expo Router entry point
+├── package.json          # Dependencies and scripts
+├── Dockerfile           # Container configuration
+└── docker-compose.yml   # Multi-container setup
 ```
 
 ## 🚀 Getting Started
@@ -189,11 +192,11 @@ docker-compose build
 
 #### 4. Navigation Errors
 
-**Error**: `Unable to resolve "./src/navigation/AppNavigator"`
+**Error**: `Unable to resolve expo-router`
 
 **Solution**:
-- Ensure all files in `src/` directory are present
-- Check file permissions
+- Ensure expo-router is installed: `npm install expo-router`
+- Check that app.json has expo-router configuration
 - Rebuild the container
 
 ### Debug Commands

@@ -1,11 +1,8 @@
-import React, { useEffect, ReactNode } from 'react';
-import { View, ScrollView, StyleSheet, Platform, ViewStyle } from 'react-native';
+import React, { useEffect } from 'react';
+import { Stack } from 'expo-router';
+import { View, ScrollView, StyleSheet, Platform } from 'react-native';
 
-export interface AuthLayoutProps {
-  children: ReactNode;
-}
-
-const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
+export default function LoginLayout() {
   // Fix body overflow on web
   useEffect(() => {
     if (Platform.OS === 'web') {
@@ -22,17 +19,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
     }
   }, []);
 
-  // Use different components for web vs native
-  if (Platform.OS === 'web') {
-    return (
-      <View style={styles.webContainer}>
-        <View style={styles.webContent}>
-          {children}
-        </View>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <ScrollView 
@@ -46,37 +32,19 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         alwaysBounceVertical={false}
       >
         <View style={styles.content}>
-          {children}
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+          </Stack>
         </View>
       </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  // Web-specific styles (body scrolling enabled)
-  webContainer: {
-    ...Platform.select({
-      web: {
-        minHeight: '100vh' as any,
-        display: 'flex' as any,
-      },
-      default: {
-        minHeight: '100%',
-      },
-    }),
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  webContent: {
-    width: '100%',
-    maxWidth: 700,
   },
   scrollView: {
     flex: 1,
@@ -92,6 +60,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 40,
     ...Platform.select({
       web: {
@@ -104,9 +73,6 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    maxWidth: 400,
-    padding: 20,
+    alignItems: 'center',
   },
 });
-
-export default AuthLayout;
