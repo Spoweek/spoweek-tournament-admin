@@ -8,3 +8,5 @@ export * from './ChevronIcon';
 export * from './ValidationIndicator';
 export * from './ToggleVisibility';
 export * from './IconContainer';
+export * from './Label';
+export * from './Description';

@@ -9,6 +9,8 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { colors } from '../styles';
 import { typography } from '../styles';
+import Label from '../components/Label';
+import Description from '../components/Description';
 
 export interface RadioOption {
   value: string | number;
@@ -107,18 +109,18 @@ const RadioInput: React.FC<RadioInputProps> = ({
   return (
     <View style={[styles.container, style]}>
       {label && (
-        <View style={styles.labelContainer}>
-          <Text style={[styles.label, disabled && styles.disabledLabel]}>
-            {label}
-          </Text>
-          {required && <View style={styles.requiredIndicator} />}
-        </View>
+        <Label
+          required={required}
+          disabled={disabled}
+        >
+          {label}
+        </Label>
       )}
 
-      {description !== '' && (
-        <Text style={[styles.description, disabled && styles.disabledDescription]}>
+      {description && (
+        <Description disabled={disabled}>
           {description}
-        </Text>
+        </Description>
       )}
       
       <View style={[
@@ -167,36 +169,6 @@ const RadioInput: React.FC<RadioInputProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-  },
-  labelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  label: {
-    ...typography.body,
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.text.primary,
-  },
-  disabledLabel: {
-    color: colors.neutral[500],
-  },
-  requiredIndicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.error[500],
-    marginLeft: 4,
-  },
-  description: {
-    ...typography.body,
-    fontSize: 14,
-    color: colors.text.secondary,
-    marginBottom: 8,
-  },
-  disabledDescription: {
-    color: colors.neutral[500],
   },
   optionsContainer: {
     gap: 12,

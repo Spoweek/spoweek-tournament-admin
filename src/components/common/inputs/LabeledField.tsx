@@ -2,6 +2,8 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
 import { colors } from '../styles';
+import Label from '../components/Label';
+import Description from '../components/Description';
 export type InputAdapterProps<T = any> = {
   value: T;
   onChange: (val: T) => void;
@@ -98,7 +100,6 @@ export function LabeledField<T = any>({
       containerStyle, 
     ]}>
       <View style={[
-        styles.labelContainer,
         inline && styles.inlineLabelContainer,
         { 
           borderBottomLeftRadius: radius,
@@ -109,16 +110,21 @@ export function LabeledField<T = any>({
           borderColor: colors.primary[500],
         },
       ]}>
-        <Text style={[
-          styles.label, 
-          inline && styles.inlineLabel, 
-          labelStyle,
-        ]}>{label}</Text>
-        {required && <View style={styles.requiredIndicator} />}
+        <Label
+          required={required}
+          disabled={disabled}
+          inline={inline}
+          style={labelStyle}
+          containerStyle={inline ? undefined : styles.labelContainer}
+        >
+          {label}
+        </Label>
       </View>
 
       {description && (
-        <Text style={styles.description}>{description}</Text>
+        <Description disabled={disabled}>
+          {description}
+        </Description>
       )}
 
       <View
@@ -203,26 +209,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderRightWidth: 1,
     borderRightColor: colors.gray[300],
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#222',
-  },
-  inlineLabel: {
-    fontWeight: '400',
-  },
-  requiredIndicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.error[500],
-    marginLeft: 4,
-  },
-  description: {
-    fontSize: 14,
-    color: colors.text.secondary,
-    marginBottom: 8,
   },
   inputWrapper: {
     borderWidth: 1,
