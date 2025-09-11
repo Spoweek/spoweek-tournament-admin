@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, Platform } from 'react-native';
 import { colors, typography } from '../../src/components/common';
 import { useAuth } from '../../src/context/AuthContext';
 import { LabeledField, EmailInputAdapter, PasswordInputAdapter } from '../../src/components/common/inputs';
@@ -141,15 +141,14 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     width: 600,
-    maxWidth: '100vw',
     alignItems: 'center',
   },
   logo: {
     marginBottom: 20,
   },
   card: {
-    width: '100%',
-    maxWidth: 600,
+    width: 600,
+    maxWidth: Platform.OS === 'web' ? '100vw' as any : '100%',
   },
   title: {
     textAlign: 'center',

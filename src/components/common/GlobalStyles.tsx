@@ -39,6 +39,7 @@ export const GlobalStyles: React.FC<GlobalStylesProps> = ({ children }) => {
           -moz-osx-font-smoothing: grayscale;
           text-rendering: optimizeLegibility;
           font-smooth: always;
+          box-sizing: border-box;
         }
         input:focus {
           outline: none !important;
