@@ -46,7 +46,6 @@ const TouchableScreenArea: React.FC<TouchableScreenAreaProps> = ({
     <Pressable
       style={({ pressed }) => [
         style,
-        pressed && { opacity: 0.8 }
       ]}
       onPress={handlePress}
       onPressIn={handlePressIn}

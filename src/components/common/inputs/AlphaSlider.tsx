@@ -37,7 +37,6 @@ const AlphaSlider: React.FC<AlphaSliderProps> = ({
   const handlePress = (event: any) => {
     const x = event.x;
     const newAlpha = Math.max(0, Math.min(1, x / width));
-    console.log('Alpha slider click:', { x, newAlpha });
     setAlpha(newAlpha);
     onAlphaChange(newAlpha);
   };
@@ -127,17 +126,13 @@ const styles = StyleSheet.create({
   alphaSliderThumb: {
     position: 'absolute',
     top: -2,
-    width: 4,
+    width: 8,
     height: 24,
-    backgroundColor: 'white',
+    transform: [{ translateX: -4 }],
+    backgroundColor: 'black',
     borderRadius: 2,
     borderWidth: 1,
-    borderColor: colors.border.light,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 3,
+    borderColor: 'white',
   },
   shadow: shadows.small,
   fallbackGradient: {

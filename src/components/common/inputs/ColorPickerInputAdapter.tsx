@@ -180,6 +180,7 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
 
   // Update HSV values when color changes
   // Calculate HSV and HSL values from current color
+  const hex = useMemo(() => rgbToHex(currentColor), [currentColor]);
   const hsv = useMemo(() => rgbToHsv(currentColor), [currentColor]);
   const hsl = useMemo(() => rgbToHsl(currentColor), [currentColor]);
 
@@ -235,6 +236,10 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
 
   const handleManualInputChange = (text: string) => {
     setManualInput(text);
+
+    if (text.length < 8) {1
+      text = text.padEnd(8, '0');
+    }
     
     // Try to parse the input and update color
     try {
@@ -359,60 +364,62 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
             >
               <View ref={dropdownContentRef} style={styles.colorPickerDropdown}>
                 <View style={styles.colorPickerContent}>
+                  {/* Color Screen */}
+                  <ColorScreen
+                    hue={hsv.h}
+                    saturation={hsv.s}
+                    value={hsv.v}
+                    onSaturationValueChange={(newSaturation, newValue) => {
+                      const newHsv = { h: hsv.h, s: newSaturation, v: newValue, a: currentColor.a };
+                      const newColor = hsvToRgb(newHsv);
+                      handleColorChange(newColor);
+                    }}
+                  />
+                  
+                  {/* Hue Slider */}
+                  <HueSlider
+                    hue={hsv.h}
+                    onHueChange={(newHue) => {
+                      if (newHue >= 360) {
+                        newHue = newHue % 360;
+                      }
+                      const newHsv = { h: newHue, s: hsv.s, v: hsv.v, a: currentColor.a };
+                      const newColor = hsvToRgb(newHsv);
+                      handleColorChange(newColor);
+                    }}
+                  />
 
-            {/* Color Screen */}
-            <ColorScreen
-              hue={hsv.h}
-              saturation={hsv.s}
-              value={hsv.v}
-              onSaturationValueChange={(newSaturation, newValue) => {
-                const newHsv = { h: hsv.h, s: newSaturation, v: newValue, a: currentColor.a };
-                const newColor = hsvToRgb(newHsv);
-                handleColorChange(newColor);
-              }}
-            />
-              
-              {/* Hue Slider */}
-              <HueSlider
-                hue={hsv.h}
-                onHueChange={(newHue) => {
-                  const newHsv = { h: newHue, s: hsv.s, v: hsv.v, a: currentColor.a };
-                  const newColor = hsvToRgb(newHsv);
-                  handleColorChange(newColor);
-                }}
-              />
-            </View>
+                  {/* Alpha Slider */}
+                  <AlphaSlider
+                    alpha={currentColor.a}
+                    color={{ r: currentColor.r, g: currentColor.g, b: currentColor.b }}
+                    onAlphaChange={(newAlpha) => {
+                      const newColor = { ...currentColor, a: newAlpha };
+                      handleColorChange(newColor);
+                    }}
+                  />
 
-            {/* Alpha Slider */}
-            <AlphaSlider
-              alpha={currentColor.a}
-              color={{ r: currentColor.r, g: currentColor.g, b: currentColor.b }}
-              onAlphaChange={(newAlpha) => {
-                const newColor = { ...currentColor, a: newAlpha };
-                handleColorChange(newColor);
-              }}
-            />
-
-            {/* Color Mode Selector */}
-            <View style={styles.modeSelector}>
-              {(['hex', 'rgb', 'hsv', 'hsl'] as ColorMode[]).map((mode) => (
-                <TouchableOpacity
-                  key={mode}
-                  style={[
-                    styles.modeButton,
-                    colorMode === mode && styles.activeModeButton
-                  ]}
-                  onPress={() => handleModeButtonPress(mode)}
-                >
-                  <Text style={[
-                    styles.modeButtonText,
-                    colorMode === mode && styles.activeModeButtonText
-                  ]}>
-                    {mode.toUpperCase()}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                  {/* Color Mode Selector */}
+                  <View style={styles.modeSelector}>
+                    {(['hex', 'rgb', 'hsv', 'hsl'] as ColorMode[]).map((mode) => (
+                      <TouchableOpacity
+                        key={mode}
+                        style={[
+                          styles.modeButton,
+                          colorMode === mode && styles.activeModeButton
+                        ]}
+                        onPress={() => handleModeButtonPress(mode)}
+                      >
+                        <Text style={[
+                          styles.modeButtonText,
+                          colorMode === mode && styles.activeModeButtonText
+                        ]}>
+                          {mode.toUpperCase()}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View> 
 
             {/* Manual Input Fields */}
             <View style={styles.manualInputSection}>
@@ -595,6 +602,9 @@ const styles = StyleSheet.create({
   },
   colorPickerContent: {
     flex: 1,
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
   },
   modeSelector: {
     flexDirection: 'row',
