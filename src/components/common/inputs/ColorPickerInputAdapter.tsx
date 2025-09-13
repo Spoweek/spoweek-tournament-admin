@@ -157,6 +157,9 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
 }) => {
   const [colorMode, setColorMode] = useState<ColorMode>('hex');
   const [manualInput, setManualInput] = useState('');
+  const [independentHue, setIndependentHue] = useState(0);
+  const [independentSaturation, setIndependentSaturation] = useState(0);
+  const [independentLightness, setIndependentLightness] = useState(0);
   
   const colorPickerRef = useRef<any>(null);
   const dropdownContentRef = useRef<any>(null);
@@ -366,7 +369,7 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
                 <View style={styles.colorPickerContent}>
                   {/* Color Screen */}
                   <ColorScreen
-                    hue={hsv.h}
+                    hue={independentHue}
                     saturation={hsv.s}
                     value={hsv.v}
                     onSaturationValueChange={(newSaturation, newValue) => {
@@ -378,11 +381,12 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
                   
                   {/* Hue Slider */}
                   <HueSlider
-                    hue={hsv.h}
+                    hue={independentHue}
                     onHueChange={(newHue) => {
                       if (newHue >= 360) {
                         newHue = newHue % 360;
                       }
+                      setIndependentHue(newHue);
                       const newHsv = { h: newHue, s: hsv.s, v: hsv.v, a: currentColor.a };
                       const newColor = hsvToRgb(newHsv);
                       handleColorChange(newColor);
@@ -428,7 +432,7 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
                 <View style={styles.inputFieldContainer}>
 
                     <SimpleWrappedInput
-                        value={manualInput.replace('#', '')}
+                        value={hex.replace('#', '')}
                         onChangeText={(text) => handleManualInputChange('#' + text)}
                         label="#"
                         placeholder="00000000"

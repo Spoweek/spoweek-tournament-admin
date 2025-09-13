@@ -40,8 +40,6 @@ const ColorScreen: React.FC<ColorScreenProps> = ({
     const newSaturation = Math.max(0, Math.min(1, x / size));
     const newValue = Math.max(0, Math.min(1, 1 - (y / size)));
     
-    console.log('Color screen click:', { x, y, newSaturation, newValue });
-    
     setSaturation(newSaturation);
     setValue(newValue);
     onSaturationValueChange(newSaturation, newValue);
