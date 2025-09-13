@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import TouchableScreenArea from '../components/TouchableScreenArea';
-import { colors, shadows } from '../styles';
+import TouchableScreenArea from '../../components/TouchableScreenArea';
+import { colors, shadows } from '../../styles';
 
 interface AlphaSliderProps {
   alpha: number;

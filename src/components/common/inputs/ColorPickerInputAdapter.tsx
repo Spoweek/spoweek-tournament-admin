@@ -7,9 +7,9 @@ import DropdownContainer from '../components/DropdownContainer';
 import ClearButton from '../components/ClearButton';
 import ChevronIcon from '../components/ChevronIcon';
 import SimpleWrappedInput from '../components/SimpleWrappedInput';
-import ColorScreen from './ColorScreen';
-import HueSlider from './HueSlider';
-import AlphaSlider from './AlphaSlider';
+import ColorScreen from './screens/ColorScreen';
+import HueSlider from './screens/HueSlider';
+import AlphaSlider from './screens/AlphaSlider';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import type { InputAdapterProps } from './LabeledField';
 

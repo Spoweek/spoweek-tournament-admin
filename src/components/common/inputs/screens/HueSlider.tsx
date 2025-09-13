@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
-import TouchableScreenArea from '../components/TouchableScreenArea';
-import { colors, shadows } from '../styles';
+import TouchableScreenArea from '../../components/TouchableScreenArea';
+import { colors, shadows } from '../../styles';
 
 interface HueSliderProps {
   hue: number;
