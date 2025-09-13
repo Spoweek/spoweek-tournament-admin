@@ -1,9 +1,8 @@
-import React, { useState, useRef, useMemo } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useMemo, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { colors, typography } from '../styles';
 import { useDropdown } from '../hooks';
-import { Modal } from 'react-native';
 import DropdownContainer from '../components/DropdownContainer';
 import ClearButton from '../components/ClearButton';
 import ChevronIcon from '../components/ChevronIcon';
@@ -17,7 +16,6 @@ import type { InputAdapterProps } from './LabeledField';
 export interface ColorPickerInputAdapterProps extends InputAdapterProps<string> {
   placeholder?: string;
   borderRadius?: 'light' | 'full';
-  inline?: boolean;
   showClearButton?: boolean;
   onDropdownStateChange?: (isOpen: boolean) => void;
   containerRef?: React.RefObject<any>;
@@ -102,10 +100,8 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
   disabled = false,
   borderRadius = 'light',
   style,
-  onFocus,
   onBlur,
   onDropdownStateChange,
-  inline = false,
   showClearButton = true,
   calculatedRadius,
   containerRef,
@@ -113,13 +109,8 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
   name,
 }) => {
   const [colorMode, setColorMode] = useState<ColorMode>('hex');
-  const [manualInput, setManualInput] = useState('');
   const [independentHue, setIndependentHue] = useState(0);
-  const [independentSaturation, setIndependentSaturation] = useState(0);
-  const [independentLightness, setIndependentLightness] = useState(0);
-  
-  const colorPickerRef = useRef<any>(null);
-  const dropdownContentRef = useRef<any>(null);
+  const [hexInput, setHexInput] = useState('');
 
   // Use shared hooks
   const { isOpen, dropdownLayout, openDropdown, closeDropdown } = useDropdown({
@@ -160,7 +151,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
 
   const handleOpen = () => {
     if (!disabled) {
-      setManualInput(getCurrentColorInMode(colorMode));
       openDropdown();
     }
   };
@@ -176,33 +166,33 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
     onBlur?.();
   };
 
-  const handleColorChange = (newColor: ColorValue) => {
+  const handleColorChange = (newColor: ColorValue, updateHexInput = true) => {
     const hexValue = rgbToHex(newColor);
     onChange(hexValue);
+    if (updateHexInput) {
+      setHexInput(hexValue.replace('#', ''));
+    }
   };
 
   const handleModeChange = (mode: ColorMode) => {
     setColorMode(mode);
-    setManualInput(getCurrentColorInMode(mode));
   };
 
   const handleModeButtonPress = (mode: ColorMode) => {
     handleModeChange(mode);
   };
 
-  const handleManualInputChange = (text: string) => {
-    setManualInput(text);
-
-    if (text.length < 8) {1
+  const handleHexInputChange = (text: string) => {
+    setHexInput(text);
+    // Ensure text is properly formatted
+    if (text.length < 8) {
       text = text.padEnd(8, '0');
     }
     
     // Try to parse the input and update color
     try {
-      if (colorMode === 'hex') {
-        const newColor = hexToRgb(text);
-        handleColorChange(newColor);
-      }
+      const newColor = hexToRgb('#' + text);
+      handleColorChange(newColor, false);
     } catch (error) {
       // Invalid input, don't update color
     }
@@ -216,7 +206,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
     };
     const newHsv = rgbToHsv(newColor);
     setIndependentHue(newHsv.h);
-    setIndependentSaturation(newHsv.s);
     handleColorChange(newColor);
   };
 
@@ -246,7 +235,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        ref={colorPickerRef}
         style={[
           styles.colorPickerContainer,
           disabled && styles.disabledContainer,
@@ -307,7 +295,7 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
               borderRadius={calculatedRadius || 8}
               maxHeight={400}
             >
-              <View ref={dropdownContentRef} style={styles.colorPickerDropdown}>
+              <View style={styles.colorPickerDropdown}>
                 <View style={styles.colorPickerContent}>
                   {/* Color Screen */}
                   <ColorScreen
@@ -376,10 +364,9 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
               {/* HEX Input */}
               {colorMode === 'hex' && (
                 <View style={styles.inputFieldContainer}>
-
                     <SimpleWrappedInput
-                        value={hex.replace('#', '')}
-                        onChangeText={(text) => handleManualInputChange('#' + text)}
+                        value={hexInput}
+                        onChangeText={handleHexInputChange}
                         label="#"
                         placeholder="00000000"
                         maxLength={8}
@@ -424,7 +411,7 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
               {colorMode === 'hsv' && (
                 <View style={styles.inputFieldContainer}>
                     <SimpleWrappedInput
-                        value={independentHue.toString()}
+                        value={Math.round(independentHue).toString()}
                         onChangeText={(text) => handleHsvInputChange('h', text)}
                         label="H"
                         placeholder="0"
@@ -546,32 +533,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     flex: 1,
-  },
-  inputWithPrefix: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  inputPrefix: {
-    backgroundColor: colors.neutral[100],
-    borderWidth: 1,
-    borderColor: colors.neutral[300],
-    borderRightWidth: 0,
-    borderTopLeftRadius: 4,
-    borderBottomLeftRadius: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inputPrefixText: {
-    ...typography.body,
-    fontSize: 14,
-    color: colors.text.tertiary,
-    fontFamily: 'monospace',
-  },
-  hexInput: {
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
   },
 });
 
