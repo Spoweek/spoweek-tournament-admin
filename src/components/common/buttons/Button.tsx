@@ -338,7 +338,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 44,
-    ...typography.button,
     overflow: 'hidden', // Ensure the fill animation stays within bounds
   },
   

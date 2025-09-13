@@ -1,9 +1,8 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Platform, ViewStyle } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { colors, typography, uiLayers } from '../styles';
+import { colors, typography } from '../styles';
 import { useDropdown } from '../hooks';
-import ModalOverlay from '../components/ModalOverlay';
 import { Modal } from 'react-native';
 import DropdownContainer from '../components/DropdownContainer';
 import ClearButton from '../components/ClearButton';
@@ -12,6 +11,7 @@ import SimpleWrappedInput from '../components/SimpleWrappedInput';
 import ColorScreen from './ColorScreen';
 import HueSlider from './HueSlider';
 import AlphaSlider from './AlphaSlider';
+import { PrimaryButton, SecondaryButton } from '../buttons';
 import type { InputAdapterProps } from './LabeledField';
 
 export interface ColorPickerInputAdapterProps extends InputAdapterProps<string> {
@@ -25,7 +25,7 @@ export interface ColorPickerInputAdapterProps extends InputAdapterProps<string> 
   name?: string;
 }
 
-type ColorMode = 'hex' | 'rgb' | 'hsv' | 'hsl';
+type ColorMode = 'hex' | 'rgb' | 'hsv';
 
 interface ColorValue {
   r: number;
@@ -94,49 +94,6 @@ const hsvToRgb = (hsv: { h: number; s: number; v: number; a: number }): ColorVal
   };
 };
 
-const rgbToHsl = (color: ColorValue): { h: number; s: number; l: number; a: number } => {
-  const { r, g, b, a } = color;
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const diff = max - min;
-  
-  let h = 0;
-  if (diff !== 0) {
-    if (max === r) h = ((g - b) / diff) % 6;
-    else if (max === g) h = (b - r) / diff + 2;
-    else h = (r - g) / diff + 4;
-  }
-  h = Math.round(h * 60);
-  if (h < 0) h += 360;
-  
-  const l = (max + min) / 2;
-  const s = l === 0 || l === 1 ? 0 : diff / (1 - Math.abs(2 * l - 1));
-  
-  return { h, s, l, a };
-};
-
-const hslToRgb = (hsl: { h: number; s: number; l: number; a: number }): ColorValue => {
-  const { h, s, l, a } = hsl;
-  const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-  const m = l - c / 2;
-  
-  let r = 0, g = 0, b = 0;
-  
-  if (h >= 0 && h < 60) { r = c; g = x; b = 0; }
-  else if (h >= 60 && h < 120) { r = x; g = c; b = 0; }
-  else if (h >= 120 && h < 180) { r = 0; g = c; b = x; }
-  else if (h >= 180 && h < 240) { r = 0; g = x; b = c; }
-  else if (h >= 240 && h < 300) { r = x; g = 0; b = c; }
-  else if (h >= 300 && h < 360) { r = c; g = 0; b = x; }
-  
-  return {
-    r: Math.round((r + m) * 255),
-    g: Math.round((g + m) * 255),
-    b: Math.round((b + m) * 255),
-    a
-  };
-};
 
 const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
   value,
@@ -182,10 +139,9 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
   }, [value]);
 
   // Update HSV values when color changes
-  // Calculate HSV and HSL values from current color
+  // Calculate HSV values from current color
   const hex = useMemo(() => rgbToHex(currentColor), [currentColor]);
   const hsv = useMemo(() => rgbToHsv(currentColor), [currentColor]);
-  const hsl = useMemo(() => rgbToHsl(currentColor), [currentColor]);
 
   // Get current color in different formats
   const getCurrentColorInMode = (mode: ColorMode): string => {
@@ -197,9 +153,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
       case 'hsv':
         const hsv = rgbToHsv(currentColor);
         return `hsv(${Math.round(hsv.h)}, ${Math.round(hsv.s * 100)}%, ${Math.round(hsv.v * 100)}%)`;
-      case 'hsl':
-        const hsl = rgbToHsl(currentColor);
-        return `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s * 100)}%, ${Math.round(hsl.l * 100)}%)`;
       default:
         return rgbToHex(currentColor);
     }
@@ -394,23 +347,27 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
 
                   {/* Color Mode Selector */}
                   <View style={styles.modeSelector}>
-                    {(['hex', 'rgb', 'hsv'] as ColorMode[]).map((mode) => (
-                      <TouchableOpacity
-                        key={mode}
-                        style={[
-                          styles.modeButton,
-                          colorMode === mode && styles.activeModeButton
-                        ]}
-                        onPress={() => handleModeButtonPress(mode)}
-                      >
-                        <Text style={[
-                          styles.modeButtonText,
-                          colorMode === mode && styles.activeModeButtonText
-                        ]}>
+                    {(['hex', 'rgb', 'hsv'] as ColorMode[]).map((mode) => 
+                      colorMode === mode ? (
+                        <PrimaryButton
+                          key={mode}
+                          size="small"
+                          onPress={() => handleModeButtonPress(mode)}
+                          style={styles.modeButton}
+                        >
                           {mode.toUpperCase()}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
+                        </PrimaryButton>
+                      ) : (
+                        <SecondaryButton
+                          key={mode}
+                          size="small"
+                          onPress={() => handleModeButtonPress(mode)}
+                          style={styles.modeButton}
+                        >
+                          {mode.toUpperCase()}
+                        </SecondaryButton>
+                      )
+                    )}
                   </View>
                 </View> 
 
@@ -576,23 +533,9 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   modeButton: {
-    paddingHorizontal: 12,
+    height: 34,
+    minHeight: 34,
     width: '100%',
-    paddingVertical: 6,
-    borderRadius: 4,
-    backgroundColor: colors.neutral[100],
-  },
-  activeModeButton: {
-    backgroundColor: colors.primary[500],
-  },
-  modeButtonText: {
-    ...typography.body,
-    fontSize: 12,
-    color: colors.text.secondary,
-    fontWeight: '500',
-  },
-  activeModeButtonText: {
-    color: colors.text.inverse,
   },
   manualInputSection: {
     marginBottom: 8,
