@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { colors, typography } from '../../src/components/common';
 import { globalStyles } from '../../src/components/common/GlobalStyles';
-import { ColorPaletteCard, ButtonShowcaseCard, InputShowcaseCard, PasswordInputShowcaseCard, SelectInputShowcaseCard, TimeInputShowcaseCard, DateInputShowcaseCard, DateTimeInputShowcaseCard, FileInputShowcaseCard, RadioInputShowcaseCard, RequiredFieldsShowcaseCard, CountryDataShowcaseCard, PhoneInputShowcaseCard } from '../../src/components/design/cards';
+import { ColorPaletteCard, ButtonShowcaseCard, InputShowcaseCard, PasswordInputShowcaseCard, SelectInputShowcaseCard, TimeInputShowcaseCard, DateInputShowcaseCard, DateTimeInputShowcaseCard, FileInputShowcaseCard, RadioInputShowcaseCard, RequiredFieldsShowcaseCard, CountryDataShowcaseCard, PhoneInputShowcaseCard, ColorPickerShowcaseCard } from '../../src/components/design/cards';
 
 export default function DesignShowcaseScreen() {
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
@@ -137,6 +137,14 @@ export default function DesignShowcaseScreen() {
             paddingBottom: 16
           }]}>
             <PhoneInputShowcaseCard />
+          </View>
+          
+          <View style={[styles.gridItem, { 
+            width: gridColumns === 1 ? '100%' : `${100 / gridColumns}%`,
+            paddingHorizontal: 6,
+            paddingBottom: 16
+          }]}>
+            <ColorPickerShowcaseCard />
           </View>
         </View>
     </ScrollView>

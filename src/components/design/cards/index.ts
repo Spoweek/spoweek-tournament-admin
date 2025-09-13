@@ -11,3 +11,4 @@ export { default as RadioInputShowcaseCard } from './RadioInputShowcaseCard';
 export { default as RequiredFieldsShowcaseCard } from './RequiredFieldsShowcaseCard';
 export { default as CountryDataShowcaseCard } from './CountryDataShowcaseCard';
 export { default as PhoneInputShowcaseCard } from './PhoneInputShowcaseCard';
+export { default as ColorPickerShowcaseCard } from './ColorPickerShowcaseCard';

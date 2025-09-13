@@ -7,6 +7,7 @@ export * from './InputIcon';
 export * from './ChevronIcon';
 export * from './ValidationIndicator';
 export * from './ToggleVisibility';
+export * from './TouchableScreenArea';
 export * from './IconContainer';
 export * from './Label';
 export * from './Description';

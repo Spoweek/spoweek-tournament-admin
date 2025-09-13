@@ -12,6 +12,7 @@ export { default as FileInputAdapter } from './FileInputAdapter';
 export { default as PhoneInputAdapter } from './PhoneInputAdapter';
 export { default as RadioInput } from './RadioInput';
 export { default as RadioInputAdapter } from './RadioInputAdapter';
+export { default as ColorPickerInputAdapter } from './ColorPickerInputAdapter';
 
 // Export types
 export type { InputAdapterProps } from './LabeledField';
@@ -28,3 +29,4 @@ export type { EmailInputAdapterProps } from './EmailInputAdapter';
 export type { PasswordInputAdapterProps } from './PasswordInputAdapter';
 export type { PasswordConfirmationInputAdapterProps } from './PasswordConfirmationInputAdapter';
 export type { PasswordCreationInputProps } from './PasswordCreationInput';
+export type { ColorPickerInputAdapterProps } from './ColorPickerInputAdapter';
