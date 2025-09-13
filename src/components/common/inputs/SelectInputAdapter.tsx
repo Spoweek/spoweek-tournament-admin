@@ -169,7 +169,6 @@ const SelectInputAdapter: React.FC<SelectInputAdapterProps> = ({
         style={[
           styles.selectContainer,
           disabled && styles.disabledContainer,
-          isOpen && styles.dropdownOpenContainer,
           { pointerEvents: 'auto' },
           style
         ]}
@@ -251,10 +250,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'transparent',
     borderWidth: 0,
-  },
-  dropdownOpenContainer: {
-    // This style will be applied when dropdown is open
-    // The parent LabeledField will handle the border styling
   },
   disabledContainer: {
     backgroundColor: colors.neutral[100],
