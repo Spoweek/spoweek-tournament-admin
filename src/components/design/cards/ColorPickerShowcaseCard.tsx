@@ -8,6 +8,7 @@ const ColorPickerShowcaseCard: React.FC = () => {
   const [colorValue, setColorValue] = useState('#3e72fbff');
   const [colorValue2, setColorValue2] = useState('#ff6b6bff');
   const [colorValue3, setColorValue3] = useState('');
+  const [colorValue4, setColorValue4] = useState('');
 
   return (
     <Card style={styles.card}>
@@ -24,16 +25,6 @@ const ColorPickerShowcaseCard: React.FC = () => {
           onChange={setColorValue}
           placeholder="#00000000"
           InputComponent={ColorPickerInputAdapter}
-          description="8-digit hex format with alpha channel"
-        />
-
-        <LabeledField
-          label="Secondary Color"
-          value={colorValue2}
-          onChange={setColorValue2}
-          placeholder="#00000000"
-          InputComponent={ColorPickerInputAdapter}
-          description="Interactive color selection with dropdown"
         />
 
         <LabeledField
@@ -42,7 +33,15 @@ const ColorPickerShowcaseCard: React.FC = () => {
           onChange={setColorValue3}
           placeholder="#00000000"
           InputComponent={ColorPickerInputAdapter}
-          description="Shows placeholder when empty"
+        />
+
+        <LabeledField
+          label="Color"
+          value={colorValue4}
+          onChange={setColorValue4}
+          placeholder="#00000000"
+          inline={true}
+          InputComponent={ColorPickerInputAdapter}
         />
       </View>
 

@@ -261,12 +261,16 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
       ...currentColor,
       [channel]: value
     };
+    const newHsv = rgbToHsv(newColor);
+    setIndependentHue(newHsv.h);
+    setIndependentSaturation(newHsv.s);
     handleColorChange(newColor);
   };
 
   const handleHsvInputChange = (channel: 'h' | 's' | 'v', text: string) => {
     let value = parseInt(text) || 0;
     if (channel === 'h') {
+      setIndependentHue(value);
       value = Math.max(0, Math.min(360, value));
     } else {
       value = Math.max(0, Math.min(100, value)) / 100;
@@ -276,21 +280,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
       [channel]: value
     };
     const newColor = hsvToRgb(newHsv);
-    handleColorChange(newColor);
-  };
-
-  const handleHslInputChange = (channel: 'h' | 's' | 'l', text: string) => {
-    let value = parseInt(text) || 0;
-    if (channel === 'h') {
-      value = Math.max(0, Math.min(360, value));
-    } else {
-      value = Math.max(0, Math.min(100, value)) / 100;
-    }
-    const newHsl = {
-      ...hsl,
-      [channel]: value
-    };
-    const newColor = hslToRgb(newHsl);
     handleColorChange(newColor);
   };
 
@@ -405,7 +394,7 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
 
                   {/* Color Mode Selector */}
                   <View style={styles.modeSelector}>
-                    {(['hex', 'rgb', 'hsv', 'hsl'] as ColorMode[]).map((mode) => (
+                    {(['hex', 'rgb', 'hsv'] as ColorMode[]).map((mode) => (
                       <TouchableOpacity
                         key={mode}
                         style={[
@@ -478,7 +467,7 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
               {colorMode === 'hsv' && (
                 <View style={styles.inputFieldContainer}>
                     <SimpleWrappedInput
-                        value={Math.round(hsv.h).toString()}
+                        value={independentHue.toString()}
                         onChangeText={(text) => handleHsvInputChange('h', text)}
                         label="H"
                         placeholder="0"
@@ -499,39 +488,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
                         value={Math.round(hsv.v * 100).toString()}
                         onChangeText={(text) => handleHsvInputChange('v', text)}
                         label="V"
-                        placeholder="0"
-                        keyboardType="numeric"
-                        maxLength={3}
-                        textAlign="center"
-                    />
-                </View>
-              )}
-
-              {/* HSL Input */}
-              {colorMode === 'hsl' && (
-                <View style={styles.inputFieldContainer}>
-                    <SimpleWrappedInput
-                        value={Math.round(hsl.h).toString()}
-                        onChangeText={(text) => handleHslInputChange('h', text)}
-                        label="H"
-                        placeholder="0"
-                        keyboardType="numeric"
-                        maxLength={3}
-                        textAlign="center"
-                    />
-                    <SimpleWrappedInput
-                        value={Math.round(hsl.s * 100).toString()}
-                        onChangeText={(text) => handleHslInputChange('s', text)}
-                        label="S"
-                        placeholder="0"
-                        keyboardType="numeric"
-                        maxLength={3}
-                        textAlign="center"
-                    />
-                    <SimpleWrappedInput
-                        value={Math.round(hsl.l * 100).toString()}
-                        onChangeText={(text) => handleHslInputChange('l', text)}
-                        label="L"
                         placeholder="0"
                         keyboardType="numeric"
                         maxLength={3}
@@ -612,11 +568,16 @@ const styles = StyleSheet.create({
   },
   modeSelector: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 16,
+    width: '100%',
+    maxWidth: 200,
     gap: 4,
   },
   modeButton: {
     paddingHorizontal: 12,
+    width: '100%',
     paddingVertical: 6,
     borderRadius: 4,
     backgroundColor: colors.neutral[100],
