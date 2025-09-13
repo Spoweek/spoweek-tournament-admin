@@ -8,6 +8,7 @@ import { Modal } from 'react-native';
 import DropdownContainer from '../components/DropdownContainer';
 import ClearButton from '../components/ClearButton';
 import ChevronIcon from '../components/ChevronIcon';
+import SimpleWrappedInput from '../components/SimpleWrappedInput';
 import ColorScreen from './ColorScreen';
 import HueSlider from './HueSlider';
 import AlphaSlider from './AlphaSlider';
@@ -156,7 +157,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
 }) => {
   const [colorMode, setColorMode] = useState<ColorMode>('hex');
   const [manualInput, setManualInput] = useState('');
-  const [isManualInputFocused, setIsManualInputFocused] = useState(false);
   
   const colorPickerRef = useRef<any>(null);
   const dropdownContentRef = useRef<any>(null);
@@ -179,8 +179,9 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
   }, [value]);
 
   // Update HSV values when color changes
-  // Calculate HSV values from current color
+  // Calculate HSV and HSL values from current color
   const hsv = useMemo(() => rgbToHsv(currentColor), [currentColor]);
+  const hsl = useMemo(() => rgbToHsl(currentColor), [currentColor]);
 
   // Get current color in different formats
   const getCurrentColorInMode = (mode: ColorMode): string => {
@@ -237,56 +238,52 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
     
     // Try to parse the input and update color
     try {
-      let newColor: ColorValue;
-      
       if (colorMode === 'hex') {
-        newColor = hexToRgb(text);
-      } else if (colorMode === 'rgb') {
-        const match = text.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-        if (match) {
-          newColor = {
-            r: parseInt(match[1]),
-            g: parseInt(match[2]),
-            b: parseInt(match[3]),
-            a: currentColor.a
-          };
-        } else {
-          return;
-        }
-      } else if (colorMode === 'hsv') {
-        const match = text.match(/hsv\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-        if (match) {
-          const hsv = {
-            h: parseInt(match[1]),
-            s: parseInt(match[2]) / 100,
-            v: parseInt(match[3]) / 100,
-            a: currentColor.a
-          };
-          newColor = hsvToRgb(hsv);
-        } else {
-          return;
-        }
-      } else if (colorMode === 'hsl') {
-        const match = text.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-        if (match) {
-          const hsl = {
-            h: parseInt(match[1]),
-            s: parseInt(match[2]) / 100,
-            l: parseInt(match[3]) / 100,
-            a: currentColor.a
-          };
-          newColor = hslToRgb(hsl);
-        } else {
-          return;
-        }
-      } else {
-        return;
+        const newColor = hexToRgb(text);
+        handleColorChange(newColor);
       }
-      
-      handleColorChange(newColor);
     } catch (error) {
       // Invalid input, don't update color
     }
+  };
+
+  const handleRgbInputChange = (channel: 'r' | 'g' | 'b', text: string) => {
+    const value = Math.max(0, Math.min(255, parseInt(text) || 0));
+    const newColor = {
+      ...currentColor,
+      [channel]: value
+    };
+    handleColorChange(newColor);
+  };
+
+  const handleHsvInputChange = (channel: 'h' | 's' | 'v', text: string) => {
+    let value = parseInt(text) || 0;
+    if (channel === 'h') {
+      value = Math.max(0, Math.min(360, value));
+    } else {
+      value = Math.max(0, Math.min(100, value)) / 100;
+    }
+    const newHsv = {
+      ...hsv,
+      [channel]: value
+    };
+    const newColor = hsvToRgb(newHsv);
+    handleColorChange(newColor);
+  };
+
+  const handleHslInputChange = (channel: 'h' | 's' | 'l', text: string) => {
+    let value = parseInt(text) || 0;
+    if (channel === 'h') {
+      value = Math.max(0, Math.min(360, value));
+    } else {
+      value = Math.max(0, Math.min(100, value)) / 100;
+    }
+    const newHsl = {
+      ...hsl,
+      [channel]: value
+    };
+    const newColor = hslToRgb(newHsl);
+    handleColorChange(newColor);
   };
 
 
@@ -362,26 +359,6 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
             >
               <View ref={dropdownContentRef} style={styles.colorPickerDropdown}>
                 <View style={styles.colorPickerContent}>
-            {/* Color Mode Selector */}
-            <View style={styles.modeSelector}>
-              {(['hex', 'rgb', 'hsv', 'hsl'] as ColorMode[]).map((mode) => (
-                <TouchableOpacity
-                  key={mode}
-                  style={[
-                    styles.modeButton,
-                    colorMode === mode && styles.activeModeButton
-                  ]}
-                  onPress={() => handleModeButtonPress(mode)}
-                >
-                  <Text style={[
-                    styles.modeButtonText,
-                    colorMode === mode && styles.activeModeButtonText
-                  ]}>
-                    {mode.toUpperCase()}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
 
             {/* Color Screen */}
             <ColorScreen
@@ -416,21 +393,141 @@ const ColorPickerInputAdapter: React.FC<ColorPickerInputAdapterProps> = ({
               }}
             />
 
-            {/* Manual Input */}
+            {/* Color Mode Selector */}
+            <View style={styles.modeSelector}>
+              {(['hex', 'rgb', 'hsv', 'hsl'] as ColorMode[]).map((mode) => (
+                <TouchableOpacity
+                  key={mode}
+                  style={[
+                    styles.modeButton,
+                    colorMode === mode && styles.activeModeButton
+                  ]}
+                  onPress={() => handleModeButtonPress(mode)}
+                >
+                  <Text style={[
+                    styles.modeButtonText,
+                    colorMode === mode && styles.activeModeButtonText
+                  ]}>
+                    {mode.toUpperCase()}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Manual Input Fields */}
             <View style={styles.manualInputSection}>
-              <Text style={styles.manualInputLabel}>Manual Input:</Text>
-              <TextInput
-                style={[
-                  styles.manualInput,
-                  isManualInputFocused && styles.manualInputFocused
-                ]}
-                value={manualInput}
-                onChangeText={handleManualInputChange}
-                onFocus={() => setIsManualInputFocused(true)}
-                onBlur={() => setIsManualInputFocused(false)}
-                placeholder={`Enter ${colorMode.toUpperCase()} value`}
-                placeholderTextColor={colors.text.tertiary}
-              />
+              {/* HEX Input */}
+              {colorMode === 'hex' && (
+                <View style={styles.inputFieldContainer}>
+
+                    <SimpleWrappedInput
+                        value={manualInput.replace('#', '')}
+                        onChangeText={(text) => handleManualInputChange('#' + text)}
+                        label="#"
+                        placeholder="00000000"
+                        maxLength={8}
+                    />
+                </View>
+              )}
+
+              {/* RGB Input */}
+              {colorMode === 'rgb' && (
+                <View style={styles.inputFieldContainer}>
+                    <SimpleWrappedInput
+                        value={Math.round(currentColor.r).toString()}
+                        onChangeText={(text) => handleRgbInputChange('r', text)}
+                        label="R"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                    <SimpleWrappedInput
+                        value={Math.round(currentColor.g).toString()}
+                        onChangeText={(text) => handleRgbInputChange('g', text)}
+                        label="G"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                    <SimpleWrappedInput
+                        value={Math.round(currentColor.b).toString()}
+                        onChangeText={(text) => handleRgbInputChange('b', text)}
+                        label="B"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                </View>
+              )}
+
+              {/* HSV Input */}
+              {colorMode === 'hsv' && (
+                <View style={styles.inputFieldContainer}>
+                    <SimpleWrappedInput
+                        value={Math.round(hsv.h).toString()}
+                        onChangeText={(text) => handleHsvInputChange('h', text)}
+                        label="H"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                    <SimpleWrappedInput
+                        value={Math.round(hsv.s * 100).toString()}
+                        onChangeText={(text) => handleHsvInputChange('s', text)}
+                        label="S"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                    <SimpleWrappedInput
+                        value={Math.round(hsv.v * 100).toString()}
+                        onChangeText={(text) => handleHsvInputChange('v', text)}
+                        label="V"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                </View>
+              )}
+
+              {/* HSL Input */}
+              {colorMode === 'hsl' && (
+                <View style={styles.inputFieldContainer}>
+                    <SimpleWrappedInput
+                        value={Math.round(hsl.h).toString()}
+                        onChangeText={(text) => handleHslInputChange('h', text)}
+                        label="H"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                    <SimpleWrappedInput
+                        value={Math.round(hsl.s * 100).toString()}
+                        onChangeText={(text) => handleHslInputChange('s', text)}
+                        label="S"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                    <SimpleWrappedInput
+                        value={Math.round(hsl.l * 100).toString()}
+                        onChangeText={(text) => handleHslInputChange('l', text)}
+                        label="L"
+                        placeholder="0"
+                        keyboardType="numeric"
+                        maxLength={3}
+                        textAlign="center"
+                    />
+                </View>
+              )}
             </View>
                 </View>
             </DropdownContainer>
@@ -525,25 +622,38 @@ const styles = StyleSheet.create({
   manualInputSection: {
     marginBottom: 8,
   },
-  manualInputLabel: {
-    ...typography.body,
-    fontSize: 14,
-    color: colors.text.primary,
+  inputFieldContainer: {
     marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
   },
-  manualInput: {
+  inputWithPrefix: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputPrefix: {
+    backgroundColor: colors.neutral[100],
     borderWidth: 1,
     borderColor: colors.neutral[300],
-    borderRadius: 4,
+    borderRightWidth: 0,
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
     paddingHorizontal: 12,
     paddingVertical: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputPrefixText: {
+    ...typography.body,
     fontSize: 14,
-    color: colors.text.primary,
-    backgroundColor: colors.background.primary,
+    color: colors.text.tertiary,
     fontFamily: 'monospace',
   },
-  manualInputFocused: {
-    borderColor: colors.primary[500],
+  hexInput: {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
 });
 
