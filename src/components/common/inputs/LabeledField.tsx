@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   input: {
-    minHeight: 40,
+    minHeight: 38,
     paddingHorizontal: 16,
     paddingVertical: 8,
     justifyContent: 'center',

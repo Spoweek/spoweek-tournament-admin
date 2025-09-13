@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral[100],
-    minHeight: 40,
+    minHeight: 38,
     paddingHorizontal: 16,
   },
   selectedOption: {
